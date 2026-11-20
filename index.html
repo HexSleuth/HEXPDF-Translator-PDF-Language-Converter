@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HEXPDF Translator — PDF Language Converter</title>
+  <style>
+    /* =========================================================================
+       Theme Tokens & Dark Glass/Neon Aesthetic (with Light Mode System Support)
+       ========================================================================= */
+    :root {
+      --bg: #070b11;
+      --bg-glow-1: rgba(34, 211, 238, 0.14);
+      --bg-glow-2: rgba(129, 140, 248, 0.14);
+      --surface: rgba(15, 23, 36, 0.78);
+      --surface-elevated: rgba(11, 18, 29, 0.9);
+      --border: rgba(148, 163, 184, 0.18);
+      --border-hover: rgba(34, 211, 238, 0.48);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --neon: #22d3ee;
+      --neon-2: #818cf8;
+      --neon-ink: #031018;
+      --ok: #34d399;
+      --warn: #fbbf24;
+      --err: #fb7185;
+      --shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
+      color-scheme: dark;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f4f7fb;
+        --bg-glow-1: rgba(8, 145, 178, 0.1);
+        --bg-glow-2: rgba(79, 70, 229, 0.1);
+        --surface: rgba(255, 255, 255, 0.84);
+        --surface-elevated: rgba(248, 250, 252, 0.96);
+        --border: rgba(15, 23, 42, 0.12);
+        --border-hover: rgba(8, 145, 178, 0.5);
+        --text: #0f172a;
+        --muted: #475569;
+        --neon: #0891b2;
+        --neon-2: #4f46e5;
+        --neon-ink: #ffffff;
+        --ok: #059669;
+        --warn: #d97706;
+        --err: #e11d48;
+        --shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+        color-scheme: light;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(950px 500px at 12% -8%, var(--bg-glow-1), transparent 62%),
+        radial-gradient(900px 480px at 92% 0%, var(--bg-glow-2), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      padding: 28px 16px 64px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* =========================================================================
+       Header
+       ========================================================================= */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 6px;
+    }
+
+    .hex-badge {
+      width: 46px;
+      height: 52px;
+      flex: 0 0 auto;
+      background: linear-gradient(135deg, var(--neon), var(--neon-2));
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--neon-ink);
+      box-shadow: 0 0 24px var(--bg-glow-1);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 2.6vw, 1.7rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    h1 .accent {
+      color: var(--neon);
+    }
+
+    .subtitle {
+      margin: 2px 0 22px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .notice {
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+    }
+
+    /* =========================================================================
+       Glass Cards
+       ========================================================================= */
+    .card {
+      background: var(--surface);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Dropzone */
+    .dropzone {
+      border: 1.5px dashed var(--border);
+      border-radius: 14px;
+      padding: 32px 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .dropzone:hover,
+    .dropzone.is-dragover {
+      border-color: var(--neon);
+      background: rgba(34, 211, 238, 0.06);
+      transform: translateY(-1px);
+    }
+
+    .dropzone-icon {
+      font-size: 32px;
+      line-height: 1;
+      color: var(--neon);
+      filter: drop-shadow(0 0 12px var(--bg-glow-1));
+    }
+
+    .dropzone-title {
+      margin: 10px 0 4px;
+      font-size: 0.98rem;
+      color: var(--muted);
+    }
+
+    .dropzone-title strong {
+      color: var(--text);
+    }
+
+    .inline-link {
+      background: none;
+      border: 0;
+      padding: 0;
+      font: inherit;
+      font-weight: 600;
+      color: var(--neon);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+
+    .file-meta {
+      margin: 6px 0 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    /* =========================================================================
+       Language & Action Controls
+       ========================================================================= */
+    .controls-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: flex-end;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1 1 200px;
+      min-width: 150px;
+    }
+
+    label.field-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: var(--surface-elevated);
+      color: var(--text);
+      font-size: 0.92rem;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    select:focus {
+      border-color: var(--neon);
+      box-shadow: 0 0 0 3px var(--bg-glow-1);
+    }
+
+    select:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border-radius: 11px;
+      border: 0;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--neon), #06b6d4);
+      color: var(--neon-ink);
+      box-shadow: 0 6px 20px rgba(34, 211, 238, 0.24);
+      transition: transform 0.15s ease, filter 0.15s ease, opacity 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover:not(:disabled) {
+      filter: brightness(1.07);
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: var(--surface-elevated);
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      border-color: var(--border-hover);
+      color: var(--neon);
+    }
+
+    /* Status Bar & Options */
+    .meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface-elevated);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+      flex: 0 0 auto;
+    }
+
+    .dot.ok {
+      background: var(--ok);
+      box-shadow: 0 0 10px var(--ok);
+    }
+
+    .dot.warn {
+      background: var(--warn);
+      box-shadow: 0 0 10px var(--warn);
+    }
+
+    .dot.err {
+      background: var(--err);
+      box-shadow: 0 0 10px var(--err);
+    }
+
+    .checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-label input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--neon);
+      cursor: pointer;
+    }
+
+    .progress-track {
+      height: 8px;
+      width: 100%;
+      border-radius: 999px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-top: 16px;
+    }
+
+    .progress-fill {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--neon-2), var(--neon));
+      transition: width 0.24s ease;
+    }
+
+    .status-text {
+      margin-top: 10px;
+      min-height: 20px;
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    .status-text.ok {
+      color: var(--ok);
+    }
+
+    .status-text.err {
+      color: var(--err);
+    }
+
+    /* =========================================================================
+       Per-Page Preview & Download Actions
+       ========================================================================= */
+    .result-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .result-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .download-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    details.page-card {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+    }
+
+    details.page-card summary {
+      cursor: pointer;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--neon);
+      outline: none;
+      user-select: none;
+    }
+
+    details.page-card pre {
+      margin: 10px 0 0;
+      max-height: 290px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    details.page-card pre[dir="rtl"] {
+      text-align: right;
+    }
+
+    .footer {
+      margin-top: 26px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <div class="hex-badge" aria-hidden="true">⬡</div>
+      <div>
+        <h1>HEX<span class="accent">PDF</span> Translator</h1>
+      </div>
+    </header>
+    <p class="subtitle">Translate PDF documents directly in your browser with layout-aware reconstruction and multi-script Unicode export.</p>
+
+    <div id="fileProtocolNotice" class="notice" hidden>
+      Running from <code>file://</code> may block browser AI model downloads. Serve over <code>http://</code> or <code>https://</code> (such as GitHub Pages) for full AI translation.
+    </div>
+
+    <!-- PDF Upload Card -->
+    <section class="card dropzone" id="dropzone" role="button" tabindex="0" aria-label="Upload PDF file">
+      <input type="file" id="fileInput" accept="application/pdf,.pdf" hidden />
+      <div class="dropzone-icon" aria-hidden="true">⬡</div>
+      <p class="dropzone-title"><strong>Drop a PDF here</strong> or <button type="button" class="inline-link" id="browseBtn">choose a file</button></p>
+      <p class="file-meta" id="fileMeta">Processed locally in your browser. Nothing is uploaded.</p>
+    </section>
+
+    <!-- Translation Controls Card -->
+    <section class="card" aria-label="Translation settings">
+      <div class="controls-grid">
+        <div class="field">
+          <label class="field-label" for="sourceLang">Source language</label>
+          <select id="sourceLang"></select>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="targetLang">Target language</label>
+          <select id="targetLang"></select>
+        </div>
+
+        <div class="field" style="flex: 0 0 auto;">
+          <span class="field-label" aria-hidden="true">&nbsp;</span>
+          <button type="button" class="btn" id="translateBtn" disabled>Translate PDF</button>
+        </div>
+      </div>
+
+      <div class="meta-bar">
+        <span class="status-pill" id="engineBadge">
+          <span class="dot" id="engineDot"></span>
+          <span id="engineLabel">Checking engine…</span>
+        </span>
+
+        <label class="checkbox-label">
+          <input type="checkbox" id="embedUnicode" checked />
+          Embed Unicode font for non-Latin scripts
+        </label>
+
+        <label class="checkbox-label">
+          <input type="checkbox" id="fastDictionaryOnly" />
+          Fast offline dictionary only
+        </label>
+      </div>
+
+      <div class="progress-track" aria-hidden="true">
+        <i class="progress-fill" id="progressBar"></i>
+      </div>
+      <p class="status-text" id="statusText" role="status" aria-live="polite">Select or drop a PDF to begin.</p>
+    </section>
+
+    <!-- Per-Page Preview & Downloads Card -->
+    <section class="card" id="resultCard" hidden aria-label="Translated output">
+      <div class="result-header">
+        <div>
+          <span class="field-label">Translated Preview</span>
+          <div class="result-sub" id="resultSummary"></div>
+        </div>
+        <div class="download-group">
+          <button type="button" class="btn btn-secondary" id="downloadTxtBtn" disabled>Download TXT</button>
+          <button type="button" class="btn" id="downloadPdfBtn" disabled>Download PDF</button>
+        </div>
+      </div>
+      <div id="pagesPreview"></div>
+    </section>
+
+    <footer class="footer">
+      Powered by PDF.js, jsPDF, and browser-side translation engines. All PDF parsing and rendering run client-side.
+    </footer>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    (() => {
+      'use strict';
+
+      /* =======================================================================
+         DOM Helpers & Application State
+         ======================================================================= */
+      const $ = (selector) => document.querySelector(selector);
+      const nextTick = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+      const state = {
+        pages: null,       // Extracted lines & page geometry per page
+        translated: null,  // Translated lines & page geometry per page
+        textOutput: '',    // Combined plain text for TXT export
+        pdfDoc: null,      // Built jsPDF instance
+        baseName: 'translated',
+        busy: false
+      };
+
+      const els = {
+        fileProtocolNotice: $('#fileProtocolNotice'),
+        dropzone: $('#dropzone'),
+        fileInput: $('#fileInput'),
+        browseBtn: $('#browseBtn'),
+        fileMeta: $('#fileMeta'),
+        sourceLang: $('#sourceLang'),
+        targetLang: $('#targetLang'),
+        translateBtn: $('#translateBtn'),
+        engineDot: $('#engineDot'),
+        engineLabel: $('#engineLabel'),
+        embedUnicode: $('#embedUnicode'),
+        fastDictionaryOnly: $('#fastDictionaryOnly'),
+        progressBar: $('#progressBar'),
+        statusText: $('#statusText'),
+        resultCard: $('#resultCard'),
+        resultSummary: $('#resultSummary'),
+        pagesPreview: $('#pagesPreview'),
+        downloadPdfBtn: $('#downloadPdfBtn'),
+        downloadTxtBtn: $('#downloadTxtBtn')
+      };
+
+      /* =======================================================================
+         Language Catalog & Script / RTL Metadata
+         ======================================================================= */
+      const LANGUAGES = [
+        ['af', 'Afrikaans'], ['sq', 'Albanian'], ['am', 'Amharic'], ['ar', 'Arabic'],
+        ['hy', 'Armenian'], ['az', 'Azerbaijani'], ['eu', 'Basque'], ['be', 'Belarusian'],
+        ['bn', 'Bengali (বাংলা)'], ['bs', 'Bosnian'], ['bg', 'Bulgarian'], ['ca', 'Catalan'],
+        ['ceb', 'Cebuano'], ['zh', 'Chinese'], ['zh-CN', 'Chinese (Simplified)'],
+        ['zh-TW', 'Chinese (Traditional)'], ['co', 'Corsican'], ['hr', 'Croatian'],
+        ['cs', 'Czech'], ['da', 'Danish'], ['nl', 'Dutch'], ['en', 'English'],
+        ['en-US', 'English (US)'], ['en-GB', 'English (UK)'], ['eo', 'Esperanto'],
+        ['et', 'Estonian'], ['tl', 'Filipino'], ['fi', 'Finnish'], ['fr', 'French'],
+        ['fy', 'Frisian'], ['gl', 'Galician'], ['ka', 'Georgian'], ['de', 'German'],
+        ['el', 'Greek'], ['gu', 'Gujarati (ગુજરાતી)'], ['ht', 'Haitian Creole'],
+        ['ha', 'Hausa'], ['haw', 'Hawaiian'], ['he', 'Hebrew'], ['hi', 'Hindi (हिन्दी)'],
+        ['hmn', 'Hmong'], ['hu', 'Hungarian'], ['is', 'Icelandic'], ['ig', 'Igbo'],
+        ['id', 'Indonesian'], ['ga', 'Irish'], ['it', 'Italian'], ['ja', 'Japanese'],
+        ['jv', 'Javanese'], ['kn', 'Kannada (ಕನ್ನಡ)'], ['kk', 'Kazakh'], ['km', 'Khmer'],
+        ['rw', 'Kinyarwanda'], ['ko', 'Korean'], ['ku', 'Kurdish'], ['ky', 'Kyrgyz'],
+        ['lo', 'Lao'], ['la', 'Latin'], ['lv', 'Latvian'], ['lt', 'Lithuanian'],
+        ['lb', 'Luxembourgish'], ['mk', 'Macedonian'], ['mg', 'Malagasy'], ['ms', 'Malay'],
+        ['ml', 'Malayalam (മലയാളം)'], ['mt', 'Maltese'], ['mi', 'Maori'],
+        ['mr', 'Marathi (मराठी)'], ['mn', 'Mongolian'], ['my', 'Myanmar (Burmese)'],
+        ['ne', 'Nepali (नेपाली)'], ['no', 'Norwegian'], ['or', 'Odia (ଓଡ଼ିଆ)'],
+        ['ps', 'Pashto'], ['fa', 'Persian (فارسی)'], ['pl', 'Polish'], ['pt', 'Portuguese'],
+        ['pa', 'Punjabi (ਪੰਜਾਬੀ)'], ['ro', 'Romanian'], ['ru', 'Russian'], ['sm', 'Samoan'],
+        ['gd', 'Scottish Gaelic'], ['sr', 'Serbian'], ['st', 'Sesotho'], ['sn', 'Shona'],
+        ['sd', 'Sindhi'], ['si', 'Sinhala'], ['sk', 'Slovak'], ['sl', 'Slovenian'],
+        ['so', 'Somali'], ['es', 'Spanish'], ['su', 'Sundanese'], ['sw', 'Swahili'],
+        ['sv', 'Swedish'], ['tg', 'Tajik'], ['ta', 'Tamil (தமிழ்)'], ['tt', 'Tatar'],
+        ['te', 'Telugu (తెలుగు)'], ['th', 'Thai'], ['tr', 'Turkish'], ['tk', 'Turkmen'],
+        ['uk', 'Ukrainian'], ['ur', 'Urdu (اردو)'], ['ug', 'Uyghur'], ['uz', 'Uzbek'],
+        ['vi', 'Vietnamese'], ['cy', 'Welsh'], ['xh', 'Xhosa'], ['yi', 'Yiddish'],
+        ['yo', 'Yoruba'], ['zu', 'Zulu']
+      ];
+
+      const RTL_LANGS = new Set(['ar', 'he', 'ur', 'fa', 'ps', 'sd', 'yi', 'ug']);
+
+      /* Script-specific TTF URLs for accurate non-Latin PDF export in jsPDF */
+      const SCRIPT_FONT_URLS = {
+        bengali: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansbengali/NotoSansBengali%5Bwdth%2Cwght%5D.ttf',
+          'https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-bengali/files/noto-sans-bengali-bengali-400-normal.woff'
+        ],
+        devanagari: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansdevanagari/NotoSansDevanagari%5Bwdth%2Cwght%5D.ttf'
+        ],
+        tamil: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosanstamil/NotoSansTamil%5Bwdth%2Cwght%5D.ttf'
+        ],
+        telugu: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosanstelugu/NotoSansTelugu%5Bwdth%2Cwght%5D.ttf'
+        ],
+        kannada: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosanskannada/NotoSansKannada%5Bwdth%2Cwght%5D.ttf'
+        ],
+        malayalam: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansmalayalam/NotoSansMalayalam%5Bwdth%2Cwght%5D.ttf'
+        ],
+        gujarati: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansgujarati/NotoSansGujarati%5Bwdth%2Cwght%5D.ttf'
+        ],
+        gurmukhi: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansgurmukhi/NotoSansGurmukhi%5Bwdth%2Cwght%5D.ttf'
+        ],
+        arabic: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansarabic/NotoSansArabic%5Bwdth%2Cwght%5D.ttf',
+          'https://cdn.jsdelivr.net/npm/dejavu-fonts-ttf@2.37.3/ttf/DejaVuSans.ttf'
+        ],
+        dejavu: [
+          'https://cdn.jsdelivr.net/npm/dejavu-fonts-ttf@2.37.3/ttf/DejaVuSans.ttf',
+          'https://cdn.jsdelivr.net/gh/dejavu-fonts/dejavu-fonts@version_2_37/ttf/DejaVuSans.ttf'
+        ]
+      };
+
+      const LANG_TO_SCRIPT = {
+        bn: 'bengali',
+        hi: 'devanagari', mr: 'devanagari', ne: 'devanagari',
+        ta: 'tamil',
+        te: 'telugu',
+        kn: 'kannada',
+        ml: 'malayalam',
+        gu: 'gujarati',
+        pa: 'gurmukhi',
+        ar: 'arabic', fa: 'arabic', ur: 'arabic', ps: 'arabic', sd: 'arabic', ug: 'arabic'
+      };
+
+      function primaryCode(code) {
+        return String(code || '').split('-')[0].toLowerCase();
+      }
+
+      function isRtlLang(code) {
+        return RTL_LANGS.has(primaryCode(code));
+      }
+
+      /* =======================================================================
+         PDF Extraction with PDF.js (Line Grouping & Page Geometry)
+         ======================================================================= */
+      function configurePdfWorker() {
+        if (!window.pdfjsLib) {
+          throw new Error('PDF.js failed to load.');
+        }
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      }
+
+      async function extractPdfPages(file, onProgress) {
+        configurePdfWorker();
+        const buffer = await file.arrayBuffer();
+        const pdfDoc = await window.pdfjsLib.getDocument({
+          data: buffer,
+          isEvalSupported: false,
+          useSystemFonts: true
+        }).promise;
+
+        const pages = [];
+
+        for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+          const page = await pdfDoc.getPage(pageNum);
+          const viewport = page.getViewport({ scale: 1 });
+          const textContent = await page.getTextContent();
+
+          const rawItems = [];
+          for (const item of textContent.items) {
+            if (!item.str || !item.str.trim()) continue;
+            const tr = item.transform;
+            const height = item.height || Math.hypot(tr[2], tr[3]) || 10;
+            rawItems.push({
+              str: item.str,
+              x: tr[4],
+              y: tr[5],
+              w: item.width || 0,
+              h: height
+            });
+          }
+
+          /* Sort top-to-bottom (higher PDF y = higher on page), then left-to-right */
+          rawItems.sort((a, b) => (b.y - a.y) || (a.x - b.x));
+
+          const lineBuckets = [];
+          for (const item of rawItems) {
+            const tolerance = Math.max(1.5, item.h * 0.5);
+            let matchedLine = null;
+            for (let i = lineBuckets.length - 1; i >= 0; i--) {
+              const bucket = lineBuckets[i];
+              if (Math.abs(bucket.y - item.y) <= Math.max(tolerance, bucket.h * 0.5)) {
+                matchedLine = bucket;
+                break;
+              }
+              if (bucket.y > item.y + tolerance * 2) break;
+            }
+            if (!matchedLine) {
+              matchedLine = { y: item.y, h: item.h, items: [] };
+              lineBuckets.push(matchedLine);
+            }
+            matchedLine.items.push(item);
+            if (item.h > matchedLine.h) matchedLine.h = item.h;
+          }
+
+          const lines = [];
+          for (const bucket of lineBuckets) {
+            bucket.items.sort((a, b) => a.x - b.x);
+            let lineText = '';
+            let prevEnd = null;
+            let minX = Infinity;
+
+            for (const part of bucket.items) {
+              if (prevEnd !== null) {
+                const gap = part.x - prevEnd;
+                if (gap > part.h * 0.28 && !/\s$/.test(lineText)) {
+                  lineText += ' ';
+                }
+              }
+              lineText += part.str;
+              if (part.x < minX) minX = part.x;
+              prevEnd = part.x + part.w;
+            }
+
+            lineText = lineText.replace(/\s+/g, ' ').trim();
+            if (!lineText) continue;
+
+            lines.push({
+              x: Number.isFinite(minX) ? Math.max(0, minX) : 24,
+              y: bucket.y,
+              size: Math.max(5, Math.min(bucket.h, 72)),
+              text: lineText
+            });
+          }
+
+          pages.push({
+            pageNumber: pageNum,
+            width: viewport.width,
+            height: viewport.height,
+            lines
+          });
+
+          if (onProgress) onProgress(pageNum / pdfDoc.numPages);
+          await nextTick();
+        }
+
+        return pages;
+      }
+
+      /* =======================================================================
+         Offline Dictionary Fallback (Fast Local Lookup)
+         ======================================================================= */
+      const DICTIONARIES = {
+        es: {
+          the: 'el', a: 'un', and: 'y', or: 'o', but: 'pero', is: 'es', are: 'son',
+          was: 'era', be: 'ser', have: 'tener', has: 'tiene', i: 'yo', you: 'tú',
+          he: 'él', she: 'ella', we: 'nosotros', they: 'ellos', my: 'mi', your: 'tu',
+          his: 'su', her: 'su', our: 'nuestro', in: 'en', on: 'en', at: 'en',
+          to: 'a', from: 'de', of: 'de', for: 'para', with: 'con', without: 'sin',
+          by: 'por', about: 'sobre', not: 'no', yes: 'sí', all: 'todo', more: 'más',
+          very: 'muy', now: 'ahora', when: 'cuando', where: 'dónde', how: 'cómo',
+          what: 'qué', who: 'quién', hello: 'hola', world: 'mundo', good: 'bueno',
+          new: 'nuevo', first: 'primero', day: 'día', year: 'año', time: 'tiempo',
+          people: 'gente', life: 'vida', water: 'agua', house: 'casa', book: 'libro',
+          question: 'pregunta', answer: 'respuesta', problem: 'problema', part: 'parte',
+          page: 'página', document: 'documento', text: 'texto', word: 'palabra',
+          language: 'idioma', file: 'archivo', line: 'línea', title: 'título'
+        },
+        fr: {
+          the: 'le', a: 'un', and: 'et', or: 'ou', but: 'mais', is: 'est', are: 'sont',
+          was: 'était', be: 'être', have: 'avoir', has: 'a', i: 'je', you: 'vous',
+          he: 'il', she: 'elle', we: 'nous', they: 'ils', my: 'mon', your: 'votre',
+          his: 'son', her: 'sa', our: 'notre', in: 'dans', on: 'sur', at: 'à',
+          to: 'à', from: 'de', of: 'de', for: 'pour', with: 'avec', without: 'sans',
+          by: 'par', about: 'sur', not: 'ne pas', yes: 'oui', all: 'tout', more: 'plus',
+          very: 'très', now: 'maintenant', when: 'quand', where: 'où', how: 'comment',
+          what: 'quoi', who: 'qui', hello: 'bonjour', world: 'monde', good: 'bon',
+          new: 'nouveau', first: 'premier', day: 'jour', year: 'année', time: 'temps',
+          people: 'gens', life: 'vie', water: 'eau', house: 'maison', book: 'livre',
+          question: 'question', answer: 'réponse', problem: 'problème', part: 'partie',
+          page: 'page', document: 'document', text: 'texte', word: 'mot',
+          language: 'langue', file: 'fichier', line: 'ligne', title: 'titre'
+        },
+        de: {
+          the: 'der', a: 'ein', and: 'und', or: 'oder', but: 'aber', is: 'ist', are: 'sind',
+          was: 'war', be: 'sein', have: 'haben', has: 'hat', i: 'ich', you: 'du',
+          he: 'er', she: 'sie', we: 'wir', they: 'sie', my: 'mein', your: 'dein',
+          his: 'sein', her: 'ihr', our: 'unser', in: 'in', on: 'auf', at: 'bei',
+          to: 'zu', from: 'von', of: 'von', for: 'für', with: 'mit', without: 'ohne',
+          by: 'von', about: 'über', not: 'nicht', yes: 'ja', all: 'alle', more: 'mehr',
+          very: 'sehr', now: 'jetzt', when: 'wenn', where: 'wo', how: 'wie',
+          what: 'was', who: 'wer', hello: 'hallo', world: 'Welt', good: 'gut',
+          new: 'neu', first: 'erste', day: 'Tag', year: 'Jahr', time: 'Zeit',
+          people: 'Menschen', life: 'Leben', water: 'Wasser', house: 'Haus', book: 'Buch',
+          question: 'Frage', answer: 'Antwort', problem: 'Problem', part: 'Teil',
+          page: 'Seite', document: 'Dokument', text: 'Text', word: 'Wort',
+          language: 'Sprache', file: 'Datei', line: 'Linie', title: 'Titel'
+        },
+        it: {
+          the: 'il', a: 'un', and: 'e', or: 'o', but: 'ma', is: 'è', are: 'sono',
+          was: 'era', be: 'essere', have: 'avere', has: 'ha', i: 'io', you: 'tu',
+          he: 'lui', she: 'lei', we: 'noi', they: 'loro', my: 'mio', your: 'tuo',
+          his: 'suo', her: 'sua', our: 'nostro', in: 'in', on: 'su', at: 'a',
+          to: 'a', from: 'da', of: 'di', for: 'per', with: 'con', without: 'senza',
+          by: 'da', about: 'circa', not: 'non', yes: 'sì', all: 'tutto', more: 'più',
+          very: 'molto', now: 'ora', when: 'quando', where: 'dove', how: 'come',
+          what: 'cosa', who: 'chi', hello: 'ciao', world: 'mondo', good: 'buono',
+          new: 'nuovo', first: 'primo', day: 'giorno', year: 'anno', time: 'tempo',
+          people: 'persone', life: 'vita', water: 'acqua', house: 'casa', book: 'libro',
+          question: 'domanda', answer: 'risposta', problem: 'problema', part: 'parte',
+          page: 'pagina', document: 'documento', text: 'testo', word: 'parola',
+          language: 'lingua', file: 'file', line: 'linea', title: 'titolo'
+        },
+        pt: {
+          the: 'o', a: 'um', and: 'e', or: 'ou', but: 'mas', is: 'é', are: 'são',
+          was: 'era', be: 'ser', have: 'ter', has: 'tem', i: 'eu', you: 'você',
+          he: 'ele', she: 'ela', we: 'nós', they: 'eles', my: 'meu', your: 'seu',
+          his: 'dele', her: 'dela', our: 'nosso', in: 'em', on: 'em', at: 'em',
+          to: 'para', from: 'de', of: 'de', for: 'para', with: 'com', without: 'sem',
+          by: 'por', about: 'sobre', not: 'não', yes: 'sim', all: 'todo', more: 'mais',
+          very: 'muito', now: 'agora', when: 'quando', where: 'onde', how: 'como',
+          what: 'o que', who: 'quem', hello: 'olá', world: 'mundo', good: 'bom',
+          new: 'novo', first: 'primeiro', day: 'dia', year: 'ano', time: 'tempo',
+          people: 'pessoas', life: 'vida', water: 'água', house: 'casa', book: 'livro',
+          question: 'pergunta', answer: 'resposta', problem: 'problema', part: 'parte',
+          page: 'página', document: 'documento', text: 'texto', word: 'palavra',
+          language: 'idioma', file: 'arquivo', line: 'linha', title: 'título'
+        }
+      };
+
+      const reverseDictCache = {};
+
+      function resolveDictionary(src, tgt) {
+        const s = primaryCode(src);
+        const t = primaryCode(tgt);
+        if (s === 'en' && DICTIONARIES[t]) return DICTIONARIES[t];
+        if (t === 'en' && DICTIONARIES[s]) {
+          if (!reverseDictCache[s]) {
+            const rev = {};
+            for (const [eng, mapped] of Object.entries(DICTIONARIES[s])) {
+              const key = String(mapped).toLowerCase();
+              if (!(key in rev)) rev[key] = eng;
+            }
+            reverseDictCache[s] = rev;
+          }
+          return reverseDictCache[s];
+        }
+        return null;
+      }
+
+      function applyDictionary(text, table) {
+        return text.replace(/[\p{L}\p{M}'’]+/gu, (token) => {
+          const translated = table[token.toLowerCase()];
+          if (!translated) return token;
+          if (token.length > 1 && token === token.toUpperCase()) return translated.toUpperCase();
+          if (token[0] === token[0].toUpperCase()) {
+            return translated.charAt(0).toUpperCase() + translated.slice(1);
+          }
+          return translated;
+        });
+      }
+
+      /* =======================================================================
+         Multi-Tier Translation Engine:
+         1. Chrome Translator API
+         2. @xenova/transformers (Opus-MT pair -> NLLB-200 universal)
+         3. Offline Dictionary Fallback
+         ======================================================================= */
+      const NLLB_CODES = {
+        en: 'eng_Latn', bn: 'ben_Beng', hi: 'hin_Deva', ta: 'tam_Taml', te: 'tel_Telu',
+        ml: 'mal_Mlym', mr: 'mar_Deva', gu: 'guj_Gujr', pa: 'pan_Guru', ur: 'urd_Arab',
+        ne: 'npi_Deva', si: 'sin_Sinh', th: 'tha_Thai', vi: 'vie_Latn', id: 'ind_Latn',
+        ms: 'zsm_Latn', tl: 'tgl_Latn', sw: 'swh_Latn', ar: 'arb_Arab', fa: 'pes_Arab',
+        he: 'heb_Hebr', tr: 'tur_Latn', ru: 'rus_Cyrl', uk: 'ukr_Cyrl', pl: 'pol_Latn',
+        de: 'deu_Latn', fr: 'fra_Latn', es: 'spa_Latn', it: 'ita_Latn', pt: 'por_Latn',
+        nl: 'nld_Latn', sv: 'swe_Latn', da: 'dan_Latn', fi: 'fin_Latn', no: 'nob_Latn',
+        cs: 'ces_Latn', sk: 'slk_Latn', hu: 'hun_Latn', ro: 'ron_Latn', bg: 'bul_Cyrl',
+        el: 'ell_Grek', ja: 'jpn_Jpan', ko: 'kor_Hang', zh: 'zho_Hans', af: 'afr_Latn',
+        sq: 'sqi_Latn', am: 'amh_Ethi', hy: 'hye_Armn', az: 'azj_Latn', eu: 'eus_Latn',
+        be: 'bel_Cyrl', bs: 'bos_Latn', ca: 'cat_Latn', hr: 'hrv_Latn', et: 'est_Latn',
+        gl: 'glg_Latn', ka: 'kat_Geor', kk: 'kaz_Cyrl', km: 'khm_Khmr', ky: 'kir_Cyrl',
+        lo: 'lao_Laoo', lv: 'lvs_Latn', lt: 'lit_Latn', mk: 'mkd_Cyrl', mn: 'khk_Cyrl',
+        my: 'mya_Mymr', ps: 'pbt_Arab', sd: 'snd_Arab', sr: 'srp_Cyrl', sl: 'slv_Latn',
+        so: 'som_Latn', tg: 'tgk_Cyrl', tk: 'tuk_Latn', uz: 'uzn_Latn', yi: 'ydd_Hebr',
+        zu: 'zul_Latn', yo: 'yor_Latn', ha: 'hau_Latn', ig: 'ibo_Latn', mi: 'mri_Latn',
+        mg: 'plt_Latn', jv: 'jav_Latn', su: 'sun_Latn', ceb: 'ceb_Latn', ny: 'nya_Latn',
+        co: 'cos_Latn', fy: 'fry_Latn', gd: 'gla_Latn', haw: 'haw_Latn', hmn: 'hmn_Latn',
+        ht: 'hat_Latn', lb: 'ltz_Latn', mt: 'mlt_Latn', rw: 'kin_Latn', sm: 'smo_Latn',
+        sn: 'sna_Latn', st: 'sot_Latn', tt: 'tat_Cyrl', ug: 'uig_Arab'
+      };
+
+      let transformersMod = null;
+      const pipelineCache = {};
+
+      async function getTransformers() {
+        if (transformersMod) return transformersMod;
+        transformersMod = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');
+        transformersMod.env.allowLocalModels = false;
+        transformersMod.env.useBrowserCache = true;
+        return transformersMod;
+      }
+
+      async function getTranslationPipeline(modelId, onProgressNote) {
+        if (pipelineCache[modelId]) return pipelineCache[modelId];
+        const { pipeline } = await getTransformers();
+        const instance = await pipeline('translation', modelId, {
+          progress_callback: (info) => {
+            if (!onProgressNote || !info) return;
+            if (info.status === 'progress' && info.total) {
+              const pct = Math.round((info.loaded / info.total) * 100);
+              onProgressNote(`Downloading ${modelId} (${pct}%)…`);
+            } else if (info.status === 'initiate') {
+              onProgressNote(`Initializing ${modelId}…`);
+            }
+          }
+        });
+        pipelineCache[modelId] = instance;
+        return instance;
+      }
+
+      async function tryChromeTranslator(sourceLanguage, targetLanguage) {
+        const api = window.Translator || (window.translation && window.translation);
+        if (!api) return null;
+
+        try {
+          if (typeof api.availability === 'function') {
+            const avail = await api.availability({ sourceLanguage, targetLanguage });
+            if (avail === 'unavailable' || avail === 'no') return null;
+          } else if (typeof api.canTranslate === 'function') {
+            const can = await api.canTranslate({ sourceLanguage, targetLanguage });
+            if (can === 'no' || can === 'unavailable') return null;
+          }
+
+          return await api.create({
+            sourceLanguage,
+            targetLanguage,
+            monitor(monitor) {
+              if (!monitor || typeof monitor.addEventListener !== 'function') return;
+              monitor.addEventListener('downloadprogress', (ev) => {
+                if (ev && ev.total) {
+                  setStatus(`Downloading Chrome language pack: ${Math.round((ev.loaded / ev.total) * 100)}%`);
+                }
+              });
+            }
+          });
+        } catch {
+          return null;
+        }
+      }
+
+      async function tryTransformersModel(src, tgt, onProgressNote) {
+        const s = primaryCode(src);
+        const t = primaryCode(tgt);
+        if (s === t) return null;
+
+        /* Tier 2A: Direct Opus-MT pair */
+        const opusModel = `Xenova/opus-mt-${s}-${t}`;
+        try {
+          onProgressNote && onProgressNote(`Loading ${opusModel}…`);
+          const translator = await getTranslationPipeline(opusModel, onProgressNote);
+          return {
+            kind: 'ai',
+            label: `Transformers · Opus-MT (${s}→${t})`,
+            supportsBatch: false,
+            translate: async (text) => {
+              const result = await translator(text, { max_length: 512 });
+              if (Array.isArray(result)) return result[0]?.translation_text || text;
+              return result?.translation_text || text;
+            }
+          };
+        } catch {
+          /* Fall through to NLLB-200 */
+        }
+
+        /* Tier 2B: NLLB-200 distilled universal model */
+        const srcNllb = NLLB_CODES[s];
+        const tgtNllb = NLLB_CODES[t];
+        if (srcNllb && tgtNllb) {
+          try {
+            onProgressNote && onProgressNote('Loading NLLB-200 universal model…');
+            const translator = await getTranslationPipeline('Xenova/nllb-200-distilled-600M', onProgressNote);
+            return {
+              kind: 'ai',
+              label: `Transformers · NLLB-200 (${s}→${t})`,
+              supportsBatch: false,
+              translate: async (text) => {
+                const result = await translator(text, {
+                  src_lang: srcNllb,
+                  tgt_lang: tgtNllb,
+                  max_length: 512
+                });
+                if (Array.isArray(result)) return result[0]?.translation_text || text;
+                return result?.translation_text || text;
+              }
+            };
+          } catch {
+            return null;
+          }
+        }
+
+        return null;
+      }
+
+      async function createTranslationEngine(src, tgt, onProgressNote) {
+        const dictTable = resolveDictionary(src, tgt);
+
+        if (els.fastDictionaryOnly.checked) {
+          if (!dictTable) return null;
+          return {
+            kind: 'dict',
+            label: `Offline Dictionary (${primaryCode(src)}↔${primaryCode(tgt)})`,
+            supportsBatch: true,
+            translate: (text) => applyDictionary(text, dictTable)
+          };
+        }
+
+        /* Tier 1: Chrome Translator API */
+        if (window.Translator || (window.translation && window.translation)) {
+          onProgressNote && onProgressNote('Checking Chrome Translator API…');
+          let chromeTr = await tryChromeTranslator(src, tgt);
+          if (!chromeTr && (src.includes('-') || tgt.includes('-'))) {
+            chromeTr = await tryChromeTranslator(primaryCode(src), primaryCode(tgt));
+          }
+          if (chromeTr) {
+            return {
+              kind: 'ai',
+              label: `Chrome Translator (${primaryCode(src)}→${primaryCode(tgt)})`,
+              supportsBatch: true,
+              translate: (text) => chromeTr.translate(text)
+            };
+          }
+        }
+
+        /* Tier 2: @xenova/transformers (Opus-MT / NLLB-200) */
+        const tfEngine = await tryTransformersModel(src, tgt, onProgressNote);
+        if (tfEngine) return tfEngine;
+
+        /* Tier 3: Offline Dictionary Fallback */
+        if (dictTable) {
+          return {
+            kind: 'dict',
+            label: `Offline Dictionary (${primaryCode(src)}↔${primaryCode(tgt)})`,
+            supportsBatch: true,
+            translate: (text) => applyDictionary(text, dictTable)
+          };
+        }
+
+        return null;
+      }
+
+      async function translateLineBatch(engine, linesText, onLineProgress) {
+        const output = new Array(linesText.length).fill('');
+
+        if (engine.kind === 'dict' || engine.supportsBatch) {
+          const maxBatchChars = 1200;
+          let idx = 0;
+
+          while (idx < linesText.length) {
+            let end = idx;
+            let charCount = 0;
+            while (end < linesText.length && (charCount === 0 || charCount + linesText[end].length + 1 <= maxBatchChars)) {
+              charCount += linesText[end].length + 1;
+              end++;
+            }
+
+            const slice = linesText.slice(idx, end);
+            let translatedSlice = null;
+
+            if (engine.kind === 'dict') {
+              translatedSlice = slice.map((line) => engine.translate(line));
+            } else {
+              try {
+                const joined = await engine.translate(slice.join('\n'));
+                const split = String(joined).split('\n');
+                if (split.length === slice.length) {
+                  translatedSlice = split;
+                }
+              } catch {
+                translatedSlice = null;
+              }
+              if (!translatedSlice) {
+                translatedSlice = [];
+                for (const line of slice) {
+                  try {
+                    translatedSlice.push(await engine.translate(line));
+                  } catch {
+                    translatedSlice.push(line);
+                  }
+                }
+              }
+            }
+
+            for (let k = 0; k < slice.length; k++) {
+              output[idx + k] = translatedSlice[k] ?? slice[k];
+            }
+
+            idx = end;
+            if (onLineProgress) onLineProgress(idx);
+            await nextTick();
+          }
+
+          return output;
+        }
+
+        /* Line-by-line execution for sequence-to-sequence models */
+        for (let i = 0; i < linesText.length; i++) {
+          try {
+            output[i] = await engine.translate(linesText[i]);
+          } catch {
+            output[i] = linesText[i];
+          }
+          if (onLineProgress) onLineProgress(i + 1);
+          if (i % 3 === 0) await nextTick();
+        }
+
+        return output;
+      }
+
+      /* =======================================================================
+         Script-Aware Unicode Font Loading & jsPDF Reconstruction (with RTL)
+         ======================================================================= */
+      const unicodeFontCache = new Map();
+
+      function arrayBufferToBase64(buffer) {
+        const bytes = new Uint8Array(buffer);
+        const chunkSize = 0x8000;
+        let binary = '';
+        for (let i = 0; i < bytes.length; i += chunkSize) {
+          binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+        }
+        return btoa(binary);
+      }
+
+      async function fetchUnicodeFontBase64(targetLangCode) {
+        const scriptKey = LANG_TO_SCRIPT[primaryCode(targetLangCode)] || 'dejavu';
+        if (unicodeFontCache.has(scriptKey)) {
+          return unicodeFontCache.get(scriptKey);
+        }
+
+        const candidateUrls = [
+          ...(SCRIPT_FONT_URLS[scriptKey] || []),
+          ...(scriptKey !== 'dejavu' ? SCRIPT_FONT_URLS.dejavu : [])
+        ];
+
+        for (const url of candidateUrls) {
+          try {
+            const response = await fetch(url);
+            if (!response.ok) continue;
+            const b64 = arrayBufferToBase64(await response.arrayBuffer());
+            unicodeFontCache.set(scriptKey, b64);
+            return b64;
+          } catch {
+            /* Try next mirror */
+          }
+        }
+
+        return null;
+      }
+
+      async function buildTranslatedPdf(pages, targetLangCode, useUnicodeFont, onPageProgress) {
+        const { jsPDF } = window.jspdf || {};
+        if (!jsPDF) {
+          throw new Error('jsPDF failed to load.');
+        }
+
+        const rtl = isRtlLang(targetLangCode);
+        let doc = null;
+
+        for (const page of pages) {
+          const orientation = page.width >= page.height ? 'l' : 'p';
+          if (!doc) {
+            doc = new jsPDF({
+              unit: 'pt',
+              format: [page.width, page.height],
+              orientation,
+              compress: true
+            });
+          } else {
+            doc.addPage([page.width, page.height], orientation);
+          }
+        }
+
+        let activeFont = 'helvetica';
+        if (useUnicodeFont) {
+          const fontBase64 = await fetchUnicodeFontBase64(targetLangCode);
+          if (fontBase64) {
+            const vfsFileName = 'HexPdfUnicodeFont.ttf';
+            doc.addFileToVFS(vfsFileName, fontBase64);
+            doc.addFont(vfsFileName, 'HexPdfUnicode', 'normal');
+            activeFont = 'HexPdfUnicode';
+          }
+        }
+
+        doc.setFont(activeFont, 'normal');
+
+        for (let p = 0; p < pages.length; p++) {
+          doc.setPage(p + 1);
+          const page = pages[p];
+
+          for (const line of page.lines) {
+            if (!line.text || !line.text.trim()) continue;
+
+            const rightMargin = 24;
+            const x = rtl
+              ? page.width - rightMargin
+              : Math.max(16, Math.min(line.x, page.width - 36));
+            const availableWidth = rtl
+              ? Math.max(60, page.width - rightMargin * 2)
+              : Math.max(48, page.width - x - rightMargin);
+
+            let fontSize = Math.max(5, Math.min(line.size, 72));
+            doc.setFontSize(fontSize);
+
+            const measuredWidth = doc.getTextWidth(line.text);
+            if (measuredWidth > availableWidth) {
+              const scaleRatio = Math.max(0.6, availableWidth / measuredWidth);
+              fontSize = Math.max(4.5, fontSize * scaleRatio);
+              doc.setFontSize(fontSize);
+            }
+
+            const wrappedLines = doc.splitTextToSize(line.text, availableWidth);
+            let cursorY = page.height - line.y;
+            const lineHeight = fontSize * 1.18;
+
+            for (const segment of wrappedLines) {
+              if (cursorY > page.height - 10) break;
+              if (rtl) {
+                doc.text(segment, x, cursorY, { align: 'right' });
+              } else {
+                doc.text(segment, x, cursorY);
+              }
+              cursorY += lineHeight;
+            }
+          }
+
+          if (onPageProgress) {
+            onPageProgress((p + 1) / pages.length);
+          }
+          await nextTick();
+        }
+
+        return doc;
+      }
+
+      /* =======================================================================
+         UI State, Engine Badge & Preview Rendering
+         ======================================================================= */
+      function setStatus(message, tone = '') {
+        els.statusText.textContent = message;
+        els.statusText.className = 'status-text' + (tone ? ` ${tone}` : '');
+      }
+
+      function setProgress(fraction) {
+        const clamped = Math.max(0, Math.min(1, fraction));
+        els.progressBar.style.width = `${clamped * 100}%`;
+      }
+
+      function setBusy(isBusy) {
+        state.busy = isBusy;
+        els.translateBtn.disabled = isBusy || !state.pages;
+        els.sourceLang.disabled = isBusy;
+        els.targetLang.disabled = isBusy;
+        els.embedUnicode.disabled = isBusy;
+        els.fastDictionaryOnly.disabled = isBusy;
+      }
+
+      function updateEngineBadge() {
+        const src = els.sourceLang.value;
+        const tgt = els.targetLang.value;
+        const s = primaryCode(src);
+        const t = primaryCode(tgt);
+
+        els.engineDot.className = 'dot';
+
+        if (src === tgt) {
+          els.engineDot.classList.add('err');
+          els.engineLabel.textContent = 'Source and target match';
+          return;
+        }
+
+        const hasDict = Boolean(resolveDictionary(src, tgt));
+        const hasChrome = Boolean(window.Translator || (window.translation && window.translation));
+        const hasNllb = Boolean(NLLB_CODES[s] && NLLB_CODES[t]);
+
+        if (els.fastDictionaryOnly.checked) {
+          if (hasDict) {
+            els.engineDot.classList.add('ok');
+            els.engineLabel.textContent = `Offline Dictionary (${s}↔${t})`;
+          } else {
+            els.engineDot.classList.add('err');
+            els.engineLabel.textContent = 'No dictionary for pair';
+          }
+          return;
+        }
+
+        if (hasChrome) {
+          els.engineDot.classList.add('ok');
+          els.engineLabel.textContent = `Chrome Translator (${s}→${t})`;
+          return;
+        }
+
+        if (hasNllb) {
+          els.engineDot.classList.add('warn');
+          els.engineLabel.textContent = `Transformers AI (${s}→${t})`;
+          return;
+        }
+
+        if (hasDict) {
+          els.engineDot.classList.add('warn');
+          els.engineLabel.textContent = `Offline Dictionary (${s}↔${t})`;
+          return;
+        }
+
+        els.engineDot.classList.add('err');
+        els.engineLabel.textContent = 'Engine unavailable for pair';
+      }
+
+      function renderPagesPreview(pages, targetLangCode) {
+        els.pagesPreview.innerHTML = '';
+        const rtl = isRtlLang(targetLangCode);
+
+        pages.forEach((page, index) => {
+          const details = document.createElement('details');
+          details.className = 'page-card';
+          if (index === 0) details.open = true;
+
+          const summary = document.createElement('summary');
+          summary.textContent = `Page ${page.pageNumber} · ${page.lines.length} line(s)`;
+
+          const pre = document.createElement('pre');
+          if (rtl) pre.setAttribute('dir', 'rtl');
+          pre.textContent = page.lines.map((line) => line.text).join('\n') || '(No extractable text)';
+
+          details.appendChild(summary);
+          details.appendChild(pre);
+          els.pagesPreview.appendChild(details);
+        });
+      }
+
+      /* =======================================================================
+         File Handling, Translation Pipeline & Downloads
+         ======================================================================= */
+      async function handleSelectedFile(file) {
+        if (!file) return;
+        const looksLikePdf = /\.pdf$/i.test(file.name) || file.type === 'application/pdf';
+        if (!looksLikePdf) {
+          setStatus('Please select a valid PDF file.', 'err');
+          return;
+        }
+
+        state.pages = null;
+        state.translated = null;
+        state.textOutput = '';
+        state.pdfDoc = null;
+        state.baseName = file.name.replace(/\.pdf$/i, '').trim() || 'translated';
+
+        els.resultCard.hidden = true;
+        els.downloadPdfBtn.disabled = true;
+        els.downloadTxtBtn.disabled = true;
+        els.translateBtn.disabled = true;
+
+        const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+        els.fileMeta.textContent = `${file.name} (${sizeMb} MB)`;
+
+        setProgress(0.05);
+        setStatus('Extracting text lines from PDF…');
+
+        try {
+          const pages = await extractPdfPages(file, (ratio) => {
+            setProgress(0.05 + ratio * 0.85);
+          });
+          const totalLines = pages.reduce((sum, p) => sum + p.lines.length, 0);
+
+          if (totalLines === 0) {
+            setProgress(0);
+            setStatus('No selectable text found in this PDF.', 'err');
+            return;
+          }
+
+          state.pages = pages;
+          setProgress(1);
+          setStatus(`Loaded ${pages.length} page(s) and ${totalLines} line(s). Ready to translate.`, 'ok');
+          els.translateBtn.disabled = false;
+        } catch (err) {
+          setProgress(0);
+          setStatus(`Failed to parse PDF: ${err.message || err}`, 'err');
+        }
+      }
+
+      async function runTranslation() {
+        if (!state.pages || state.busy) return;
+
+        const src = els.sourceLang.value;
+        const tgt = els.targetLang.value;
+
+        if (src === tgt) {
+          setStatus('Source and target languages must be different.', 'err');
+          return;
+        }
+
+        setBusy(true);
+        els.resultCard.hidden = true;
+        els.downloadPdfBtn.disabled = true;
+        els.downloadTxtBtn.disabled = true;
+        setProgress(0.03);
+        setStatus('Preparing translation engine…');
+
+        try {
+          const engine = await createTranslationEngine(src, tgt, (note) => setStatus(note));
+          if (!engine) {
+            throw new Error(`No translation engine available for ${src} → ${tgt}.`);
+          }
+
+          const translatedPages = [];
+          const txtPages = [];
+
+          for (let i = 0; i < state.pages.length; i++) {
+            const page = state.pages[i];
+            setStatus(`Translating page ${i + 1} of ${state.pages.length} via ${engine.label}…`);
+
+            const sourceLines = page.lines.map((line) => line.text);
+            const translatedLines = await translateLineBatch(engine, sourceLines, (doneCount) => {
+              const withinPage = sourceLines.length ? doneCount / sourceLines.length : 1;
+              setProgress(0.05 + 0.7 * ((i + withinPage) / state.pages.length));
+            });
+
+            const rebuiltLines = page.lines.map((origLine, idx) => ({
+              x: origLine.x,
+              y: origLine.y,
+              size: origLine.size,
+              text: translatedLines[idx] ?? origLine.text
+            }));
+
+            translatedPages.push({
+              pageNumber: page.pageNumber,
+              width: page.width,
+              height: page.height,
+              lines: rebuiltLines
+            });
+
+            txtPages.push(rebuiltLines.map((l) => l.text).join('\n'));
+          }
+
+          state.translated = translatedPages;
+          state.textOutput = txtPages.join('\n\n---\n\n');
+
+          setStatus('Rendering translated PDF document…');
+          const pdfDoc = await buildTranslatedPdf(
+            translatedPages,
+            tgt,
+            els.embedUnicode.checked,
+            (ratio) => setProgress(0.76 + ratio * 0.24)
+          );
+          state.pdfDoc = pdfDoc;
+
+          renderPagesPreview(translatedPages, tgt);
+          els.resultSummary.textContent = `${translatedPages.length} page(s) · ${engine.label}`;
+          els.resultCard.hidden = false;
+          els.downloadPdfBtn.disabled = false;
+          els.downloadTxtBtn.disabled = false;
+
+          setProgress(1);
+          setStatus('Translation complete. Download your PDF or TXT file below.', 'ok');
+          els.resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } catch (err) {
+          setProgress(0);
+          setStatus(`Translation error: ${err.message || err}`, 'err');
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      function triggerBlobDownload(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = filename;
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+        setTimeout(() => URL.revokeObjectURL(url), 4000);
+      }
+
+      /* =======================================================================
+         Event Listeners & Initialization
+         ======================================================================= */
+      function populateLanguageSelects() {
+        for (const [code, label] of LANGUAGES) {
+          const optSrc = document.createElement('option');
+          optSrc.value = code;
+          optSrc.textContent = label;
+          els.sourceLang.appendChild(optSrc);
+
+          const optTgt = document.createElement('option');
+          optTgt.value = code;
+          optTgt.textContent = label;
+          els.targetLang.appendChild(optTgt);
+        }
+        els.sourceLang.value = 'en';
+        els.targetLang.value = 'bn';
+      }
+
+      function bindEvents() {
+        els.browseBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          els.fileInput.click();
+        });
+
+        els.dropzone.addEventListener('click', () => els.fileInput.click());
+        els.dropzone.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            els.fileInput.click();
+          }
+        });
+
+        els.fileInput.addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (file) handleSelectedFile(file);
+        });
+
+        ['dragenter', 'dragover'].forEach((evtName) => {
+          els.dropzone.addEventListener(evtName, (e) => {
+            e.preventDefault();
+            els.dropzone.classList.add('is-dragover');
+          });
+        });
+
+        ['dragleave', 'drop'].forEach((evtName) => {
+          els.dropzone.addEventListener(evtName, (e) => {
+            e.preventDefault();
+            els.dropzone.classList.remove('is-dragover');
+          });
+        });
+
+        els.dropzone.addEventListener('drop', (e) => {
+          const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+          if (file) handleSelectedFile(file);
+        });
+
+        els.sourceLang.addEventListener('change', updateEngineBadge);
+        els.targetLang.addEventListener('change', updateEngineBadge);
+        els.fastDictionaryOnly.addEventListener('change', updateEngineBadge);
+
+        els.translateBtn.addEventListener('click', runTranslation);
+
+        els.downloadPdfBtn.addEventListener('click', () => {
+          if (!state.pdfDoc) return;
+          const filename = `${state.baseName}_${els.targetLang.value}.pdf`;
+          triggerBlobDownload(state.pdfDoc.output('blob'), filename);
+          setStatus(`Downloaded ${filename}`, 'ok');
+        });
+
+        els.downloadTxtBtn.addEventListener('click', () => {
+          if (!state.textOutput) return;
+          const filename = `${state.baseName}_${els.targetLang.value}.txt`;
+          triggerBlobDownload(
+            new Blob([state.textOutput], { type: 'text/plain;charset=utf-8' }),
+            filename
+          );
+          setStatus(`Downloaded ${filename}`, 'ok');
+        });
+      }
+
+      function init() {
+        if (window.location.protocol === 'file:') {
+          els.fileProtocolNotice.hidden = false;
+        }
+        populateLanguageSelects();
+        bindEvents();
+        updateEngineBadge();
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

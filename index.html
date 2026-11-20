@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HexPDF Studio — PDF Viewer, Text Converter &amp; Free Browser AI Translator</title>
+  <title>HexPDF Studio — PDF Viewer, Text Converter &amp; Free AI Translator</title>
 
-  <!-- Font Awesome 6 Free Icons -->
+  <!-- Font Awesome 6.7.2 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 
   <style>
@@ -13,26 +13,24 @@
        1. Design Tokens & Cyber-Neon Dark Glass Theme
        ========================================================================= */
     :root {
-      --bg-base: #0a0e13;
-      --bg-panel: #111a24;
-      --bg-panel-deep: #0d151d;
-      --glass: rgba(17, 26, 36, 0.82);
-      --glass-strong: rgba(11, 18, 27, 0.94);
-      --border: #1e2c3a;
-      --border-glow: rgba(55, 224, 195, 0.48);
+      --bg-base: #070b10;
+      --bg-card: #0f1722;
+      --bg-deep: #0a1018;
+      --border: #1d2d40;
+      --border-glow: rgba(55, 224, 195, 0.52);
       --cyan: #37e0c3;
       --cyan-soft: rgba(55, 224, 195, 0.14);
-      --cyan-glow: rgba(55, 224, 195, 0.35);
-      --purple: #7c5cff;
-      --purple-soft: rgba(124, 92, 255, 0.16);
-      --text: #e8f0f8;
-      --text-muted: #8ba0b6;
-      --text-dim: #5d7288;
+      --cyan-glow: rgba(55, 224, 195, 0.34);
+      --violet: #7c5cff;
+      --violet-soft: rgba(124, 92, 255, 0.16);
+      --text: #eaf2fa;
+      --text-muted: #8ea4bc;
+      --text-dim: #5d738b;
       --ok: #37e0c3;
       --warn: #ffb020;
       --err: #ff5c7a;
-      --shadow-lg: 0 22px 54px rgba(0, 0, 0, 0.55);
-      --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 22px 54px rgba(0, 0, 0, 0.6);
+      --shadow-sm: 0 10px 28px rgba(0, 0, 0, 0.4);
       --radius-xl: 18px;
       --radius-lg: 14px;
       --radius-md: 10px;
@@ -40,32 +38,6 @@
       --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       color-scheme: dark;
-    }
-
-    @media (prefers-color-scheme: light) {
-      html:not(.dark) {
-        --bg-base: #f2f6fb;
-        --bg-panel: #ffffff;
-        --bg-panel-deep: #f8fafc;
-        --glass: rgba(255, 255, 255, 0.88);
-        --glass-strong: rgba(248, 250, 252, 0.96);
-        --border: #d5e0ec;
-        --border-glow: rgba(13, 148, 136, 0.45);
-        --cyan: #0d9488;
-        --cyan-soft: rgba(13, 148, 136, 0.12);
-        --cyan-glow: rgba(13, 148, 136, 0.24);
-        --purple: #6366f1;
-        --purple-soft: rgba(99, 102, 241, 0.12);
-        --text: #0f172a;
-        --text-muted: #475569;
-        --text-dim: #64748b;
-        --ok: #059669;
-        --warn: #d97706;
-        --err: #e11d48;
-        --shadow-lg: 0 18px 40px rgba(15, 23, 42, 0.08);
-        --shadow-sm: 0 6px 18px rgba(15, 23, 42, 0.06);
-        color-scheme: light;
-      }
     }
 
     *, *::before, *::after {
@@ -82,8 +54,8 @@
       font-family: var(--font-sans);
       color: var(--text);
       background:
-        radial-gradient(1100px 560px at 12% -10%, rgba(55, 224, 195, 0.15), transparent 62%),
-        radial-gradient(960px 520px at 96% -4%, rgba(124, 92, 255, 0.18), transparent 60%),
+        radial-gradient(1150px 560px at 10% -10%, rgba(55, 224, 195, 0.14), transparent 62%),
+        radial-gradient(960px 520px at 94% -4%, rgba(124, 92, 255, 0.18), transparent 60%),
         var(--bg-base);
       min-height: 100vh;
       line-height: 1.5;
@@ -91,17 +63,27 @@
       overflow-x: hidden;
     }
 
+    /* Native File Input positioned offscreen (never display:none so labels always trigger natively) */
+    .sr-file-input {
+      position: fixed;
+      left: -9999px;
+      top: 0;
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+    }
+
     [hidden] {
       display: none !important;
     }
 
     /* =========================================================================
-       2. App Container & Top Header
+       2. Layout Shell & Top Bar
        ========================================================================= */
     .app-shell {
-      max-width: 1440px;
+      max-width: 1460px;
       margin: 0 auto;
-      padding: 18px 16px 56px;
+      padding: 16px 16px 56px;
     }
 
     .topbar {
@@ -112,7 +94,7 @@
       gap: 14px;
       padding: 14px 18px;
       border-radius: var(--radius-xl);
-      background: linear-gradient(180deg, var(--bg-panel), var(--bg-panel-deep));
+      background: linear-gradient(180deg, var(--bg-card), var(--bg-deep));
       border: 1px solid var(--border);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -130,7 +112,7 @@
       width: 46px;
       height: 52px;
       flex: 0 0 auto;
-      background: linear-gradient(145deg, var(--cyan), var(--purple));
+      background: linear-gradient(145deg, var(--cyan), var(--violet));
       clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
       display: grid;
       place-items: center;
@@ -141,12 +123,9 @@
 
     .brand-title {
       margin: 0;
-      font-size: 1.28rem;
+      font-size: 1.3rem;
       font-weight: 800;
       letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .brand-title span {
@@ -180,7 +159,7 @@
     }
 
     .banner-warn code {
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0, 0, 0, 0.38);
       padding: 2px 6px;
       border-radius: 5px;
       color: var(--cyan);
@@ -188,10 +167,10 @@
     }
 
     /* =========================================================================
-       3. Glass Cards, Dropzone & AI Translation Strip
+       3. Cards, Native Label Dropzone & AI Translation Bar
        ========================================================================= */
     .glass-card {
-      background: linear-gradient(180deg, var(--bg-panel), var(--bg-panel-deep));
+      background: linear-gradient(180deg, var(--bg-card), var(--bg-deep));
       border: 1px solid var(--border);
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow-sm);
@@ -211,32 +190,40 @@
       }
     }
 
-    .dropzone {
-      border: 1.5px dashed #28405a;
+    .upload-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    /* Styled directly as <label for="fileInput" class="dropzone"> for 100% native OS picker support */
+    label.dropzone {
+      border: 1.5px dashed #2a435e;
       border-radius: var(--radius-lg);
-      padding: 22px 18px;
+      padding: 20px 18px;
       text-align: center;
-      cursor: pointer;
-      background: rgba(10, 14, 19, 0.55);
+      background: rgba(7, 11, 16, 0.65);
       transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 158px;
-      height: 100%;
+      min-height: 138px;
+      cursor: pointer;
+      user-select: none;
     }
 
-    .dropzone:hover,
-    .dropzone.drag-over {
+    label.dropzone:hover,
+    label.dropzone.drag-over {
       border-color: var(--cyan);
-      background: linear-gradient(180deg, rgba(14, 42, 43, 0.65), rgba(13, 21, 29, 0.85));
-      box-shadow: 0 0 28px rgba(55, 224, 195, 0.14);
+      background: linear-gradient(180deg, rgba(16, 46, 48, 0.65), rgba(10, 16, 24, 0.9));
+      box-shadow: 0 0 28px rgba(55, 224, 195, 0.16);
       transform: translateY(-1px);
     }
 
     .dropzone-glyph {
-      font-size: 30px;
+      font-size: 32px;
       line-height: 1;
       color: var(--cyan);
       margin-bottom: 10px;
@@ -245,38 +232,33 @@
 
     .dropzone-main {
       margin: 0;
-      font-size: 0.95rem;
+      font-size: 0.96rem;
       color: var(--text);
       font-weight: 600;
     }
 
-    .link-btn {
-      background: none;
-      border: 0;
-      padding: 0;
-      font: inherit;
-      font-weight: 700;
-      color: var(--cyan);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      cursor: pointer;
-    }
-
     .dropzone-hint {
-      margin: 6px 0 0;
-      font-size: 0.8rem;
+      margin: 5px 0 0;
+      font-size: 0.79rem;
       color: var(--text-muted);
     }
 
+    .upload-action-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
     .file-pill {
-      margin-top: 10px;
       display: inline-flex;
       align-items: center;
       gap: 7px;
       padding: 5px 12px;
       border-radius: 999px;
       background: var(--cyan-soft);
-      border: 1px solid rgba(55, 224, 195, 0.35);
+      border: 1px solid rgba(55, 224, 195, 0.36);
       color: var(--cyan);
       font-size: 0.78rem;
       font-family: var(--font-mono);
@@ -286,7 +268,20 @@
       white-space: nowrap;
     }
 
-    /* AI Translation Controls */
+    .scanned-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: rgba(255, 176, 32, 0.14);
+      border: 1px solid rgba(255, 176, 32, 0.4);
+      color: var(--warn);
+      font-size: 0.76rem;
+      font-family: var(--font-mono);
+    }
+
+    /* AI Translation Panel */
     .ai-panel {
       display: flex;
       flex-direction: column;
@@ -327,13 +322,12 @@
       gap: 6px;
     }
 
-    select,
-    input[type="number"] {
+    select {
       width: 100%;
       padding: 9px 11px;
       border-radius: var(--radius-md);
       border: 1px solid var(--border);
-      background: #0b141d;
+      background: #09111a;
       color: var(--text);
       font-size: 0.87rem;
       font-family: var(--font-sans);
@@ -341,8 +335,7 @@
       transition: border-color 0.18s ease, box-shadow 0.18s ease;
     }
 
-    select:focus,
-    input[type="number"]:focus {
+    select:focus {
       border-color: var(--cyan);
       box-shadow: 0 0 0 3px var(--cyan-soft);
     }
@@ -368,6 +361,8 @@
       cursor: pointer;
       transition: transform 0.14s ease, filter 0.14s ease, border-color 0.14s ease, background 0.14s ease;
       white-space: nowrap;
+      text-decoration: none;
+      user-select: none;
     }
 
     .btn:hover:not(:disabled) {
@@ -388,28 +383,22 @@
     .btn-primary {
       background: linear-gradient(135deg, var(--cyan), #24b8a0);
       color: #04131a;
-      box-shadow: 0 6px 20px rgba(55, 224, 195, 0.24);
+      box-shadow: 0 6px 20px rgba(55, 224, 195, 0.25);
     }
 
     .btn-violet {
-      background: linear-gradient(135deg, var(--purple), #5c3df5);
+      background: linear-gradient(135deg, var(--violet), #5c3df5);
       color: #ffffff;
       box-shadow: 0 6px 20px rgba(124, 92, 255, 0.28);
     }
 
     .btn-ghost {
-      background: #0b141d;
+      background: #09111a;
       color: var(--text);
       border-color: var(--border);
     }
 
     .btn-ghost:hover:not(:disabled) {
-      border-color: var(--cyan);
-      color: var(--cyan);
-    }
-
-    .btn-ghost.is-active {
-      background: var(--cyan-soft);
       border-color: var(--cyan);
       color: var(--cyan);
     }
@@ -432,7 +421,7 @@
       gap: 7px;
       padding: 6px 12px;
       border-radius: 999px;
-      background: #0b141d;
+      background: #09111a;
       border: 1px solid var(--border);
       font-size: 0.78rem;
       color: var(--text-muted);
@@ -442,7 +431,7 @@
     }
 
     .toggle-chip:hover {
-      border-color: var(--purple);
+      border-color: var(--violet);
       color: var(--text);
     }
 
@@ -460,7 +449,7 @@
       gap: 7px;
       padding: 5px 12px;
       border-radius: 999px;
-      background: #0b141d;
+      background: #09111a;
       border: 1px solid var(--border);
       font-size: 0.76rem;
       color: var(--text-muted);
@@ -490,7 +479,7 @@
       box-shadow: 0 0 10px var(--err);
     }
 
-    /* Progress & Live Log Bar */
+    /* Progress Card */
     .progress-card {
       margin-bottom: 16px;
       padding: 13px 18px;
@@ -535,7 +524,7 @@
       margin-top: 9px;
       height: 7px;
       border-radius: 999px;
-      background: #0b141d;
+      background: #09111a;
       border: 1px solid var(--border);
       overflow: hidden;
     }
@@ -544,12 +533,12 @@
       display: block;
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      background: linear-gradient(90deg, var(--violet), var(--cyan));
       transition: width 0.2s ease;
     }
 
     /* =========================================================================
-       4. Split Studio Workspace ("PDF Show" + Live Text Preview & Converter)
+       4. Split Studio Workspace (PDF Canvas Viewer + Editable Text & PDF Export)
        ========================================================================= */
     .studio-grid {
       display: grid;
@@ -567,8 +556,8 @@
     .pane {
       display: flex;
       flex-direction: column;
-      min-height: 600px;
-      max-height: 80vh;
+      min-height: 620px;
+      max-height: 82vh;
       padding: 0;
       overflow: hidden;
     }
@@ -581,7 +570,7 @@
       gap: 10px;
       padding: 13px 16px;
       border-bottom: 1px solid var(--border);
-      background: rgba(11, 20, 29, 0.85);
+      background: rgba(9, 17, 26, 0.9);
     }
 
     .pane-title-group {
@@ -594,7 +583,6 @@
       margin: 0;
       font-size: 0.93rem;
       font-weight: 700;
-      letter-spacing: -0.01em;
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -605,7 +593,7 @@
       font-family: var(--font-mono);
       padding: 2px 8px;
       border-radius: 999px;
-      background: var(--purple-soft);
+      background: var(--violet-soft);
       color: #c4b5fd;
       border: 1px solid rgba(124, 92, 255, 0.35);
     }
@@ -631,7 +619,7 @@
       gap: 8px;
       padding: 8px 14px;
       border-bottom: 1px solid var(--border);
-      background: #0b141d;
+      background: #09111a;
       font-size: 0.78rem;
       color: var(--text-muted);
     }
@@ -650,10 +638,9 @@
       text-align: center;
     }
 
-    /* Segmented Source/Generated Switcher */
     .segmented {
       display: inline-flex;
-      background: #080f16;
+      background: #060b10;
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       padding: 2px;
@@ -697,7 +684,7 @@
       padding: 18px;
       background:
         radial-gradient(circle at 50% 0%, rgba(55, 224, 195, 0.06), transparent 55%),
-        #080d13;
+        #060a0f;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -707,7 +694,7 @@
     .pdf-page-frame {
       background: #ffffff;
       border-radius: 8px;
-      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65);
       overflow: hidden;
       max-width: 100%;
       position: relative;
@@ -725,7 +712,7 @@
       right: 10px;
       padding: 3px 9px;
       border-radius: 6px;
-      background: rgba(10, 14, 19, 0.84);
+      background: rgba(7, 11, 16, 0.86);
       color: var(--cyan);
       font-family: var(--font-mono);
       font-size: 0.7rem;
@@ -744,15 +731,15 @@
     }
 
     .empty-glyph {
-      font-size: 36px;
+      font-size: 38px;
       margin-bottom: 12px;
       color: var(--cyan);
-      opacity: 0.75;
+      opacity: 0.78;
     }
 
     .empty-state p {
       margin: 4px 0;
-      max-width: 350px;
+      max-width: 360px;
       font-size: 0.86rem;
     }
 
@@ -764,7 +751,7 @@
       padding: 8px 14px;
       overflow-x: auto;
       border-bottom: 1px solid var(--border);
-      background: #0b141d;
+      background: #09111a;
       scrollbar-width: thin;
     }
 
@@ -772,7 +759,7 @@
       padding: 4px 10px;
       border-radius: 999px;
       border: 1px solid var(--border);
-      background: #111a24;
+      background: #0f1722;
       color: var(--text-muted);
       font-family: var(--font-mono);
       font-size: 0.74rem;
@@ -812,7 +799,7 @@
       resize: none;
       border-radius: var(--radius-md);
       border: 1px solid var(--border);
-      background: #091018;
+      background: #070d14;
       color: var(--text);
       font-family: var(--font-mono);
       font-size: 0.84rem;
@@ -834,7 +821,7 @@
       overflow-y: auto;
       border-radius: var(--radius-md);
       border: 1px solid var(--border);
-      background: #091018;
+      background: #070d14;
       color: var(--text);
       font-family: var(--font-sans);
       font-size: 0.94rem;
@@ -858,7 +845,7 @@
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       font-family: var(--font-mono);
       font-size: 0.74rem;
     }
@@ -869,33 +856,33 @@
       gap: 5px;
       padding: 2px 8px;
       border-radius: 6px;
-      background: #0b141d;
+      background: #09111a;
       border: 1px solid var(--border);
     }
 
-    /* Text-to-PDF Builder Bar */
+    /* Text-to-PDF Converter Bar */
     .pdf-builder-bar {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       padding: 11px 14px;
       border-top: 1px solid var(--border);
-      background: rgba(11, 20, 29, 0.9);
+      background: rgba(9, 17, 26, 0.92);
     }
 
     .mini-field {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.76rem;
+      gap: 5px;
+      font-size: 0.75rem;
       color: var(--text-muted);
     }
 
     .mini-field select {
       width: auto;
-      padding: 5px 8px;
-      font-size: 0.77rem;
+      padding: 5px 7px;
+      font-size: 0.76rem;
       border-radius: var(--radius-sm);
     }
 
@@ -921,7 +908,7 @@
       gap: 9px;
       padding: 10px 14px;
       border-radius: var(--radius-md);
-      background: var(--glass-strong);
+      background: #0b131e;
       border: 1px solid var(--border-glow);
       color: var(--text);
       font-size: 0.82rem;
@@ -951,6 +938,9 @@
   </style>
 </head>
 <body>
+  <!-- Offscreen native file input wired directly via <label for="fileInput"> -->
+  <input type="file" id="fileInput" class="sr-file-input" accept=".pdf,application/pdf" />
+
   <div class="app-shell">
     <!-- Top Header Bar -->
     <header class="topbar">
@@ -960,7 +950,7 @@
         </div>
         <div>
           <h1 class="brand-title">Hex<span>PDF</span> Studio</h1>
-          <p class="brand-sub">Fast PDF Show · PDF ↔ Text Converter · Zero-Cost Browser AI Translator</p>
+          <p class="brand-sub">Fast PDF Viewer · PDF ↔ Text Converter · Zero-Cost Browser AI Translator</p>
         </div>
       </div>
 
@@ -977,8 +967,8 @@
           <span>Fast Dictionary Mode</span>
         </label>
 
-        <button type="button" class="btn btn-ghost btn-sm" id="sampleDocBtn" title="Generate and load a live sample PDF document">
-          <i class="fa-solid fa-flask"></i>
+        <button type="button" class="btn btn-ghost btn-sm" id="headerSampleBtn" title="Generate a real multi-paragraph PDF in memory and load it immediately">
+          <i class="fa-solid fa-wand-sparkles" style="color: var(--cyan);"></i>
           <span>Load Sample PDF</span>
         </button>
       </div>
@@ -988,26 +978,43 @@
     <div class="banner-warn" id="fileProtocolBanner" hidden>
       <i class="fa-solid fa-triangle-exclamation" style="color: var(--warn); font-size: 1rem;"></i>
       <div>
-        Opened via <code>file://</code>. Browser AI models require serving over <code>http://</code> or <code>https://</code> (such as GitHub Pages or <code>npx serve</code>).
+        Opened via <code>file://</code>. Browser neural AI models require serving over <code>http://</code> or <code>https://</code> (such as GitHub Pages or <code>npx serve</code>). Offline Dictionary &amp; PDF tools work everywhere.
       </div>
     </div>
 
-    <!-- Top Strip: PDF Dropzone + Zero-Cost AI Translation Controls -->
-    <section class="ingest-strip" aria-label="PDF input and AI translation">
-      <!-- Drag-and-Drop PDF Input -->
-      <div class="glass-card">
-        <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Drop PDF file here or browse">
-          <input type="file" id="pdfFileInput" accept="application/pdf,.pdf" hidden />
+    <!-- Top Strip: Native Label PDF Upload + Zero-Cost AI Translation Controls -->
+    <section class="ingest-strip" aria-label="PDF upload and AI translation">
+      <!-- Styled <label for="fileInput" class="dropzone"> + Dedicated <label for="fileInput" class="btn"> -->
+      <div class="glass-card upload-wrapper">
+        <label for="fileInput" class="dropzone" id="dropZone" aria-label="Upload PDF file">
           <div class="dropzone-glyph" aria-hidden="true">
             <i class="fa-solid fa-cloud-arrow-up"></i>
           </div>
           <p class="dropzone-main">
-            Drop a PDF here or <button type="button" class="link-btn" id="browsePdfBtn">browse files</button>
+            Click anywhere here or drag &amp; drop a PDF file
           </p>
-          <p class="dropzone-hint">Instant high-DPI canvas preview + full text extraction · 100% private in your browser</p>
+          <p class="dropzone-hint">Instant Page-1 canvas preview + coordinate text extraction · 100% private in your browser</p>
+        </label>
+
+        <div class="upload-action-row">
+          <label for="fileInput" class="btn btn-primary btn-sm" role="button" tabindex="0">
+            <i class="fa-solid fa-folder-open"></i>
+            <span>Browse PDF File</span>
+          </label>
+
+          <button type="button" class="btn btn-ghost btn-sm" id="cardSampleBtn">
+            <i class="fa-solid fa-file-circle-plus" style="color: var(--cyan);"></i>
+            <span>Load Sample PDF</span>
+          </button>
+
           <div class="file-pill" id="filePill" hidden>
             <i class="fa-solid fa-file-pdf"></i>
             <span id="filePillText">No PDF loaded</span>
+          </div>
+
+          <div class="scanned-pill" id="scannedPill" hidden title="No selectable text characters found in PDF">
+            <i class="fa-solid fa-image"></i>
+            <span>Image / Scanned PDF (0 text chars)</span>
           </div>
         </div>
       </div>
@@ -1035,15 +1042,15 @@
         <div class="ai-actions">
           <button type="button" class="btn btn-primary" id="translateDocBtn" disabled>
             <i class="fa-solid fa-wand-magic-sparkles"></i>
-            <span>Translate PDF &amp; Rebuild</span>
+            <span>Translate PDF (Layout Preserved)</span>
           </button>
 
-          <button type="button" class="btn btn-violet" id="translateCurrentBtn">
+          <button type="button" class="btn btn-violet" id="translateEditorBtn">
             <i class="fa-solid fa-language"></i>
             <span>Translate Text Editor</span>
           </button>
 
-          <button type="button" class="btn btn-ghost btn-sm" id="syncExtractedBtn" disabled title="Restore original extracted PDF text">
+          <button type="button" class="btn btn-ghost btn-sm" id="resetTextBtn" disabled title="Restore original extracted PDF text">
             <i class="fa-solid fa-rotate-left"></i>
             <span>Reset</span>
           </button>
@@ -1061,7 +1068,7 @@
       <div class="progress-top">
         <div class="status-msg-wrap">
           <i id="statusIcon" class="fa-solid fa-circle-check" style="color: var(--cyan);"></i>
-          <span class="status-msg" id="statusMsg" role="status" aria-live="polite">Ready. Drop a PDF, load a sample PDF, or type text to convert.</span>
+          <span class="status-msg" id="statusMsg" role="status" aria-live="polite">Ready. Choose a PDF file, drop one anywhere, or click Load Sample PDF.</span>
         </div>
         <span class="progress-pct" id="progressPct">0%</span>
       </div>
@@ -1070,7 +1077,7 @@
       </div>
     </section>
 
-    <!-- Main Split Studio Workspace: Left = PDF Show Canvas Viewer, Right = Live Text Preview & Text->PDF -->
+    <!-- Split Studio Workspace: Left = PDF Canvas Viewer, Right = Live Text Preview & Text->PDF -->
     <section class="studio-grid" aria-label="PDF viewer and text converter workspace">
       <!-- Left Pane: Visual PDF Show Canvas Viewer -->
       <article class="glass-card pane">
@@ -1078,13 +1085,12 @@
           <div class="pane-title-group">
             <h2 class="pane-title">
               <i class="fa-solid fa-eye" style="color: var(--cyan);"></i>
-              <span>PDF Show</span>
+              <span>PDF Canvas Viewer</span>
             </h2>
             <span class="pane-tag cyan" id="pdfPageCountTag">0 pages</span>
           </div>
 
           <div class="pane-toolbar">
-            <!-- Switch between Original Uploaded PDF and Generated/Translated PDF -->
             <div class="segmented" role="group" aria-label="PDF document source">
               <button type="button" class="seg-btn active" id="showOriginalPdfBtn" disabled>
                 <i class="fa-solid fa-file-pdf"></i>
@@ -1108,11 +1114,11 @@
             <button type="button" class="btn btn-ghost btn-sm" id="prevPageBtn" disabled aria-label="Previous page">
               <i class="fa-solid fa-chevron-left"></i>
             </button>
-            <span class="page-indicator" id="pageIndicator">Page 0 of 0</span>
+            <span class="page-indicator" id="pageIndicator">Page 0 / 0</span>
             <button type="button" class="btn btn-ghost btn-sm" id="nextPageBtn" disabled aria-label="Next page">
               <i class="fa-solid fa-chevron-right"></i>
             </button>
-            <button type="button" class="btn btn-ghost btn-sm" id="viewModeBtn" disabled title="Toggle Single Page or Continuous Scroll">
+            <button type="button" class="btn btn-ghost btn-sm" id="viewModeBtn" disabled title="Switch between Single Page and Continuous Scroll">
               <i class="fa-solid fa-arrows-up-down"></i>
               <span id="viewModeLabel">Single</span>
             </button>
@@ -1126,7 +1132,7 @@
             <button type="button" class="btn btn-ghost btn-sm" id="zoomInBtn" disabled title="Zoom in" aria-label="Zoom in">
               <i class="fa-solid fa-magnifying-glass-plus"></i>
             </button>
-            <button type="button" class="btn btn-ghost btn-sm" id="zoomFitBtn" disabled title="Fit PDF to viewer width">
+            <button type="button" class="btn btn-ghost btn-sm" id="zoomFitBtn" disabled title="Fit PDF page to viewer width">
               <i class="fa-solid fa-expand"></i>
               <span>Fit</span>
             </button>
@@ -1138,29 +1144,28 @@
             <div class="empty-glyph" aria-hidden="true">
               <i class="fa-solid fa-file-pdf"></i>
             </div>
-            <p><strong>No PDF rendered yet</strong></p>
-            <p>Upload any PDF above, click <strong>Load Sample PDF</strong>, or convert text on the right to preview pages visually here.</p>
+            <p><strong>No PDF loaded yet</strong></p>
+            <p>Click <strong>Browse PDF File</strong>, drag &amp; drop a PDF anywhere on the page, or click <strong>Load Sample PDF</strong>.</p>
           </div>
         </div>
       </article>
 
-      <!-- Right Pane: Live Text Preview Showing & Text-to-PDF Converter -->
+      <!-- Right Pane: Live Text Previewer & Text-to-PDF Converter -->
       <article class="glass-card pane">
         <div class="pane-header">
           <div class="pane-title-group">
             <h2 class="pane-title">
-              <i class="fa-solid fa-file-lines" style="color: var(--purple);"></i>
+              <i class="fa-solid fa-file-lines" style="color: var(--violet);"></i>
               <span>Text Preview &amp; Converter</span>
             </h2>
             <span class="pane-tag" id="textSourceTag">Editable</span>
           </div>
 
           <div class="pane-toolbar">
-            <!-- Toggle between Source Extracted Text and Translated Text -->
             <div class="segmented" role="group" aria-label="Text layer selector">
               <button type="button" class="seg-btn active" id="viewSourceTextBtn">
                 <i class="fa-solid fa-align-left"></i>
-                <span>Source</span>
+                <span>Original</span>
               </button>
               <button type="button" class="seg-btn" id="viewTranslatedTextBtn" disabled>
                 <i class="fa-solid fa-language"></i>
@@ -1168,7 +1173,7 @@
               </button>
             </div>
 
-            <button type="button" class="btn btn-ghost btn-sm" id="toggleReadModeBtn" title="Switch between Editable Textarea and Clean Reading View">
+            <button type="button" class="btn btn-ghost btn-sm" id="toggleReadModeBtn" title="Toggle between Editable Textarea and Clean Reading View">
               <i class="fa-solid fa-book-open"></i>
               <span id="readModeLabel">Read View</span>
             </button>
@@ -1179,21 +1184,21 @@
             </button>
 
             <button type="button" class="btn btn-ghost btn-sm" id="downloadTxtBtn" title="Download as .TXT file">
-              <i class="fa-solid fa-file-lines"></i>
+              <i class="fa-solid fa-file-arrow-down"></i>
               <span>.TXT</span>
             </button>
 
-            <button type="button" class="btn btn-ghost btn-sm" id="clearTextBtn" title="Clear editor">
+            <button type="button" class="btn btn-ghost btn-sm" id="clearTextBtn" title="Clear text editor">
               <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
         </div>
 
-        <!-- Per-page tabs + All Pages tab -->
+        <!-- Page Tabs Bar -->
         <div class="page-tabs-bar" id="pageTabsBar" role="tablist" aria-label="Page text selector">
           <button type="button" class="page-tab active" data-page="all">
             <i class="fa-solid fa-layer-group"></i>
-            <span>All Pages / Free Text</span>
+            <span>All Pages</span>
           </button>
         </div>
 
@@ -1201,7 +1206,7 @@
           <textarea
             id="textEditor"
             class="text-editor"
-            placeholder="Extracted PDF text appears here automatically, or type / paste any text here to translate with free browser AI or export directly as a PDF..."
+            placeholder="Extracted PDF text appears here automatically, or type / paste any text here to translate with free browser AI or export to PDF..."
             spellcheck="true"
           ></textarea>
 
@@ -1219,13 +1224,22 @@
         </div>
 
         <!-- Text -> PDF Converter Bar -->
-        <div class="pdf-builder-bar" aria-label="Convert text to PDF settings">
+        <div class="pdf-builder-bar" aria-label="Text to PDF settings">
           <label class="mini-field">
             <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
             <span>Size</span>
             <select id="pdfPageSize">
               <option value="a4" selected>A4</option>
               <option value="letter">Letter</option>
+            </select>
+          </label>
+
+          <label class="mini-field">
+            <i class="fa-solid fa-compass-drafting"></i>
+            <span>Orient</span>
+            <select id="pdfOrientation">
+              <option value="p" selected>Portrait</option>
+              <option value="l">Landscape</option>
             </select>
           </label>
 
@@ -1244,19 +1258,19 @@
             <i class="fa-solid fa-border-all"></i>
             <span>Margin</span>
             <select id="pdfMarginPreset">
-              <option value="20" selected>Normal (20mm)</option>
-              <option value="12">Compact (12mm)</option>
-              <option value="30">Wide (30mm)</option>
+              <option value="20" selected>20mm</option>
+              <option value="12">12mm</option>
+              <option value="28">28mm</option>
             </select>
           </label>
 
-          <label class="toggle-chip" style="padding: 4px 10px; font-size: 0.75rem;" title="Embed DejaVuSans Unicode TTF for non-Latin scripts">
+          <label class="toggle-chip" style="padding: 4px 10px; font-size: 0.75rem;" title="Auto-detect and embed Unicode TrueType fonts for Bengali, Hindi, Arabic, Tamil, etc.">
             <input type="checkbox" id="unicodeFontToggle" checked />
             <i class="fa-solid fa-spell-check" style="color: var(--cyan);"></i>
-            <span>Unicode</span>
+            <span>Auto Unicode</span>
           </label>
 
-          <button type="button" class="btn btn-primary btn-sm" id="exportPdfBtn" style="margin-left: auto;">
+          <button type="button" class="btn btn-primary btn-sm" id="sendToPdfBtn" style="margin-left: auto;">
             <i class="fa-solid fa-file-export"></i>
             <span>Text → PDF</span>
           </button>
@@ -1266,3 +1280,1977 @@
 
     <footer class="footer">
       <i class="fa-solid fa-hexagon-nodes" style="color: var(--cyan);"></i>
+      HexPDF Studio · PDF.js 3.11.174 · jsPDF 2.5.1 · @xenova/transformers 2.17.2 · 100% Client-Side, Zero API Keys Required
+    </footer>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Core Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    (() => {
+      'use strict';
+
+      /* =======================================================================
+         1. Global Drag-and-Drop Guards (Prevents Tab Navigation on Dropped Files)
+         ======================================================================= */
+      window.addEventListener('dragover', (e) => {
+        e.preventDefault();
+      });
+
+      window.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          loadPdfFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      /* =======================================================================
+         2. Safe PDF.js Worker Configuration with Automatic DisableWorker Retry
+         ======================================================================= */
+      const PDFJS_WORKER_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      let forceDisableWorker = false;
+
+      if (window.pdfjsLib) {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_URL;
+      }
+
+      async function openPdfDocumentSafe(arrayBuffer) {
+        if (!window.pdfjsLib) {
+          throw new Error('PDF.js library failed to load. Check your internet connection.');
+        }
+
+        /* Always clone ArrayBuffer before handing to PDF.js so original never detaches */
+        const primaryClone = new Uint8Array(arrayBuffer.slice(0));
+
+        if (!forceDisableWorker) {
+          try {
+            window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_URL;
+            const task = window.pdfjsLib.getDocument({
+              data: primaryClone,
+              isEvalSupported: false,
+              useSystemFonts: true
+            });
+            return await task.promise;
+          } catch (workerErr) {
+            console.warn('[HexPDF Studio] Worker failed, retrying with disableWorker: true:', workerErr);
+            forceDisableWorker = true;
+          }
+        }
+
+        const fallbackClone = new Uint8Array(arrayBuffer.slice(0));
+        const fallbackTask = window.pdfjsLib.getDocument({
+          data: fallbackClone,
+          disableWorker: true,
+          isEvalSupported: false,
+          useSystemFonts: true
+        });
+        return await fallbackTask.promise;
+      }
+
+      /* =======================================================================
+         3. DOM References & Application State
+         ======================================================================= */
+      const $ = (sel) => document.querySelector(sel);
+      const nextTick = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+      const els = {
+        fileInput: $('#fileInput'),
+        dropZone: $('#dropZone'),
+        headerSampleBtn: $('#headerSampleBtn'),
+        cardSampleBtn: $('#cardSampleBtn'),
+        filePill: $('#filePill'),
+        filePillText: $('#filePillText'),
+        scannedPill: $('#scannedPill'),
+        fileProtocolBanner: $('#fileProtocolBanner'),
+        engineDot: $('#engineDot'),
+        engineBadgeText: $('#engineBadgeText'),
+        fastModeToggle: $('#fastModeToggle'),
+        sourceLang: $('#sourceLang'),
+        targetLang: $('#targetLang'),
+        swapLangBtn: $('#swapLangBtn'),
+        translateDocBtn: $('#translateDocBtn'),
+        translateEditorBtn: $('#translateEditorBtn'),
+        resetTextBtn: $('#resetTextBtn'),
+        statusIcon: $('#statusIcon'),
+        statusMsg: $('#statusMsg'),
+        progressPct: $('#progressPct'),
+        progressFill: $('#progressFill'),
+        pdfPageCountTag: $('#pdfPageCountTag'),
+        showOriginalPdfBtn: $('#showOriginalPdfBtn'),
+        showGeneratedPdfBtn: $('#showGeneratedPdfBtn'),
+        downloadActivePdfBtn: $('#downloadActivePdfBtn'),
+        prevPageBtn: $('#prevPageBtn'),
+        nextPageBtn: $('#nextPageBtn'),
+        pageIndicator: $('#pageIndicator'),
+        viewModeBtn: $('#viewModeBtn'),
+        viewModeLabel: $('#viewModeLabel'),
+        zoomOutBtn: $('#zoomOutBtn'),
+        zoomLabel: $('#zoomLabel'),
+        zoomInBtn: $('#zoomInBtn'),
+        zoomFitBtn: $('#zoomFitBtn'),
+        pdfStage: $('#pdfStage'),
+        pdfEmptyState: $('#pdfEmptyState'),
+        textSourceTag: $('#textSourceTag'),
+        viewSourceTextBtn: $('#viewSourceTextBtn'),
+        viewTranslatedTextBtn: $('#viewTranslatedTextBtn'),
+        toggleReadModeBtn: $('#toggleReadModeBtn'),
+        readModeLabel: $('#readModeLabel'),
+        copyTextBtn: $('#copyTextBtn'),
+        copyBtnIcon: $('#copyBtnIcon'),
+        copyBtnLabel: $('#copyBtnLabel'),
+        downloadTxtBtn: $('#downloadTxtBtn'),
+        clearTextBtn: $('#clearTextBtn'),
+        pageTabsBar: $('#pageTabsBar'),
+        textEditor: $('#textEditor'),
+        readingPreview: $('#readingPreview'),
+        statPagesLabel: $('#statPagesLabel'),
+        statLinesLabel: $('#statLinesLabel'),
+        statWordsLabel: $('#statWordsLabel'),
+        statCharsLabel: $('#statCharsLabel'),
+        activeTabHint: $('#activeTabHint'),
+        pdfPageSize: $('#pdfPageSize'),
+        pdfOrientation: $('#pdfOrientation'),
+        pdfFontSize: $('#pdfFontSize'),
+        pdfMarginPreset: $('#pdfMarginPreset'),
+        unicodeFontToggle: $('#unicodeFontToggle'),
+        sendToPdfBtn: $('#sendToPdfBtn'),
+        toastContainer: $('#toastContainer')
+      };
+
+      const state = {
+        baseFileName: 'document',
+        originalPdfBytes: null,
+        generatedPdfBytes: null,
+        generatedPdfBlob: null,
+        activePdfSlot: 'original', // 'original' | 'generated'
+        pdfProxy: null,
+        totalPages: 0,
+        currentPage: 1,
+        zoomScale: 1.15,
+        continuousScroll: false,
+        renderToken: 0,
+
+        extractedPages: [],    // [{ pageNumber, width, height, lines: [{ x, y, size, text, paragraphBreak }] }]
+        translatedPages: null, // Same structure when translated
+        activeTextLayer: 'source', // 'source' | 'translated'
+        activePageTab: 'all',      // 'all' or 1-based page number
+        freeformSourceText: '',
+        freeformTranslatedText: '',
+        readMode: false,
+        busy: false
+      };
+
+      /* =======================================================================
+         4. Language Catalog, Script Detection & Noto/DejaVu TTF Font Registry
+         ======================================================================= */
+      const LANGUAGES = [
+        ['af', 'Afrikaans'], ['sq', 'Albanian'], ['am', 'Amharic'], ['ar', 'Arabic (العربية)'],
+        ['hy', 'Armenian'], ['az', 'Azerbaijani'], ['eu', 'Basque'], ['be', 'Belarusian'],
+        ['bn', 'Bengali (বাংলা)'], ['bs', 'Bosnian'], ['bg', 'Bulgarian'], ['ca', 'Catalan'],
+        ['ceb', 'Cebuano'], ['zh', 'Chinese'], ['zh-CN', 'Chinese (Simplified)'],
+        ['zh-TW', 'Chinese (Traditional)'], ['co', 'Corsican'], ['hr', 'Croatian'],
+        ['cs', 'Czech'], ['da', 'Danish'], ['nl', 'Dutch'], ['en', 'English'],
+        ['en-US', 'English (US)'], ['en-GB', 'English (UK)'], ['eo', 'Esperanto'],
+        ['et', 'Estonian'], ['tl', 'Filipino'], ['fi', 'Finnish'], ['fr', 'French (Français)'],
+        ['fy', 'Frisian'], ['gl', 'Galician'], ['ka', 'Georgian'], ['de', 'German (Deutsch)'],
+        ['el', 'Greek'], ['gu', 'Gujarati (ગુજરાતી)'], ['ht', 'Haitian Creole'],
+        ['ha', 'Hausa'], ['haw', 'Hawaiian'], ['he', 'Hebrew (עברית)'], ['hi', 'Hindi (हिन्दी)'],
+        ['hmn', 'Hmong'], ['hu', 'Hungarian'], ['is', 'Icelandic'], ['ig', 'Igbo'],
+        ['id', 'Indonesian'], ['ga', 'Irish'], ['it', 'Italian (Italiano)'], ['ja', 'Japanese (日本語)'],
+        ['jv', 'Javanese'], ['kn', 'Kannada (ಕನ್ನಡ)'], ['kk', 'Kazakh'], ['km', 'Khmer'],
+        ['rw', 'Kinyarwanda'], ['ko', 'Korean (한국어)'], ['ku', 'Kurdish'], ['ky', 'Kyrgyz'],
+        ['lo', 'Lao'], ['la', 'Latin'], ['lv', 'Latvian'], ['lt', 'Lithuanian'],
+        ['lb', 'Luxembourgish'], ['mk', 'Macedonian'], ['mg', 'Malagasy'], ['ms', 'Malay'],
+        ['ml', 'Malayalam (മലയാളം)'], ['mt', 'Maltese'], ['mi', 'Maori'],
+        ['mr', 'Marathi (मराठी)'], ['mn', 'Mongolian'], ['my', 'Myanmar (Burmese)'],
+        ['ne', 'Nepali (नेपाली)'], ['no', 'Norwegian'], ['or', 'Odia (ଓଡ଼ିଆ)'],
+        ['ps', 'Pashto'], ['fa', 'Persian (فارسی)'], ['pl', 'Polish'], ['pt', 'Portuguese (Português)'],
+        ['pa', 'Punjabi (ਪੰਜਾਬੀ)'], ['ro', 'Romanian'], ['ru', 'Russian (Русский)'], ['sm', 'Samoan'],
+        ['gd', 'Scottish Gaelic'], ['sr', 'Serbian'], ['st', 'Sesotho'], ['sn', 'Shona'],
+        ['sd', 'Sindhi'], ['si', 'Sinhala'], ['sk', 'Slovak'], ['sl', 'Slovenian'],
+        ['so', 'Somali'], ['es', 'Spanish (Español)'], ['su', 'Sundanese'], ['sw', 'Swahili'],
+        ['sv', 'Swedish'], ['tg', 'Tajik'], ['ta', 'Tamil (தமிழ்)'], ['tt', 'Tatar'],
+        ['te', 'Telugu (తెలుగు)'], ['th', 'Thai (ไทย)'], ['tr', 'Turkish'], ['tk', 'Turkmen'],
+        ['uk', 'Ukrainian'], ['ur', 'Urdu (اردو)'], ['ug', 'Uyghur'], ['uz', 'Uzbek'],
+        ['vi', 'Vietnamese'], ['cy', 'Welsh'], ['xh', 'Xhosa'], ['yi', 'Yiddish'],
+        ['yo', 'Yoruba'], ['zu', 'Zulu']
+      ];
+
+      const RTL_CODES = new Set(['ar', 'he', 'ur', 'fa', 'ps', 'sd', 'yi', 'ug']);
+
+      const SCRIPT_FONT_URLS = {
+        bengali: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansbengali/NotoSansBengali%5Bwdth%2Cwght%5D.ttf',
+          'https://cdn.jsdelivr.net/gh/notofonts/bengali@main/fonts/NotoSansBengali/unhinted/ttf/NotoSansBengali-Regular.ttf'
+        ],
+        devanagari: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansdevanagari/NotoSansDevanagari%5Bwdth%2Cwght%5D.ttf',
+          'https://cdn.jsdelivr.net/gh/notofonts/devanagari@main/fonts/NotoSansDevanagari/unhinted/ttf/NotoSansDevanagari-Regular.ttf'
+        ],
+        tamil: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosanstamil/NotoSansTamil%5Bwdth%2Cwght%5D.ttf',
+          'https://cdn.jsdelivr.net/gh/notofonts/tamil@main/fonts/NotoSansTamil/unhinted/ttf/NotoSansTamil-Regular.ttf'
+        ],
+        telugu: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosanstelugu/NotoSansTelugu%5Bwdth%2Cwght%5D.ttf'
+        ],
+        kannada: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosanskannada/NotoSansKannada%5Bwdth%2Cwght%5D.ttf'
+        ],
+        malayalam: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansmalayalam/NotoSansMalayalam%5Bwdth%2Cwght%5D.ttf'
+        ],
+        gujarati: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansgujarati/NotoSansGujarati%5Bwdth%2Cwght%5D.ttf'
+        ],
+        gurmukhi: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansgurmukhi/NotoSansGurmukhi%5Bwdth%2Cwght%5D.ttf'
+        ],
+        arabic: [
+          'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansarabic/NotoSansArabic%5Bwdth%2Cwght%5D.ttf',
+          'https://cdn.jsdelivr.net/npm/dejavu-fonts-ttf@2.37.3/ttf/DejaVuSans.ttf'
+        ],
+        dejavu: [
+          'https://cdn.jsdelivr.net/npm/dejavu-fonts-ttf@2.37.3/ttf/DejaVuSans.ttf',
+          'https://cdn.jsdelivr.net/gh/dejavu-fonts/dejavu-fonts@version_2_37/ttf/DejaVuSans.ttf'
+        ]
+      };
+
+      const LANG_TO_SCRIPT = {
+        bn: 'bengali',
+        hi: 'devanagari', mr: 'devanagari', ne: 'devanagari',
+        ta: 'tamil',
+        te: 'telugu',
+        kn: 'kannada',
+        ml: 'malayalam',
+        gu: 'gujarati',
+        pa: 'gurmukhi',
+        ar: 'arabic', fa: 'arabic', ur: 'arabic', ps: 'arabic', sd: 'arabic', ug: 'arabic'
+      };
+
+      function baseLang(code) {
+        return String(code || '').split('-')[0].toLowerCase();
+      }
+
+      /* Detect script directly from Unicode character ranges in text, falling back to language code */
+      function detectRequiredScript(text, langCode = '') {
+        const sample = String(text || '');
+        if (/[\u0980-\u09FF]/.test(sample)) return 'bengali';
+        if (/[\u0900-\u097F]/.test(sample)) return 'devanagari';
+        if (/[\u0B80-\u0BFF]/.test(sample)) return 'tamil';
+        if (/[\u0C00-\u0C7F]/.test(sample)) return 'telugu';
+        if (/[\u0C80-\u0CFF]/.test(sample)) return 'kannada';
+        if (/[\u0D00-\u0D7F]/.test(sample)) return 'malayalam';
+        if (/[\u0A80-\u0AFF]/.test(sample)) return 'gujarati';
+        if (/[\u0A00-\u0A7F]/.test(sample)) return 'gurmukhi';
+        if (/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(sample)) return 'arabic';
+
+        const mapped = LANG_TO_SCRIPT[baseLang(langCode)];
+        if (mapped) return mapped;
+
+        /* Any non-ASCII Unicode character uses DejaVuSans */
+        if (/[^\u0000-\u00FF]/.test(sample)) return 'dejavu';
+        return null;
+      }
+
+      function isRtlTextOrLang(text, langCode = '') {
+        if (RTL_CODES.has(baseLang(langCode))) return true;
+        return /[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/.test(String(text || ''));
+      }
+
+      /* =======================================================================
+         5. Toast, Progress & Status Helpers
+         ======================================================================= */
+      function showToast(message, iconClass = 'fa-circle-check') {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<i class="fa-solid ${iconClass}" style="color: var(--cyan);"></i><span></span>`;
+        toast.querySelector('span').textContent = message;
+        els.toastContainer.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transition = 'opacity 0.2s ease';
+          setTimeout(() => toast.remove(), 220);
+        }, 2800);
+      }
+
+      function setStatus(message, tone = 'info') {
+        els.statusMsg.textContent = message;
+        els.statusMsg.className = 'status-msg';
+        if (tone === 'ok') {
+          els.statusMsg.classList.add('ok');
+          els.statusIcon.className = 'fa-solid fa-circle-check';
+          els.statusIcon.style.color = 'var(--ok)';
+        } else if (tone === 'err') {
+          els.statusMsg.classList.add('err');
+          els.statusIcon.className = 'fa-solid fa-circle-exclamation';
+          els.statusIcon.style.color = 'var(--err)';
+        } else if (tone === 'busy') {
+          els.statusIcon.className = 'fa-solid fa-spinner fa-spin';
+          els.statusIcon.style.color = 'var(--cyan)';
+        } else {
+          els.statusIcon.className = 'fa-solid fa-circle-info';
+          els.statusIcon.style.color = 'var(--cyan)';
+        }
+      }
+
+      function setProgress(ratio) {
+        const clamped = Math.max(0, Math.min(1, ratio));
+        const pct = Math.round(clamped * 100);
+        els.progressFill.style.width = `${pct}%`;
+        els.progressPct.textContent = `${pct}%`;
+      }
+
+      function setBusy(isBusy) {
+        state.busy = isBusy;
+        els.translateDocBtn.disabled = isBusy || state.extractedPages.length === 0;
+        els.translateEditorBtn.disabled = isBusy;
+        els.sendToPdfBtn.disabled = isBusy;
+        els.sourceLang.disabled = isBusy;
+        els.targetLang.disabled = isBusy;
+        els.fastModeToggle.disabled = isBusy;
+      }
+
+      /* =======================================================================
+         6. Built-in "Load Sample PDF" Generator via jsPDF arraybuffer
+         ======================================================================= */
+      async function loadSamplePdf() {
+        const { jsPDF } = window.jspdf || {};
+        if (!jsPDF) {
+          setStatus('jsPDF failed to load. Check your internet connection.', 'err');
+          return;
+        }
+
+        setStatus('Generating sample multi-page PDF in memory…', 'busy');
+        setProgress(0.15);
+
+        const doc = new jsPDF({ unit: 'pt', format: 'a4', orientation: 'p' });
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(20);
+        doc.text('HexPDF Studio — Sample Document', 48, 68);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(11);
+        const page1Paragraphs = [
+          'Hello world! Welcome to HexPDF Studio, a private client-side PDF workspace.',
+          'This document was generated directly in browser memory using jsPDF to demonstrate instant PDF rendering, coordinate-accurate text extraction, and free AI translation.',
+          'Key Features Included:',
+          '1. Fast Page-1 Canvas Preview: Page 1 renders immediately onto high-DPI canvas while remaining pages extract in the background.',
+          '2. Multi-Tier Zero-API-Key AI Translation: Supports Chrome On-Device AI, Transformers.js neural models, and an instant offline dictionary.',
+          '3. Script-Aware Unicode PDF Export: Automatically embeds Noto Sans or DejaVu fonts for Bengali, Hindi, Arabic, Tamil, and European scripts.'
+        ];
+
+        let cursorY = 108;
+        for (const para of page1Paragraphs) {
+          const wrapped = doc.splitTextToSize(para, 498);
+          for (const line of wrapped) {
+            doc.text(line, 48, cursorY);
+            cursorY += 16;
+          }
+          cursorY += 12; // Clear paragraph break
+        }
+
+        doc.addPage('a4', 'p');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.text('Page 2 — Bilingual & Editing Workflow', 48, 68);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(11);
+        const page2Paragraphs = [
+          'Every file stays 100% on your device. No servers, no cloud uploads, and no API keys are required.',
+          'Try switching between All Pages, Page 1, and Page 2 tabs on the right editor, edit any paragraph, and click "Text -> PDF" or "Translate PDF (Layout Preserved)" to inspect the live PDF output.'
+        ];
+
+        cursorY = 104;
+        for (const para of page2Paragraphs) {
+          const wrapped = doc.splitTextToSize(para, 498);
+          for (const line of wrapped) {
+            doc.text(line, 48, cursorY);
+            cursorY += 16;
+          }
+          cursorY += 12;
+        }
+
+        const sampleArrayBuffer = doc.output('arraybuffer');
+        await loadPdfFromBuffer(sampleArrayBuffer, 'HexPDF_Sample_Guide.pdf', sampleArrayBuffer.byteLength);
+      }
+
+      /* =======================================================================
+         7. Fast Page-1 Visual Rendering & Coordinate Text Extraction
+         ======================================================================= */
+      function extractLinesFromTextContent(textContent) {
+        const rawItems = [];
+        for (const item of textContent.items) {
+          if (!item.str || !item.str.trim()) continue;
+          const tr = item.transform;
+          const height = item.height || Math.hypot(tr[2], tr[3]) || 10;
+          rawItems.push({
+            str: item.str,
+            x: tr[4],
+            y: tr[5],
+            w: item.width || 0,
+            h: height
+          });
+        }
+
+        /* Sort top-to-bottom (y descending with tolerance h * 0.45), then left-to-right (x ascending) */
+        rawItems.sort((a, b) => {
+          const tol = Math.max(1.5, Math.min(a.h, b.h) * 0.45);
+          if (Math.abs(b.y - a.y) > tol) return b.y - a.y;
+          return a.x - b.x;
+        });
+
+        const lineBuckets = [];
+        for (const item of rawItems) {
+          const tol = Math.max(1.5, item.h * 0.45);
+          let matchedBucket = null;
+          for (let i = lineBuckets.length - 1; i >= 0; i--) {
+            const bucket = lineBuckets[i];
+            if (Math.abs(bucket.y - item.y) <= Math.max(tol, bucket.h * 0.45)) {
+              matchedBucket = bucket;
+              break;
+            }
+            if (bucket.y > item.y + tol * 2.2) break;
+          }
+          if (!matchedBucket) {
+            matchedBucket = { y: item.y, h: item.h, items: [] };
+            lineBuckets.push(matchedBucket);
+          }
+          matchedBucket.items.push(item);
+          if (item.h > matchedBucket.h) matchedBucket.h = item.h;
+        }
+
+        const lines = [];
+        let prevLineY = null;
+        let prevLineH = null;
+
+        for (const bucket of lineBuckets) {
+          bucket.items.sort((a, b) => a.x - b.x);
+          let text = '';
+          let prevEnd = null;
+          let minX = Infinity;
+
+          for (const part of bucket.items) {
+            if (prevEnd !== null) {
+              const gap = part.x - prevEnd;
+              if (gap > part.h * 0.28 && !/\s$/.test(text)) {
+                text += ' ';
+              }
+            }
+            text += part.str;
+            if (part.x < minX) minX = part.x;
+            prevEnd = part.x + part.w;
+          }
+
+          text = text.replace(/\s+/g, ' ').trim();
+          if (!text) continue;
+
+          /* Preserve paragraph breaks when vertical gap exceeds lineHeight * 1.45 */
+          let paragraphBreak = false;
+          if (prevLineY !== null && prevLineH !== null) {
+            const verticalGap = prevLineY - bucket.y;
+            const avgLineHeight = Math.max(prevLineH, bucket.h, 8);
+            if (verticalGap > avgLineHeight * 1.45) {
+              paragraphBreak = true;
+            }
+          }
+
+          lines.push({
+            x: Number.isFinite(minX) ? Math.max(0, minX) : 32,
+            y: bucket.y,
+            size: Math.max(5, Math.min(bucket.h, 72)),
+            text,
+            paragraphBreak
+          });
+
+          prevLineY = bucket.y;
+          prevLineH = bucket.h;
+        }
+
+        return lines;
+      }
+
+      function formatPageLinesToText(lines) {
+        if (!lines || lines.length === 0) return '';
+        const parts = [];
+        for (let i = 0; i < lines.length; i++) {
+          if (i > 0) {
+            parts.push(lines[i].paragraphBreak ? '\n\n' : '\n');
+          }
+          parts.push(lines[i].text);
+        }
+        return parts.join('');
+      }
+
+      async function loadPdfFile(file) {
+        if (!file) return;
+        const isPdf = /\.pdf$/i.test(file.name) || file.type === 'application/pdf';
+        if (!isPdf) {
+          setStatus('Unsupported file format. Please choose a valid .PDF file.', 'err');
+          showToast('Please select a valid PDF file.', 'fa-circle-exclamation');
+          return;
+        }
+
+        setStatus(`Opening "${file.name}"…`, 'busy');
+        setProgress(0.06);
+
+        try {
+          const buffer = await file.arrayBuffer();
+          await loadPdfFromBuffer(buffer, file.name, file.size);
+        } catch (err) {
+          console.error('[HexPDF Studio] File read error:', err);
+          setProgress(0);
+          setStatus(`Error reading file: ${err.message || err}`, 'err');
+        }
+      }
+
+      async function loadPdfFromBuffer(arrayBuffer, fileName, byteSize = arrayBuffer.byteLength) {
+        try {
+          state.baseFileName = fileName.replace(/\.pdf$/i, '').trim() || 'document';
+          state.originalPdfBytes = arrayBuffer.slice(0);
+          state.generatedPdfBytes = null;
+          state.generatedPdfBlob = null;
+          state.translatedPages = null;
+          state.activeTextLayer = 'source';
+          state.activePageTab = 'all';
+          state.currentPage = 1;
+
+          const sizeKb = byteSize < 1024 * 1024
+            ? `${Math.max(1, Math.round(byteSize / 1024))} KB`
+            : `${(byteSize / (1024 * 1024)).toFixed(2)} MB`;
+          els.filePillText.textContent = `${fileName} (${sizeKb})`;
+          els.filePill.hidden = false;
+          els.scannedPill.hidden = true;
+
+          const pdfProxy = await openPdfDocumentSafe(state.originalPdfBytes);
+
+          /* STEP 1: Render Page 1 immediately onto canvas FIRST (<100ms) for instant visual feedback */
+          els.showOriginalPdfBtn.disabled = false;
+          els.showGeneratedPdfBtn.disabled = true;
+          await activatePdfBuffer('original', pdfProxy);
+          setProgress(0.2);
+
+          /* STEP 2: Extract text across all pages in background ticks */
+          const extracted = [];
+          for (let pageNum = 1; pageNum <= pdfProxy.numPages; pageNum++) {
+            const page = await pdfProxy.getPage(pageNum);
+            const viewport = page.getViewport({ scale: 1 });
+            const textContent = await page.getTextContent();
+            const lines = extractLinesFromTextContent(textContent);
+
+            extracted.push({
+              pageNumber: pageNum,
+              width: viewport.width,
+              height: viewport.height,
+              lines
+            });
+
+            setProgress(0.2 + 0.8 * (pageNum / pdfProxy.numPages));
+            await nextTick();
+          }
+
+          state.extractedPages = extracted;
+          state.freeformSourceText = extracted
+            .map((p) => formatPageLinesToText(p.lines))
+            .filter(Boolean)
+            .join('\n\n');
+          state.freeformTranslatedText = '';
+
+          els.viewSourceTextBtn.classList.add('active');
+          els.viewTranslatedTextBtn.classList.remove('active');
+          els.viewTranslatedTextBtn.disabled = true;
+          els.resetTextBtn.disabled = false;
+
+          buildPageTabs();
+          syncEditorFromState();
+
+          const totalChars = state.freeformSourceText.replace(/\s+/g, '').length;
+          const totalLines = extracted.reduce((acc, p) => acc + p.lines.length, 0);
+
+          if (totalChars === 0) {
+            els.scannedPill.hidden = false;
+            els.translateDocBtn.disabled = true;
+            setStatus(`Rendered ${pdfProxy.numPages} page(s). Scanned/image-only PDF detected (0 selectable text chars).`, 'ok');
+          } else {
+            els.scannedPill.hidden = true;
+            els.translateDocBtn.disabled = false;
+            setStatus(`Loaded "${fileName}" — ${pdfProxy.numPages} page(s), ${totalLines} lines extracted.`, 'ok');
+          }
+
+          showToast(`Loaded ${fileName} (${pdfProxy.numPages} pages)`, 'fa-file-pdf');
+        } catch (err) {
+          console.error('[HexPDF Studio] PDF Load Error:', err);
+          setProgress(0);
+          setStatus(`Error loading PDF: ${err.message || err}`, 'err');
+          showToast('Failed to read PDF file.', 'fa-circle-exclamation');
+        }
+      }
+
+      async function activatePdfBuffer(slot, existingProxy = null) {
+        const buffer = slot === 'generated' ? state.generatedPdfBytes : state.originalPdfBytes;
+        if (!buffer) return;
+
+        state.activePdfSlot = slot;
+        els.showOriginalPdfBtn.classList.toggle('active', slot === 'original');
+        els.showGeneratedPdfBtn.classList.toggle('active', slot === 'generated');
+
+        const proxy = existingProxy || (await openPdfDocumentSafe(buffer));
+        state.pdfProxy = proxy;
+        state.totalPages = proxy.numPages;
+        state.currentPage = Math.min(Math.max(1, state.currentPage), proxy.numPages);
+
+        els.pdfPageCountTag.textContent = `${proxy.numPages} page${proxy.numPages === 1 ? '' : 's'}`;
+        els.downloadActivePdfBtn.disabled = false;
+        els.viewModeBtn.disabled = false;
+        els.zoomOutBtn.disabled = false;
+        els.zoomInBtn.disabled = false;
+        els.zoomFitBtn.disabled = false;
+
+        updatePdfNavControls();
+        await renderPdfCanvasStage();
+      }
+
+      function updatePdfNavControls() {
+        const hasPdf = Boolean(state.pdfProxy && state.totalPages > 0);
+        els.pageIndicator.textContent = hasPdf
+          ? `Page ${state.currentPage} / ${state.totalPages}`
+          : 'Page 0 / 0';
+        els.zoomLabel.textContent = `${Math.round(state.zoomScale * 100)}%`;
+        els.prevPageBtn.disabled = !hasPdf || state.continuousScroll || state.currentPage <= 1;
+        els.nextPageBtn.disabled = !hasPdf || state.continuousScroll || state.currentPage >= state.totalPages;
+      }
+
+      async function renderPdfCanvasStage() {
+        if (!state.pdfProxy) return;
+        const token = ++state.renderToken;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        els.pdfStage.innerHTML = '';
+
+        const pagesToRender = state.continuousScroll
+          ? Array.from({ length: state.totalPages }, (_, i) => i + 1)
+          : [state.currentPage];
+
+        for (const pageNum of pagesToRender) {
+          if (token !== state.renderToken) return;
+
+          const page = await state.pdfProxy.getPage(pageNum);
+          const cssViewport = page.getViewport({ scale: state.zoomScale });
+          const renderViewport = page.getViewport({ scale: state.zoomScale * dpr });
+
+          const frame = document.createElement('div');
+          frame.className = 'pdf-page-frame';
+
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.floor(renderViewport.width);
+          canvas.height = Math.floor(renderViewport.height);
+          canvas.style.width = `${Math.floor(cssViewport.width)}px`;
+          canvas.style.height = `${Math.floor(cssViewport.height)}px`;
+
+          const caption = document.createElement('div');
+          caption.className = 'pdf-page-caption';
+          caption.textContent = `Page ${pageNum} of ${state.totalPages}`;
+
+          frame.appendChild(canvas);
+          frame.appendChild(caption);
+          els.pdfStage.appendChild(frame);
+
+          const ctx = canvas.getContext('2d', { alpha: false });
+          await page.render({ canvasContext: ctx, viewport: renderViewport }).promise;
+        }
+      }
+
+      async function fitPdfToStageWidth() {
+        if (!state.pdfProxy) return;
+        const page = await state.pdfProxy.getPage(state.currentPage);
+        const unscaledViewport = page.getViewport({ scale: 1 });
+        const availableWidth = Math.max(260, els.pdfStage.clientWidth - 40);
+        state.zoomScale = Math.max(0.4, Math.min(3.0, availableWidth / unscaledViewport.width));
+        updatePdfNavControls();
+        await renderPdfCanvasStage();
+      }
+
+      /* =======================================================================
+         8. Editable Text Preview & Page Tabs Synchronization
+         ======================================================================= */
+      function buildPageTabs() {
+        els.pageTabsBar.innerHTML = '';
+
+        const allBtn = document.createElement('button');
+        allBtn.type = 'button';
+        allBtn.className = 'page-tab' + (state.activePageTab === 'all' ? ' active' : '');
+        allBtn.dataset.page = 'all';
+        allBtn.innerHTML = '<i class="fa-solid fa-layer-group"></i><span>All Pages</span>';
+        allBtn.addEventListener('click', () => selectPageTab('all'));
+        els.pageTabsBar.appendChild(allBtn);
+
+        const pagesList = state.activeTextLayer === 'translated' && state.translatedPages
+          ? state.translatedPages
+          : state.extractedPages;
+
+        pagesList.forEach((pg) => {
+          const tab = document.createElement('button');
+          tab.type = 'button';
+          tab.className = 'page-tab' + (state.activePageTab === pg.pageNumber ? ' active' : '');
+          tab.dataset.page = String(pg.pageNumber);
+          tab.innerHTML = `<i class="fa-regular fa-file-lines"></i><span>Page ${pg.pageNumber}</span>`;
+          tab.addEventListener('click', () => selectPageTab(pg.pageNumber));
+          els.pageTabsBar.appendChild(tab);
+        });
+      }
+
+      function selectPageTab(tabKey) {
+        persistCurrentEditorBuffer();
+        state.activePageTab = tabKey;
+
+        els.pageTabsBar.querySelectorAll('.page-tab').forEach((btn) => {
+          btn.classList.toggle('active', btn.dataset.page === String(tabKey));
+        });
+
+        if (typeof tabKey === 'number' && state.pdfProxy && !state.continuousScroll) {
+          state.currentPage = tabKey;
+          updatePdfNavControls();
+          renderPdfCanvasStage();
+        }
+
+        syncEditorFromState();
+      }
+
+      function getActivePagesArray() {
+        if (state.activeTextLayer === 'translated') {
+          return state.translatedPages;
+        }
+        return state.extractedPages.length > 0 ? state.extractedPages : null;
+      }
+
+      function syncEditorFromState() {
+        const pagesArr = getActivePagesArray();
+        let displayText = '';
+
+        if (!pagesArr || pagesArr.length === 0) {
+          displayText = state.activeTextLayer === 'translated'
+            ? state.freeformTranslatedText
+            : state.freeformSourceText;
+          els.activeTabHint.textContent = state.activeTextLayer === 'translated'
+            ? 'Translated text buffer'
+            : 'Freeform text buffer';
+        } else if (state.activePageTab === 'all') {
+          displayText = pagesArr
+            .map((p) => formatPageLinesToText(p.lines))
+            .filter(Boolean)
+            .join('\n\n');
+          els.activeTabHint.textContent = `Showing all ${pagesArr.length} page(s)`;
+        } else {
+          const targetPage = pagesArr.find((p) => p.pageNumber === state.activePageTab);
+          displayText = targetPage ? formatPageLinesToText(targetPage.lines) : '';
+          els.activeTabHint.textContent = `Editing Page ${state.activePageTab} of ${pagesArr.length}`;
+        }
+
+        const rtl = isRtlTextOrLang(
+          displayText,
+          state.activeTextLayer === 'translated' ? els.targetLang.value : els.sourceLang.value
+        );
+        els.textEditor.dir = rtl ? 'rtl' : 'ltr';
+        els.readingPreview.dir = rtl ? 'rtl' : 'ltr';
+
+        els.textEditor.value = displayText;
+        els.readingPreview.textContent = displayText || 'No text content yet.';
+        updateTextStats(displayText);
+      }
+
+      function persistCurrentEditorBuffer() {
+        const currentVal = els.textEditor.value;
+        const pagesArr = getActivePagesArray();
+
+        if (!pagesArr || pagesArr.length === 0) {
+          if (state.activeTextLayer === 'translated') {
+            state.freeformTranslatedText = currentVal;
+          } else {
+            state.freeformSourceText = currentVal;
+          }
+          return;
+        }
+
+        if (state.activePageTab === 'all') {
+          if (state.activeTextLayer === 'translated') {
+            state.freeformTranslatedText = currentVal;
+          } else {
+            state.freeformSourceText = currentVal;
+          }
+
+          /* Map edited lines back across pages cleanly */
+          const editedLines = currentVal.split(/\r?\n/);
+          let cursor = 0;
+          for (let p = 0; p < pagesArr.length; p++) {
+            const page = pagesArr[p];
+            if (p === pagesArr.length - 1) {
+              const remaining = editedLines.slice(cursor);
+              page.lines = remaining.map((txt, idx) => ({
+                x: page.lines[idx]?.x ?? 36,
+                y: page.lines[idx]?.y ?? Math.max(40, page.height - 50 - idx * 16),
+                size: page.lines[idx]?.size ?? 11,
+                text: txt,
+                paragraphBreak: idx > 0 && txt === ''
+              })).filter((l) => l.text.trim() !== '');
+            } else {
+              const count = page.lines.length;
+              for (let i = 0; i < count; i++) {
+                if (cursor < editedLines.length) {
+                  if (editedLines[cursor] === '' && cursor + 1 < editedLines.length) {
+                    cursor++;
+                  }
+                  page.lines[i].text = editedLines[cursor] ?? '';
+                  cursor++;
+                }
+              }
+            }
+          }
+        } else {
+          const targetPage = pagesArr.find((p) => p.pageNumber === state.activePageTab);
+          if (targetPage) {
+            const rawLines = currentVal.split(/\r?\n/);
+            targetPage.lines = rawLines
+              .map((txt, idx) => ({
+                x: targetPage.lines[idx]?.x ?? 36,
+                y: targetPage.lines[idx]?.y ?? Math.max(40, targetPage.height - 50 - idx * 16),
+                size: targetPage.lines[idx]?.size ?? 11,
+                text: txt,
+                paragraphBreak: idx > 0 && rawLines[idx - 1] === ''
+              }))
+              .filter((l) => l.text.trim() !== '');
+          }
+        }
+      }
+
+      function updateTextStats(text) {
+        const clean = String(text || '');
+        const trimmed = clean.trim();
+        const words = trimmed ? trimmed.split(/\s+/).length : 0;
+        const lines = clean ? clean.split(/\r?\n/).filter((l) => l.trim().length > 0).length : 0;
+        const pageCount = state.extractedPages.length || (trimmed ? 1 : 0);
+
+        els.statPagesLabel.textContent = `${pageCount} page${pageCount === 1 ? '' : 's'}`;
+        els.statLinesLabel.textContent = `${lines} line${lines === 1 ? '' : 's'}`;
+        els.statWordsLabel.textContent = `${words} word${words === 1 ? '' : 's'}`;
+        els.statCharsLabel.textContent = `${clean.length} chars`;
+      }
+
+      /* =======================================================================
+         9. Zero-Cost, No-API-Key 3-Tier AI Translation Engine
+         ======================================================================= */
+      const DICTIONARIES = {
+        es: {
+          the: 'el', a: 'un', and: 'y', or: 'o', but: 'pero', is: 'es', are: 'son',
+          was: 'era', be: 'ser', have: 'tener', has: 'tiene', i: 'yo', you: 'tú',
+          he: 'él', she: 'ella', we: 'nosotros', they: 'ellos', my: 'mi', your: 'tu',
+          his: 'su', her: 'su', our: 'nuestro', in: 'en', on: 'en', at: 'en',
+          to: 'a', from: 'de', of: 'de', for: 'para', with: 'con', without: 'sin',
+          by: 'por', about: 'sobre', not: 'no', yes: 'sí', all: 'todo', more: 'más',
+          very: 'muy', now: 'ahora', when: 'cuando', where: 'dónde', how: 'cómo',
+          what: 'qué', who: 'quién', hello: 'hola', world: 'mundo', good: 'bueno',
+          new: 'nuevo', first: 'primero', day: 'día', year: 'año', time: 'tiempo',
+          people: 'gente', life: 'vida', water: 'agua', house: 'casa', book: 'libro',
+          question: 'pregunta', answer: 'respuesta', problem: 'problema', part: 'parte',
+          page: 'página', document: 'documento', text: 'texto', word: 'palabra',
+          language: 'idioma', file: 'archivo', line: 'línea', title: 'título',
+          welcome: 'bienvenido', sample: 'muestra', browser: 'navegador', free: 'gratis'
+        },
+        fr: {
+          the: 'le', a: 'un', and: 'et', or: 'ou', but: 'mais', is: 'est', are: 'sont',
+          was: 'était', be: 'être', have: 'avoir', has: 'a', i: 'je', you: 'vous',
+          he: 'il', she: 'elle', we: 'nous', they: 'ils', my: 'mon', your: 'votre',
+          his: 'son', her: 'sa', our: 'notre', in: 'dans', on: 'sur', at: 'à',
+          to: 'à', from: 'de', of: 'de', for: 'pour', with: 'avec', without: 'sans',
+          by: 'par', about: 'sur', not: 'ne pas', yes: 'oui', all: 'tout', more: 'plus',
+          very: 'très', now: 'maintenant', when: 'quand', where: 'où', how: 'comment',
+          what: 'quoi', who: 'qui', hello: 'bonjour', world: 'monde', good: 'bon',
+          new: 'nouveau', first: 'premier', day: 'jour', year: 'année', time: 'temps',
+          people: 'gens', life: 'vie', water: 'eau', house: 'maison', book: 'livre',
+          question: 'question', answer: 'réponse', problem: 'problème', part: 'partie',
+          page: 'page', document: 'document', text: 'texte', word: 'mot',
+          language: 'langue', file: 'fichier', line: 'ligne', title: 'titre',
+          welcome: 'bienvenue', sample: 'exemple', browser: 'navigateur', free: 'gratuit'
+        },
+        de: {
+          the: 'der', a: 'ein', and: 'und', or: 'oder', but: 'aber', is: 'ist', are: 'sind',
+          was: 'war', be: 'sein', have: 'haben', has: 'hat', i: 'ich', you: 'du',
+          he: 'er', she: 'sie', we: 'wir', they: 'sie', my: 'mein', your: 'dein',
+          his: 'sein', her: 'ihr', our: 'unser', in: 'in', on: 'auf', at: 'bei',
+          to: 'zu', from: 'von', of: 'von', for: 'für', with: 'mit', without: 'ohne',
+          by: 'von', about: 'über', not: 'nicht', yes: 'ja', all: 'alle', more: 'mehr',
+          very: 'sehr', now: 'jetzt', when: 'wenn', where: 'wo', how: 'wie',
+          what: 'was', who: 'wer', hello: 'hallo', world: 'Welt', good: 'gut',
+          new: 'neu', first: 'erste', day: 'Tag', year: 'Jahr', time: 'Zeit',
+          people: 'Menschen', life: 'Leben', water: 'Wasser', house: 'Haus', book: 'Buch',
+          question: 'Frage', answer: 'Antwort', problem: 'Problem', part: 'Teil',
+          page: 'Seite', document: 'Dokument', text: 'Text', word: 'Wort',
+          language: 'Sprache', file: 'Datei', line: 'Linie', title: 'Titel',
+          welcome: 'willkommen', sample: 'Beispiel', browser: 'Browser', free: 'kostenlos'
+        },
+        it: {
+          the: 'il', a: 'un', and: 'e', or: 'o', but: 'ma', is: 'è', are: 'sono',
+          was: 'era', be: 'essere', have: 'avere', has: 'ha', i: 'io', you: 'tu',
+          he: 'lui', she: 'lei', we: 'noi', they: 'loro', my: 'mio', your: 'tuo',
+          his: 'suo', her: 'sua', our: 'nostro', in: 'in', on: 'su', at: 'a',
+          to: 'a', from: 'da', of: 'di', for: 'per', with: 'con', without: 'senza',
+          by: 'da', about: 'circa', not: 'non', yes: 'sì', all: 'tutto', more: 'più',
+          very: 'molto', now: 'ora', when: 'quando', where: 'dove', how: 'come',
+          what: 'cosa', who: 'chi', hello: 'ciao', world: 'mondo', good: 'buono',
+          new: 'nuovo', first: 'primo', day: 'giorno', year: 'anno', time: 'tempo',
+          people: 'persone', life: 'vita', water: 'acqua', house: 'casa', book: 'libro',
+          question: 'domanda', answer: 'risposta', problem: 'problema', part: 'parte',
+          page: 'pagina', document: 'documento', text: 'testo', word: 'parola',
+          language: 'lingua', file: 'file', line: 'linea', title: 'titolo',
+          welcome: 'benvenuto', sample: 'esempio', browser: 'browser', free: 'gratuito'
+        },
+        pt: {
+          the: 'o', a: 'um', and: 'e', or: 'ou', but: 'mas', is: 'é', are: 'são',
+          was: 'era', be: 'ser', have: 'ter', has: 'tem', i: 'eu', you: 'você',
+          he: 'ele', she: 'ela', we: 'nós', they: 'eles', my: 'meu', your: 'seu',
+          his: 'dele', her: 'dela', our: 'nosso', in: 'em', on: 'em', at: 'em',
+          to: 'para', from: 'de', of: 'de', for: 'para', with: 'com', without: 'sem',
+          by: 'por', about: 'sobre', not: 'não', yes: 'sim', all: 'todo', more: 'mais',
+          very: 'muito', now: 'agora', when: 'quando', where: 'onde', how: 'como',
+          what: 'o que', who: 'quem', hello: 'olá', world: 'mundo', good: 'bom',
+          new: 'novo', first: 'primeiro', day: 'dia', year: 'ano', time: 'tempo',
+          people: 'pessoas', life: 'vida', water: 'água', house: 'casa', book: 'livro',
+          question: 'pergunta', answer: 'resposta', problem: 'problema', part: 'parte',
+          page: 'página', document: 'documento', text: 'texto', word: 'palavra',
+          language: 'idioma', file: 'arquivo', line: 'linha', title: 'título',
+          welcome: 'bem-vindo', sample: 'amostra', browser: 'navegador', free: 'grátis'
+        },
+        bn: {
+          the: 'এই', a: 'একটি', and: 'এবং', or: 'অথবা', but: 'কিন্তু', is: 'হয়', are: 'হন',
+          i: 'আমি', you: 'আপনি', he: 'সে', she: 'সে', we: 'আমরা', they: 'তারা',
+          my: 'আমার', your: 'আপনার', our: 'আমাদের', in: 'মধ্যে', on: 'উপরে', to: 'প্রতি',
+          from: 'থেকে', of: 'এর', for: 'জন্য', with: 'সাথে', without: 'ছাড়া', not: 'না',
+          yes: 'হ্যাঁ', all: 'সব', more: 'আরও', very: 'খুব', now: 'এখন', hello: 'হ্যালো',
+          world: 'বিশ্ব', good: 'ভালো', new: 'নতুন', first: 'প্রথম', day: 'দিন', year: 'বছর',
+          time: 'সময়', people: 'মানুষ', life: 'জীবন', water: 'জল', house: 'বাড়ি', book: 'বই',
+          question: 'প্রশ্ন', answer: 'উত্তর', problem: 'সমস্যা', part: 'অংশ', page: 'পৃষ্ঠা',
+          document: 'নথি', text: 'পাঠ্য', word: 'শব্দ', language: 'ভাষা', file: 'ফাইল',
+          line: 'লাইন', title: 'শিরোনাম', welcome: 'স্বাগতম', sample: 'নমুনা', browser: 'ব্রাউজার',
+          free: 'বিনামূল্যে'
+        },
+        hi: {
+          the: 'यह', a: 'एक', and: 'और', or: 'या', but: 'लेकिन', is: 'है', are: 'हैं',
+          i: 'मैं', you: 'आप', he: 'वह', she: 'वह', we: 'हम', they: 'वे',
+          my: 'मेरा', your: 'आपका', our: 'हमारा', in: 'में', on: 'पर', to: 'को',
+          from: 'से', of: 'का', for: 'के लिए', with: 'के साथ', without: 'बिना', not: 'नहीं',
+          yes: 'हाँ', all: 'सभी', more: 'अधिक', very: 'बहुत', now: 'अब', hello: 'नमस्ते',
+          world: 'दुनिया', good: 'अच्छा', new: 'नया', first: 'पहला', day: 'दिन', year: 'साल',
+          time: 'समय', people: 'लोग', life: 'जीवन', water: 'पानी', house: 'घर', book: 'किताब',
+          question: 'प्रश्न', answer: 'उत्तर', problem: 'समस्या', part: 'भाग', page: 'पृष्ठ',
+          document: 'दस्तावेज़', text: 'पाठ', word: 'शब्द', language: 'भाषा', file: 'फ़ाइल',
+          line: 'पंक्ति', title: 'शीर्षक', welcome: 'स्वागत है', sample: 'नमूना', browser: 'ब्राउज़र',
+          free: 'निःशुल्क'
+        }
+      };
+
+      const reverseDictCache = {};
+
+      function resolveDictionary(src, tgt) {
+        const s = baseLang(src);
+        const t = baseLang(tgt);
+        if (s === 'en' && DICTIONARIES[t]) return DICTIONARIES[t];
+        if (t === 'en' && DICTIONARIES[s]) {
+          if (!reverseDictCache[s]) {
+            const rev = {};
+            for (const [eng, mapped] of Object.entries(DICTIONARIES[s])) {
+              const key = String(mapped).toLowerCase();
+              if (!(key in rev)) rev[key] = eng;
+            }
+            reverseDictCache[s] = rev;
+          }
+          return reverseDictCache[s];
+        }
+        return null;
+      }
+
+      function applyDictionary(text, table) {
+        return text.replace(/[\p{L}\p{M}'’]+/gu, (token) => {
+          const translated = table[token.toLowerCase()];
+          if (!translated) return token;
+          if (token.length > 1 && token === token.toUpperCase()) return translated.toUpperCase();
+          if (token[0] === token[0].toUpperCase()) {
+            return translated.charAt(0).toUpperCase() + translated.slice(1);
+          }
+          return translated;
+        });
+      }
+
+      const NLLB = {
+        en: 'eng_Latn', bn: 'ben_Beng', hi: 'hin_Deva', ta: 'tam_Taml', te: 'tel_Telu',
+        ml: 'mal_Mlym', mr: 'mar_Deva', gu: 'guj_Gujr', pa: 'pan_Guru', ur: 'urd_Arab',
+        ne: 'npi_Deva', si: 'sin_Sinh', th: 'tha_Thai', vi: 'vie_Latn', id: 'ind_Latn',
+        ms: 'zsm_Latn', tl: 'tgl_Latn', sw: 'swh_Latn', ar: 'arb_Arab', fa: 'pes_Arab',
+        he: 'heb_Hebr', tr: 'tur_Latn', ru: 'rus_Cyrl', uk: 'ukr_Cyrl', pl: 'pol_Latn',
+        de: 'deu_Latn', fr: 'fra_Latn', es: 'spa_Latn', it: 'ita_Latn', pt: 'por_Latn',
+        nl: 'nld_Latn', sv: 'swe_Latn', da: 'dan_Latn', fi: 'fin_Latn', no: 'nob_Latn',
+        cs: 'ces_Latn', sk: 'slk_Latn', hu: 'hun_Latn', ro: 'ron_Latn', bg: 'bul_Cyrl',
+        el: 'ell_Grek', ja: 'jpn_Jpan', ko: 'kor_Hang', zh: 'zho_Hans', af: 'afr_Latn',
+        sq: 'sqi_Latn', am: 'amh_Ethi', hy: 'hye_Armn', az: 'azj_Latn', eu: 'eus_Latn',
+        be: 'bel_Cyrl', bs: 'bos_Latn', ca: 'cat_Latn', hr: 'hrv_Latn', et: 'est_Latn',
+        gl: 'glg_Latn', ka: 'kat_Geor', kk: 'kaz_Cyrl', km: 'khm_Khmr', ky: 'kir_Cyrl',
+        lo: 'lao_Laoo', lv: 'lvs_Latn', lt: 'lit_Latn', mk: 'mkd_Cyrl', mn: 'khk_Cyrl',
+        my: 'mya_Mymr', ps: 'pbt_Arab', sd: 'snd_Arab', sr: 'srp_Cyrl', sl: 'slv_Latn',
+        so: 'som_Latn', tg: 'tgk_Cyrl', tk: 'tuk_Latn', uz: 'uzn_Latn', yi: 'ydd_Hebr',
+        zu: 'zul_Latn', yo: 'yor_Latn', ha: 'hau_Latn', ig: 'ibo_Latn', mi: 'mri_Latn',
+        mg: 'plt_Latn', jv: 'jav_Latn', su: 'sun_Latn', ceb: 'ceb_Latn', ny: 'nya_Latn',
+        co: 'cos_Latn', fy: 'fry_Latn', gd: 'gla_Latn', haw: 'haw_Latn', hmn: 'hmn_Latn',
+        ht: 'hat_Latn', lb: 'ltz_Latn', mt: 'mlt_Latn', rw: 'kin_Latn', sm: 'smo_Latn',
+        sn: 'sna_Latn', st: 'sot_Latn', tt: 'tat_Cyrl', ug: 'uig_Arab'
+      };
+
+      let transformersMod = null;
+      const pipelineCache = {};
+
+      async function getTransformers() {
+        if (transformersMod) return transformersMod;
+        transformersMod = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2');
+        transformersMod.env.allowLocalModels = false;
+        transformersMod.env.useBrowserCache = true;
+        /* Prevent SharedArrayBuffer / Cross-Origin-Isolation crashes on GitHub Pages */
+        if (transformersMod.env.backends && transformersMod.env.backends.onnx && transformersMod.env.backends.onnx.wasm) {
+          transformersMod.env.backends.onnx.wasm.numThreads = 1;
+        }
+        return transformersMod;
+      }
+
+      async function getTranslationPipeline(modelId, onProgressNote) {
+        if (pipelineCache[modelId]) return pipelineCache[modelId];
+        const { pipeline } = await getTransformers();
+        const instance = await pipeline('translation', modelId, {
+          progress_callback: (info) => {
+            if (!onProgressNote || !info) return;
+            if (info.status === 'progress' && info.total) {
+              const pct = Math.round((info.loaded / info.total) * 100);
+              onProgressNote(`Downloading free AI model (${modelId}): ${pct}%…`);
+            } else if (info.status === 'initiate') {
+              onProgressNote(`Initializing ${modelId}…`);
+            }
+          }
+        });
+        pipelineCache[modelId] = instance;
+        return instance;
+      }
+
+      async function tryChromeTranslator(sourceLanguage, targetLanguage) {
+        const api = window.Translator || (window.translation && window.translation);
+        if (!api) return null;
+
+        try {
+          if (typeof api.availability === 'function') {
+            const avail = await api.availability({ sourceLanguage, targetLanguage });
+            if (avail === 'unavailable' || avail === 'no') return null;
+          } else if (typeof api.canTranslate === 'function') {
+            const can = await api.canTranslate({ sourceLanguage, targetLanguage });
+            if (can === 'no' || can === 'unavailable') return null;
+          }
+
+          return await api.create({
+            sourceLanguage,
+            targetLanguage,
+            monitor(monitor) {
+              if (!monitor || typeof monitor.addEventListener !== 'function') return;
+              monitor.addEventListener('downloadprogress', (ev) => {
+                if (ev && ev.total) {
+                  setStatus(`Downloading Chrome on-device AI pack: ${Math.round((ev.loaded / ev.total) * 100)}%`, 'busy');
+                }
+              });
+            }
+          });
+        } catch {
+          return null;
+        }
+      }
+
+      async function tryTransformersModel(src, tgt, onProgressNote) {
+        const s = baseLang(src);
+        const t = baseLang(tgt);
+        if (s === t) return null;
+
+        /* Tier 2A: Direct Opus-MT pair */
+        const opusModel = `Xenova/opus-mt-${s}-${t}`;
+        try {
+          onProgressNote && onProgressNote(`Loading ${opusModel}…`);
+          const translator = await getTranslationPipeline(opusModel, onProgressNote);
+          return {
+            kind: 'ai',
+            label: `Transformers · Opus-MT (${s}→${t})`,
+            supportsBatch: false,
+            translate: async (text) => {
+              const result = await translator(text, { max_length: 512 });
+              if (Array.isArray(result)) return result[0]?.translation_text || text;
+              return result?.translation_text || text;
+            }
+          };
+        } catch {
+          /* Fall through to NLLB-200 */
+        }
+
+        /* Tier 2B: NLLB-200 distilled 600M universal model */
+        const srcNllb = NLLB[s];
+        const tgtNllb = NLLB[t];
+        if (srcNllb && tgtNllb) {
+          try {
+            onProgressNote && onProgressNote('Loading NLLB-200 universal AI model (cached in browser)…');
+            const translator = await getTranslationPipeline('Xenova/nllb-200-distilled-600M', onProgressNote);
+            return {
+              kind: 'ai',
+              label: `Transformers · NLLB-200 (${s}→${t})`,
+              supportsBatch: false,
+              translate: async (text) => {
+                const result = await translator(text, {
+                  src_lang: srcNllb,
+                  tgt_lang: tgtNllb,
+                  max_length: 512
+                });
+                if (Array.isArray(result)) return result[0]?.translation_text || text;
+                return result?.translation_text || text;
+              }
+            };
+          } catch {
+            return null;
+          }
+        }
+
+        return null;
+      }
+
+      async function createTranslationEngine(src, tgt, onProgressNote) {
+        const dictTable = resolveDictionary(src, tgt);
+
+        if (els.fastModeToggle.checked) {
+          if (!dictTable) return null;
+          return {
+            kind: 'dict',
+            label: `Offline Dictionary (${baseLang(src)}↔${baseLang(tgt)})`,
+            supportsBatch: true,
+            translate: (text) => applyDictionary(text, dictTable)
+          };
+        }
+
+        /* Tier 1: Chrome Built-in On-Device Translator API */
+        if (window.Translator || (window.translation && window.translation)) {
+          onProgressNote && onProgressNote('Checking Chrome On-Device Translator…');
+          let chromeTr = await tryChromeTranslator(src, tgt);
+          if (!chromeTr && (src.includes('-') || tgt.includes('-'))) {
+            chromeTr = await tryChromeTranslator(baseLang(src), baseLang(tgt));
+          }
+          if (chromeTr) {
+            return {
+              kind: 'ai',
+              label: `Chrome On-Device AI (${baseLang(src)}→${baseLang(tgt)})`,
+              supportsBatch: true,
+              translate: (text) => chromeTr.translate(text)
+            };
+          }
+        }
+
+        /* Tier 2: @xenova/transformers (Opus-MT / NLLB-200) */
+        const tfEngine = await tryTransformersModel(src, tgt, onProgressNote);
+        if (tfEngine) return tfEngine;
+
+        /* Tier 3: Built-in Offline Dictionary Fallback */
+        if (dictTable) {
+          return {
+            kind: 'dict',
+            label: `Offline Dictionary (${baseLang(src)}↔${baseLang(tgt)})`,
+            supportsBatch: true,
+            translate: (text) => applyDictionary(text, dictTable)
+          };
+        }
+
+        return null;
+      }
+
+      async function translateStringItems(engine, items, onProgress, onIncremental) {
+        const output = new Array(items.length).fill('');
+
+        if (engine.kind === 'dict' || engine.supportsBatch) {
+          const maxBatchChars = 1200;
+          let idx = 0;
+
+          while (idx < items.length) {
+            let end = idx;
+            let charCount = 0;
+            while (end < items.length && (charCount === 0 || charCount + items[end].length + 1 <= maxBatchChars)) {
+              charCount += items[end].length + 1;
+              end++;
+            }
+
+            const slice = items.slice(idx, end);
+            let translatedSlice = null;
+
+            if (engine.kind === 'dict') {
+              translatedSlice = slice.map((item) => (item.trim() ? engine.translate(item) : item));
+            } else {
+              try {
+                const joined = await engine.translate(slice.join('\n'));
+                const split = String(joined).split('\n');
+                if (split.length === slice.length) {
+                  translatedSlice = split;
+                }
+              } catch {
+                translatedSlice = null;
+              }
+
+              if (!translatedSlice) {
+                translatedSlice = [];
+                for (const item of slice) {
+                  if (!item.trim()) {
+                    translatedSlice.push(item);
+                    continue;
+                  }
+                  try {
+                    translatedSlice.push(await engine.translate(item));
+                  } catch {
+                    translatedSlice.push(item);
+                  }
+                }
+              }
+            }
+
+            for (let k = 0; k < slice.length; k++) {
+              output[idx + k] = translatedSlice[k] ?? slice[k];
+            }
+
+            idx = end;
+            if (onProgress) onProgress(idx);
+            if (onIncremental) onIncremental(output.slice(0, idx));
+            await nextTick();
+          }
+
+          return output;
+        }
+
+        /* Neural sequence-to-sequence models: item-by-item with incremental updates */
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          if (!item.trim()) {
+            output[i] = item;
+          } else {
+            try {
+              output[i] = await engine.translate(item);
+            } catch {
+              output[i] = item;
+            }
+          }
+          if (onProgress) onProgress(i + 1);
+          if (onIncremental && (i % 2 === 0 || i === items.length - 1)) {
+            onIncremental(output.slice(0, i + 1));
+          }
+          await nextTick();
+        }
+
+        return output;
+      }
+
+      /* =======================================================================
+         10. Script-Aware Unicode Font Embedding & Dual PDF Export Modes
+         ======================================================================= */
+      const fontBase64Cache = new Map();
+
+      function arrayBufferToBase64(buffer) {
+        const bytes = new Uint8Array(buffer);
+        const chunkSize = 0x8000;
+        let binary = '';
+        for (let i = 0; i < bytes.length; i += chunkSize) {
+          binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+        }
+        return btoa(binary);
+      }
+
+      async function resolveUnicodeFontForScript(scriptKey) {
+        if (!scriptKey) return null;
+        if (fontBase64Cache.has(scriptKey)) {
+          return fontBase64Cache.get(scriptKey);
+        }
+
+        const urls = [
+          ...(SCRIPT_FONT_URLS[scriptKey] || []),
+          ...(scriptKey !== 'dejavu' ? SCRIPT_FONT_URLS.dejavu : [])
+        ];
+
+        for (const url of urls) {
+          try {
+            const resp = await fetch(url);
+            if (!resp.ok) continue;
+            const b64 = arrayBufferToBase64(await resp.arrayBuffer());
+            fontBase64Cache.set(scriptKey, b64);
+            return b64;
+          } catch {
+            /* Try next CDN fallback */
+          }
+        }
+        return null;
+      }
+
+      async function applyScriptFontToJsPdf(doc, sampleText, langCode) {
+        if (!els.unicodeFontToggle.checked) {
+          doc.setFont('helvetica', 'normal');
+          return 'helvetica';
+        }
+
+        const requiredScript = detectRequiredScript(sampleText, langCode);
+        if (!requiredScript) {
+          doc.setFont('helvetica', 'normal');
+          return 'helvetica';
+        }
+
+        setStatus(`Embedding Unicode font (${requiredScript}) for crisp glyph rendering…`, 'busy');
+        const fontB64 = await resolveUnicodeFontForScript(requiredScript);
+        if (fontB64) {
+          const vfsName = `HexPdf_${requiredScript}.ttf`;
+          doc.addFileToVFS(vfsName, fontB64);
+          doc.addFont(vfsName, 'HexPdfUnicode', 'normal');
+          doc.setFont('HexPdfUnicode', 'normal');
+          return 'HexPdfUnicode';
+        }
+
+        doc.setFont('helvetica', 'normal');
+        return 'helvetica';
+      }
+
+      /* Mode A: Layout-Preserved Translated PDF (preserves original page sizes & line coordinates) */
+      async function buildLayoutPreservedPdf(pages, targetLangCode, onPageProgress) {
+        const { jsPDF } = window.jspdf || {};
+        if (!jsPDF) throw new Error('jsPDF failed to load.');
+
+        const combinedText = pages.map((p) => p.lines.map((l) => l.text).join('\n')).join('\n');
+        const rtl = isRtlTextOrLang(combinedText, targetLangCode);
+
+        let doc = null;
+        for (const page of pages) {
+          const orientation = page.width >= page.height ? 'l' : 'p';
+          if (!doc) {
+            doc = new jsPDF({
+              unit: 'pt',
+              format: [page.width, page.height],
+              orientation,
+              compress: true
+            });
+          } else {
+            doc.addPage([page.width, page.height], orientation);
+          }
+        }
+
+        await applyScriptFontToJsPdf(doc, combinedText, targetLangCode);
+
+        for (let p = 0; p < pages.length; p++) {
+          doc.setPage(p + 1);
+          const page = pages[p];
+
+          for (const line of page.lines) {
+            if (!line.text || !line.text.trim()) continue;
+
+            const margin = 24;
+            const x = rtl
+              ? page.width - margin
+              : Math.max(16, Math.min(line.x, page.width - 36));
+            const availWidth = rtl
+              ? Math.max(60, page.width - margin * 2)
+              : Math.max(48, page.width - x - margin);
+
+            let fontSize = Math.max(5, Math.min(line.size, 72));
+            doc.setFontSize(fontSize);
+
+            const measuredWidth = doc.getTextWidth(line.text);
+            if (measuredWidth > availWidth) {
+              const ratio = Math.max(0.6, availWidth / measuredWidth);
+              fontSize = Math.max(4.5, fontSize * ratio);
+              doc.setFontSize(fontSize);
+            }
+
+            const wrapped = doc.splitTextToSize(line.text, availWidth);
+            let cursorY = page.height - line.y;
+            const lineHeight = fontSize * 1.18;
+
+            for (const segment of wrapped) {
+              if (cursorY > page.height - 10) break;
+              if (rtl) {
+                doc.text(segment, x, cursorY, { align: 'right' });
+              } else {
+                doc.text(segment, x, cursorY);
+              }
+              cursorY += lineHeight;
+            }
+          }
+
+          if (onPageProgress) onPageProgress((p + 1) / pages.length);
+          await nextTick();
+        }
+
+        return doc;
+      }
+
+      /* Mode B: Clean Reflowed Text-to-PDF Converter */
+      async function buildReflowedTextPdf(textContent, langCode = '') {
+        const { jsPDF } = window.jspdf || {};
+        if (!jsPDF) throw new Error('jsPDF failed to load.');
+
+        const format = els.pdfPageSize.value || 'a4';
+        const orientation = els.pdfOrientation.value || 'p';
+        const fontSizePt = Number(els.pdfFontSize.value) || 11;
+        const marginMm = Number(els.pdfMarginPreset.value) || 20;
+        const marginPt = marginMm * 2.83465;
+
+        const doc = new jsPDF({
+          unit: 'pt',
+          format,
+          orientation,
+          compress: true
+        });
+
+        await applyScriptFontToJsPdf(doc, textContent, langCode);
+        doc.setFontSize(fontSizePt);
+
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const usableWidth = Math.max(72, pageWidth - marginPt * 2);
+        const lineHeight = fontSizePt * 1.42;
+        const rtl = isRtlTextOrLang(textContent, langCode);
+
+        const paragraphs = String(textContent || '').split(/\r?\n/);
+        let cursorY = marginPt + fontSizePt;
+
+        for (const para of paragraphs) {
+          if (!para.trim()) {
+            cursorY += lineHeight * 0.7;
+            if (cursorY > pageHeight - marginPt) {
+              doc.addPage(format, orientation);
+              cursorY = marginPt + fontSizePt;
+            }
+            continue;
+          }
+
+          const wrappedLines = doc.splitTextToSize(para, usableWidth);
+          for (const line of wrappedLines) {
+            if (cursorY > pageHeight - marginPt) {
+              doc.addPage(format, orientation);
+              cursorY = marginPt + fontSizePt;
+            }
+            if (rtl) {
+              doc.text(line, pageWidth - marginPt, cursorY, { align: 'right' });
+            } else {
+              doc.text(line, marginPt, cursorY);
+            }
+            cursorY += lineHeight;
+          }
+        }
+
+        return doc;
+      }
+
+      async function commitGeneratedPdf(jsPdfDoc, suffixTag = 'converted') {
+        const arrayBuffer = jsPdfDoc.output('arraybuffer');
+        const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
+        state.generatedPdfBytes = arrayBuffer;
+        state.generatedPdfBlob = blob;
+
+        els.showGeneratedPdfBtn.disabled = false;
+        await activatePdfBuffer('generated');
+        showToast(`Generated PDF preview ready (${suffixTag})`, 'fa-file-pdf');
+      }
+
+      /* =======================================================================
+         11. Translation Workflows (Layout-Preserved PDF & Editor Paragraphs)
+         ======================================================================= */
+      async function translateEntirePdf() {
+        if (state.busy || state.extractedPages.length === 0) return;
+
+        const src = els.sourceLang.value;
+        const tgt = els.targetLang.value;
+        if (src === tgt) {
+          setStatus('Source and target languages are identical.', 'err');
+          return;
+        }
+
+        persistCurrentEditorBuffer();
+        setBusy(true);
+        setProgress(0.03);
+        setStatus('Preparing zero-cost browser AI engine…', 'busy');
+
+        try {
+          const engine = await createTranslationEngine(src, tgt, (note) => setStatus(note, 'busy'));
+          if (!engine) {
+            throw new Error(`No translation engine available for ${src} → ${tgt}.`);
+          }
+
+          const translatedPages = [];
+          for (let i = 0; i < state.extractedPages.length; i++) {
+            const page = state.extractedPages[i];
+            setStatus(`Translating Page ${i + 1} of ${state.extractedPages.length} via ${engine.label}…`, 'busy');
+
+            const sourceLines = page.lines.map((l) => l.text);
+            const translatedLines = await translateStringItems(
+              engine,
+              sourceLines,
+              (done) => {
+                const pageFrac = sourceLines.length ? done / sourceLines.length : 1;
+                setProgress(0.06 + 0.72 * ((i + pageFrac) / state.extractedPages.length));
+              },
+              (partialLines) => {
+                /* Incremental live preview update while translating */
+                if (state.activeTextLayer === 'translated') {
+                  els.textEditor.value = partialLines.join('\n');
+                  els.readingPreview.textContent = els.textEditor.value;
+                  updateTextStats(els.textEditor.value);
+                }
+              }
+            );
+
+            const rebuiltLines = page.lines.map((origLine, idx) => ({
+              x: origLine.x,
+              y: origLine.y,
+              size: origLine.size,
+              text: translatedLines[idx] ?? origLine.text,
+              paragraphBreak: origLine.paragraphBreak
+            }));
+
+            translatedPages.push({
+              pageNumber: page.pageNumber,
+              width: page.width,
+              height: page.height,
+              lines: rebuiltLines
+            });
+          }
+
+          state.translatedPages = translatedPages;
+          state.freeformTranslatedText = translatedPages
+            .map((p) => formatPageLinesToText(p.lines))
+            .join('\n\n');
+
+          switchTextLayer('translated');
+
+          setStatus('Rebuilding layout-preserved translated PDF…', 'busy');
+          const translatedPdf = await buildLayoutPreservedPdf(translatedPages, tgt, (ratio) => {
+            setProgress(0.78 + ratio * 0.22);
+          });
+
+          await commitGeneratedPdf(translatedPdf, `${tgt}`);
+          setProgress(1);
+          setStatus(`Translated ${translatedPages.length} page(s) via ${engine.label}. Previewing translated PDF!`, 'ok');
+        } catch (err) {
+          console.error('[HexPDF Studio] Translation Error:', err);
+          setProgress(0);
+          setStatus(`Translation error: ${err.message || err}`, 'err');
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function translateEditorText() {
+        if (state.busy) return;
+        persistCurrentEditorBuffer();
+
+        const rawText = els.textEditor.value;
+        if (!rawText.trim()) {
+          setStatus('Enter or extract some text in the editor first.', 'err');
+          return;
+        }
+
+        const src = els.sourceLang.value;
+        const tgt = els.targetLang.value;
+        if (src === tgt) {
+          setStatus('Source and target languages are identical.', 'err');
+          return;
+        }
+
+        setBusy(true);
+        setProgress(0.05);
+        setStatus('Preparing zero-cost browser AI engine…', 'busy');
+
+        try {
+          const engine = await createTranslationEngine(src, tgt, (note) => setStatus(note, 'busy'));
+          if (!engine) {
+            throw new Error(`No translation engine available for ${src} → ${tgt}.`);
+          }
+
+          /* Translate paragraph-by-paragraph in clean batches, preserving blank lines */
+          const lines = rawText.split(/\r?\n/);
+          const translatedLines = await translateStringItems(
+            engine,
+            lines,
+            (done) => setProgress(0.08 + 0.88 * (done / lines.length)),
+            (partial) => {
+              els.textEditor.value = partial.join('\n');
+              els.readingPreview.textContent = els.textEditor.value;
+              updateTextStats(els.textEditor.value);
+            }
+          );
+
+          const finalTranslated = translatedLines.join('\n');
+          state.freeformTranslatedText = finalTranslated;
+
+          if (state.extractedPages.length > 0 && !state.translatedPages) {
+            state.translatedPages = state.extractedPages.map((p) => ({
+              pageNumber: p.pageNumber,
+              width: p.width,
+              height: p.height,
+              lines: p.lines.map((l) => ({ ...l }))
+            }));
+          }
+
+          if (state.translatedPages && typeof state.activePageTab === 'number') {
+            const targetPg = state.translatedPages.find((p) => p.pageNumber === state.activePageTab);
+            if (targetPg) {
+              targetPg.lines = finalTranslated
+                .split(/\r?\n/)
+                .filter((t) => t.trim())
+                .map((txt, idx) => ({
+                  x: targetPg.lines[idx]?.x ?? 36,
+                  y: targetPg.lines[idx]?.y ?? Math.max(40, targetPg.height - 50 - idx * 16),
+                  size: targetPg.lines[idx]?.size ?? 11,
+                  text: txt,
+                  paragraphBreak: false
+                }));
+            }
+          }
+
+          switchTextLayer('translated');
+          els.textEditor.value = finalTranslated;
+          els.readingPreview.textContent = finalTranslated;
+          updateTextStats(finalTranslated);
+          persistCurrentEditorBuffer();
+
+          setProgress(1);
+          setStatus(`Text translated via ${engine.label}. Click "Text → PDF" to generate a PDF.`, 'ok');
+          showToast('Text translated successfully', 'fa-language');
+        } catch (err) {
+          console.error('[HexPDF Studio] Editor Translation Error:', err);
+          setProgress(0);
+          setStatus(`Translation error: ${err.message || err}`, 'err');
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      function switchTextLayer(layer) {
+        state.activeTextLayer = layer;
+        els.viewSourceTextBtn.classList.toggle('active', layer === 'source');
+        els.viewTranslatedTextBtn.classList.toggle('active', layer === 'translated');
+        els.viewTranslatedTextBtn.disabled = !state.translatedPages && !state.freeformTranslatedText;
+        els.textSourceTag.textContent = layer === 'translated' ? 'Translated' : 'Editable';
+        buildPageTabs();
+        syncEditorFromState();
+      }
+
+      /* =======================================================================
+         12. Engine Status Badge & Event Wiring
+         ======================================================================= */
+      function populateLanguages() {
+        for (const [code, label] of LANGUAGES) {
+          const opt1 = document.createElement('option');
+          opt1.value = code;
+          opt1.textContent = label;
+          els.sourceLang.appendChild(opt1);
+
+          const opt2 = document.createElement('option');
+          opt2.value = code;
+          opt2.textContent = label;
+          els.targetLang.appendChild(opt2);
+        }
+        els.sourceLang.value = 'en';
+        els.targetLang.value = 'es';
+      }
+
+      function refreshEngineBadge() {
+        const src = els.sourceLang.value;
+        const tgt = els.targetLang.value;
+        const s = baseLang(src);
+        const t = baseLang(tgt);
+
+        els.engineDot.className = 'status-dot';
+
+        if (src === tgt) {
+          els.engineDot.classList.add('err');
+          els.engineBadgeText.textContent = 'Same language';
+          return;
+        }
+
+        const hasDict = Boolean(resolveDictionary(src, tgt));
+        const hasChrome = Boolean(window.Translator || (window.translation && window.translation));
+        const hasNllb = Boolean(NLLB[s] && NLLB[t]);
+
+        if (els.fastModeToggle.checked) {
+          if (hasDict) {
+            els.engineDot.classList.add('ok');
+            els.engineBadgeText.textContent = `Offline Dict (${s}↔${t})`;
+          } else {
+            els.engineDot.classList.add('err');
+            els.engineBadgeText.textContent = 'No dict for pair';
+          }
+          return;
+        }
+
+        if (hasChrome) {
+          els.engineDot.classList.add('ok');
+          els.engineBadgeText.textContent = `Chrome AI (${s}→${t})`;
+          return;
+        }
+
+        if (hasNllb) {
+          els.engineDot.classList.add('warn');
+          els.engineBadgeText.textContent = `Transformers AI (${s}→${t})`;
+          return;
+        }
+
+        if (hasDict) {
+          els.engineDot.classList.add('warn');
+          els.engineBadgeText.textContent = `Offline Dict (${s}↔${t})`;
+          return;
+        }
+
+        els.engineDot.classList.add('err');
+        els.engineBadgeText.textContent = 'Pair unavailable';
+      }
+
+      function triggerBlobDownload(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 4000);
+      }
+
+      function bindEvents() {
+        /* 1. Native File Input change + e.target.value = '' reset so re-uploading the same PDF always works */
+        els.fileInput.addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (file) {
+            loadPdfFile(file);
+          }
+          e.target.value = '';
+        });
+
+        /* 2. Dropzone visual highlight & direct drop handler */
+        ['dragenter', 'dragover'].forEach((evtName) => {
+          els.dropZone.addEventListener(evtName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            els.dropZone.classList.add('drag-over');
+          });
+        });
+
+        ['dragleave', 'drop'].forEach((evtName) => {
+          els.dropZone.addEventListener(evtName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            els.dropZone.classList.remove('drag-over');
+          });
+        });
+
+        els.dropZone.addEventListener('drop', (e) => {
+          const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+          if (file) {
+            loadPdfFile(file);
+          }
+        });
+
+        /* 3. Built-in Sample PDF buttons */
+        els.headerSampleBtn.addEventListener('click', loadSamplePdf);
+        els.cardSampleBtn.addEventListener('click', loadSamplePdf);
+
+        /* 4. Language controls */
+        els.sourceLang.addEventListener('change', refreshEngineBadge);
+        els.targetLang.addEventListener('change', refreshEngineBadge);
+        els.fastModeToggle.addEventListener('change', refreshEngineBadge);
+
+        els.swapLangBtn.addEventListener('click', () => {
+          const prevSrc = els.sourceLang.value;
+          els.sourceLang.value = els.targetLang.value;
+          els.targetLang.value = prevSrc;
+          refreshEngineBadge();
+        });
+
+        /* 5. Translation triggers */
+        els.translateDocBtn.addEventListener('click', translateEntirePdf);
+        els.translateEditorBtn.addEventListener('click', translateEditorText);
+
+        els.resetTextBtn.addEventListener('click', () => {
+          if (state.extractedPages.length === 0) return;
+          state.activeTextLayer = 'source';
+          state.activePageTab = 'all';
+          els.viewSourceTextBtn.classList.add('active');
+          els.viewTranslatedTextBtn.classList.remove('active');
+          buildPageTabs();
+          syncEditorFromState();
+          showToast('Restored original extracted PDF text', 'fa-rotate-left');
+        });
+
+        /* 6. PDF Viewer Controls */
+        els.showOriginalPdfBtn.addEventListener('click', () => activatePdfBuffer('original'));
+        els.showGeneratedPdfBtn.addEventListener('click', () => activatePdfBuffer('generated'));
+
+        els.downloadActivePdfBtn.addEventListener('click', () => {
+          if (state.activePdfSlot === 'generated' && state.generatedPdfBlob) {
+            const suffix = state.activeTextLayer === 'translated' ? `_${els.targetLang.value}` : '_converted';
+            triggerBlobDownload(state.generatedPdfBlob, `${state.baseFileName}${suffix}.pdf`);
+            showToast('Downloaded generated PDF', 'fa-download');
+          } else if (state.originalPdfBytes) {
+            triggerBlobDownload(
+              new Blob([state.originalPdfBytes], { type: 'application/pdf' }),
+              `${state.baseFileName}.pdf`
+            );
+            showToast('Downloaded original PDF', 'fa-download');
+          }
+        });
+
+        els.prevPageBtn.addEventListener('click', async () => {
+          if (state.currentPage > 1) {
+            state.currentPage--;
+            updatePdfNavControls();
+            await renderPdfCanvasStage();
+          }
+        });
+
+        els.nextPageBtn.addEventListener('click', async () => {
+          if (state.currentPage < state.totalPages) {
+            state.currentPage++;
+            updatePdfNavControls();
+            await renderPdfCanvasStage();
+          }
+        });
+
+        els.viewModeBtn.addEventListener('click', async () => {
+          state.continuousScroll = !state.continuousScroll;
+          els.viewModeLabel.textContent = state.continuousScroll ? 'Scroll' : 'Single';
+          updatePdfNavControls();
+          await renderPdfCanvasStage();
+        });
+
+        els.zoomOutBtn.addEventListener('click', async () => {
+          state.zoomScale = Math.max(0.4, +(state.zoomScale - 0.15).toFixed(2));
+          updatePdfNavControls();
+          await renderPdfCanvasStage();
+        });
+
+        els.zoomInBtn.addEventListener('click', async () => {
+          state.zoomScale = Math.min(3.0, +(state.zoomScale + 0.15).toFixed(2));
+          updatePdfNavControls();
+          await renderPdfCanvasStage();
+        });
+
+        els.zoomFitBtn.addEventListener('click', fitPdfToStageWidth);
+
+        /* 7. Text Editor & Text-to-PDF Controls */
+        els.viewSourceTextBtn.addEventListener('click', () => {
+          persistCurrentEditorBuffer();
+          switchTextLayer('source');
+        });
+
+        els.viewTranslatedTextBtn.addEventListener('click', () => {
+          persistCurrentEditorBuffer();
+          switchTextLayer('translated');
+        });
+
+        els.toggleReadModeBtn.addEventListener('click', () => {
+          state.readMode = !state.readMode;
+          els.textEditor.hidden = state.readMode;
+          els.readingPreview.hidden = !state.readMode;
+          els.readModeLabel.textContent = state.readMode ? 'Edit Text' : 'Read View';
+          if (state.readMode) {
+            els.readingPreview.textContent = els.textEditor.value || 'No text content yet.';
+          }
+        });
+
+        els.textEditor.addEventListener('input', () => {
+          els.readingPreview.textContent = els.textEditor.value || 'No text content yet.';
+          updateTextStats(els.textEditor.value);
+          persistCurrentEditorBuffer();
+        });
+
+        els.copyTextBtn.addEventListener('click', () => {
+          const text = els.textEditor.value;
+          if (!text) return;
+          els.textEditor.select();
+          document.execCommand('copy');
+          window.getSelection()?.removeAllRanges();
+          els.copyBtnIcon.className = 'fa-solid fa-check';
+          els.copyBtnLabel.textContent = 'Copied';
+          showToast('Copied text to clipboard', 'fa-copy');
+          setTimeout(() => {
+            els.copyBtnIcon.className = 'fa-solid fa-copy';
+            els.copyBtnLabel.textContent = 'Copy';
+          }, 1800);
+        });
+
+        els.downloadTxtBtn.addEventListener('click', () => {
+          const text = els.textEditor.value;
+          if (!text.trim()) {
+            setStatus('Nothing to download — text editor is empty.', 'err');
+            return;
+          }
+          const suffix = state.activeTextLayer === 'translated' ? `_${els.targetLang.value}` : '';
+          triggerBlobDownload(
+            new Blob([text], { type: 'text/plain;charset=utf-8' }),
+            `${state.baseFileName}${suffix}.txt`
+          );
+          showToast('Downloaded .TXT file', 'fa-file-arrow-down');
+        });
+
+        els.clearTextBtn.addEventListener('click', () => {
+          els.textEditor.value = '';
+          els.readingPreview.textContent = 'No text content yet.';
+          updateTextStats('');
+          persistCurrentEditorBuffer();
+          showToast('Cleared text editor', 'fa-trash-can');
+        });
+
+        els.sendToPdfBtn.addEventListener('click', async () => {
+          const content = els.textEditor.value;
+          if (!content.trim()) {
+            setStatus('Type or extract some text before converting to PDF.', 'err');
+            return;
+          }
+
+          setBusy(true);
+          setProgress(0.25);
+          setStatus('Converting text to PDF document…', 'busy');
+
+          try {
+            const activeLang = state.activeTextLayer === 'translated' ? els.targetLang.value : els.sourceLang.value;
+            const doc = await buildReflowedTextPdf(content, activeLang);
+            setProgress(0.8);
+            await commitGeneratedPdf(doc, 'Text → PDF');
+            setProgress(1);
+            setStatus('PDF generated from text and loaded into the PDF Canvas Viewer.', 'ok');
+          } catch (err) {
+            console.error('[HexPDF Studio] Text->PDF Error:', err);
+            setProgress(0);
+            setStatus(`Text → PDF error: ${err.message || err}`, 'err');
+          } finally {
+            setBusy(false);
+          }
+        });
+      }
+
+      /* =======================================================================
+         13. Boot Application
+         ======================================================================= */
+      function init() {
+        if (window.location.protocol === 'file:') {
+          els.fileProtocolBanner.hidden = false;
+        }
+        populateLanguages();
+        bindEvents();
+        refreshEngineBadge();
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

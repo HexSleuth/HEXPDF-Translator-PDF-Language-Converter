@@ -79,7 +79,7 @@
     height: 1px;
   }
 
-  [hidden] { display: none !important; }
+  [hidden], .hidden { display: none !important; }
 
   /* ============ 2. Shell & Mobile-Friendly Topbar ============ */
   .app-shell { max-width: 1460px; margin: 0 auto; padding: 14px 14px 56px; }
@@ -412,7 +412,7 @@
   .btn-sm { padding: 7px 11px; font-size: 0.78rem; border-radius: var(--radius-sm); min-height: 34px; }
   .btn-icon { width: 36px; height: 36px; padding: 0; }
 
-  /* ============ 5. Workspace, OCR, Dictionary & Studio UI ============ */
+  /* ============ 5. Workspace, OCR, Dictionary, TTS & Studio UI ============ */
   .banner-warn {
     display: flex;
     align-items: center;
@@ -570,7 +570,7 @@
     gap: 6px;
   }
 
-  select, input[type="text"] {
+  select, input[type="text"], textarea.tts-textarea {
     width: 100%;
     padding: 9px 11px;
     border-radius: var(--radius-md);
@@ -583,7 +583,7 @@
     transition: all 0.18s ease;
   }
 
-  select:focus, input[type="text"]:focus {
+  select:focus, input[type="text"]:focus, textarea.tts-textarea:focus {
     border-color: var(--cyan);
     box-shadow: 0 0 0 3px var(--cyan-soft);
   }
@@ -631,6 +631,203 @@
   .status-dot.ok { background: var(--ok); box-shadow: 0 0 10px var(--ok); }
   .status-dot.warn { background: var(--warn); box-shadow: 0 0 10px var(--warn); }
   .status-dot.err { background: var(--err); box-shadow: 0 0 10px var(--err); }
+
+  /* Bengali (India) TTS Reader Card */
+  .tts-card { margin-bottom: 16px; }
+  .tts-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .tts-tabs {
+    display: inline-flex;
+    background: var(--bg-editor);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 3px;
+    gap: 4px;
+  }
+  .tts-tabs .tab {
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tts-tabs .tab.active {
+    background: var(--cyan-soft);
+    color: var(--cyan);
+  }
+  .tts-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .tts-chips .chip {
+    border: 1px solid var(--border);
+    background: var(--bg-input);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 0.76rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tts-chips .chip:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+  textarea.tts-textarea {
+    min-height: 110px;
+    resize: vertical;
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+  .tts-stats-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    background: var(--bg-editor);
+    border: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  .tts-controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .tts-panel-box {
+    padding: 12px;
+    border-radius: var(--radius-md);
+    background: var(--bg-editor);
+    border: 1px solid var(--border);
+  }
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+  .slider-row input[type="range"] {
+    flex: 1 1 auto;
+    accent-color: var(--cyan);
+    cursor: pointer;
+  }
+  .tts-action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .tts-progress-wrap {
+    margin-bottom: 10px;
+  }
+  .tts-progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+  }
+  .tts-bar-rail {
+    height: 7px;
+    border-radius: 999px;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .tts-bar-fill {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--violet), var(--cyan));
+    transition: width 0.2s ease;
+  }
+  .tts-state-box {
+    padding: 9px 12px;
+    border-radius: var(--radius-md);
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .tts-state-box.ok { border-color: rgba(55, 224, 195, 0.45); color: var(--ok); }
+  .tts-state-box.err { border-color: rgba(255, 92, 122, 0.45); color: var(--err); }
+  .tts-state-box ul { margin: 6px 0 6px 18px; padding: 0; }
+  .tts-state-box .small { font-size: 0.75rem; }
+  .err-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .tts-warn-banner {
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 176, 32, 0.12);
+    border: 1px solid rgba(255, 176, 32, 0.35);
+    color: var(--warn);
+    font-size: 0.77rem;
+    margin-bottom: 8px;
+  }
+  .tts-player-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    background: var(--bg-editor);
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
+  }
+  .tts-player-wrap audio {
+    flex: 1 1 220px;
+    height: 36px;
+  }
+  .tts-log-box {
+    max-height: 140px;
+    overflow-y: auto;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    background: var(--bg-editor);
+    border: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.73rem;
+    color: var(--text-muted);
+  }
+  .log-line { padding: 1px 0; }
+  .log-line.ok { color: var(--ok); }
+  .log-line.warn { color: var(--warn); }
+  .log-line.err { color: var(--err); }
+  .spin {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinRot 0.7s linear infinite;
+  }
+  @keyframes spinRot { to { transform: rotate(360deg); } }
 
   /* Dictionary & Wordlist Card */
   .dict-card { margin-bottom: 16px; }
@@ -984,6 +1181,7 @@
 <body>
 
 <input type="file" id="fileInput" class="sr-file-input" accept=".pdf,application/pdf" />
+<input type="file" id="pdfInput" class="sr-file-input" accept=".pdf,application/pdf" />
 <audio id="dictSound" preload="none"></audio>
 
 <div class="app-shell">
@@ -994,7 +1192,7 @@
       <div class="brand-hex" aria-hidden="true"><i class="fa-solid fa-file-pdf"></i></div>
       <div>
         <h1 class="brand-title">Hex<span>PDF</span> Studio</h1>
-        <p class="brand-sub">PDF Viewer · Tesseract OCR · PDF ↔ Text · Free AI Translator (Bengali India · Noto Sans Bengali · Hind Siliguri)</p>
+        <p class="brand-sub">PDF Viewer · OCR · PDF ↔ Text · AI Translator · Bengali (India) TTS</p>
       </div>
     </div>
 
@@ -1189,6 +1387,117 @@
     </div>
   </section>
 
+  <!-- ═══════════════ BENGALI (INDIA) TTS READER CARD ═══════════════ -->
+  <section class="glass-card tts-card" id="bengaliTtsSection">
+    <div class="tts-header">
+      <div class="pane-title-group">
+        <h2 class="pane-title"><i class="fa-solid fa-volume-high" style="color: var(--cyan);"></i><span>Bengali (India) TTS · PDF Reader</span></h2>
+        <span class="pane-tag cyan" id="engineInfo">⚡ Web Speech API (bn-IN)</span>
+      </div>
+      <div class="tts-tabs" role="tablist">
+        <button type="button" class="tab active" data-engine="browser">⚡ Browser Voice</button>
+        <button type="button" class="tab" data-engine="neural">🧠 Neural ONNX</button>
+      </div>
+    </div>
+
+    <div class="tts-warn-banner hidden" id="secWarn">
+      <i class="fa-solid fa-triangle-exclamation"></i> Non-secure context detected — Cache Storage or Media Session APIs may be restricted over plain HTTP.
+    </div>
+
+    <div class="tts-chips" id="chips">
+      <button type="button" class="chip">নমস্কার! আপনি কেমন আছেন? আজ আমরা বাংলা টেক্সট-টু-স্পিচ পরীক্ষা করছি।</button>
+      <button type="button" class="chip">ভারতের পশ্চিমবঙ্গে বাংলা ভাষা অত্যন্ত সমৃদ্ধ ও শ্রুতিমধুর।</button>
+      <button type="button" class="chip">হৃদয়, জল, বই এবং শান্তি — প্রতিটি শব্দ স্পষ্টভাবে উচ্চারিত হচ্ছে।</button>
+    </div>
+
+    <textarea id="text" class="tts-textarea" placeholder="এখানে বাংলা (ভারত) লেখা লিখুন বা PDF থেকে টেক্সট লোড করুন…"></textarea>
+
+    <div class="tts-stats-bar">
+      <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <span>Chars: <strong id="statChars">0</strong></span>
+        <span>Words: <strong id="statWords">0</strong></span>
+        <span>Sentences: <strong id="statSentences">0</strong></span>
+        <span>Est. Time: <strong id="statTime">0s</strong></span>
+      </div>
+      <span id="statExtra">0 non-space chars · 0 speech chunk(s) · ~0s</span>
+    </div>
+
+    <div class="tts-controls-grid">
+      <div class="tts-panel-box" id="panel-browser">
+        <div class="field">
+          <label for="voiceSelect"><i class="fa-solid fa-microphone-lines"></i> Bengali (India) Voice</label>
+          <select id="voiceSelect"></select>
+        </div>
+        <div class="tts-warn-banner hidden" id="voiceWarn" style="margin-top: 8px; margin-bottom: 0;">
+          No exact <code>bn-IN</code> voice detected. Using available Bengali voice or Neural ONNX fallback.
+        </div>
+        <div class="slider-row">
+          <span>Rate</span>
+          <input type="range" id="rate" min="0.5" max="1.8" step="0.05" value="1.0" />
+          <span id="rateVal">1.00×</span>
+        </div>
+        <div class="slider-row">
+          <span>Pitch</span>
+          <input type="range" id="pitch" min="0.5" max="1.6" step="0.05" value="1.0" />
+          <span id="pitchVal">1.00</span>
+        </div>
+      </div>
+
+      <div class="tts-panel-box hidden" id="panel-neural">
+        <div class="field">
+          <label for="modelId"><i class="fa-solid fa-brain"></i> Neural ONNX Model (Transformers.js v3)</label>
+          <input type="text" id="modelId" value="onnx-community/mms-tts-ben" />
+        </div>
+        <div class="slider-row">
+          <span>Playback Speed</span>
+          <input type="range" id="speed" min="0.6" max="1.6" step="0.05" value="1.0" />
+          <span id="speedVal">1.00×</span>
+        </div>
+        <div class="err-actions">
+          <button type="button" class="btn btn-ghost btn-sm" id="loadModelBtn"><i class="fa-solid fa-download"></i><span>Load Model</span></button>
+          <button type="button" class="btn btn-ghost btn-sm" id="checkCacheBtn"><i class="fa-solid fa-hard-drive"></i><span>Check Cache</span></button>
+          <button type="button" class="btn btn-ghost btn-sm" id="clearCacheBtn"><i class="fa-solid fa-broom"></i><span>Clear Cache</span></button>
+          <span class="stat-pill" id="cacheInfo">💾 checking…</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tts-action-bar">
+      <button type="button" class="btn btn-primary btn-sm" id="speakBtn">▶️ Speak · বলুন</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="pauseBtn" disabled>⏸ Pause</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="stopBtn">⏹ Stop</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="pdfBtn"><i class="fa-solid fa-file-pdf" style="color: var(--cyan);"></i><span>Extract PDF to TTS</span></button>
+      <button type="button" class="btn btn-ghost btn-sm" id="clearBtn"><i class="fa-solid fa-trash-can"></i><span>Clear</span></button>
+      <label class="toggle-chip">
+        <input type="checkbox" id="autoRead" />
+        <span>Auto-read PDF</span>
+      </label>
+      <span id="pdfStatus" style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--cyan);"></span>
+    </div>
+
+    <div class="tts-progress-wrap">
+      <div class="tts-progress-meta">
+        <span id="chunkInfo">Ready</span>
+        <span id="progressText">Idle</span>
+      </div>
+      <div class="tts-bar-rail"><i class="tts-bar-fill" id="chunkBar"></i></div>
+      <div class="tts-bar-rail" style="margin-top: 5px; height: 5px;"><i class="tts-bar-fill" id="bar"></i></div>
+    </div>
+
+    <div class="tts-state-box" id="modelState">⚡ Browser TTS (bn-IN) ready. Switch to 🧠 Neural ONNX for local ONNX synthesis.</div>
+
+    <div class="tts-player-wrap hidden" id="playerWrap">
+      <audio id="player" controls></audio>
+      <a class="btn btn-primary btn-sm" id="downloadWav" download="bengali-tts.wav"><i class="fa-solid fa-download"></i><span>Download WAV</span></a>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+      <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">TTS Diagnostics Log</span>
+      <button type="button" class="btn btn-ghost btn-sm" id="clearLog" style="padding: 3px 8px; min-height: 26px; font-size: 0.72rem;">Clear Log</button>
+    </div>
+    <div class="tts-log-box" id="log"></div>
+  </section>
+
   <!-- ═══════════════ DICTIONARY & WORDLIST PANEL ═══════════════ -->
   <section class="glass-card dict-card" id="dictionarySection">
     <div class="dict-top">
@@ -1330,7 +1639,7 @@
 
   <footer class="footer">
     <i class="fa-solid fa-hexagon-nodes" style="color: var(--cyan);"></i>
-    HexPDF Studio · PDF.js 3.11.174 · Tesseract.js 5.1.1 OCR · jsPDF 2.5.1 · @xenova/transformers 2.17.2 · BengaliDictionary (MinhasKamal) · Bengali (India) · Noto Sans Bengali &amp; Hind Siliguri TTF · GTranslate · 100% Client-Side
+    HexPDF Studio · PDF.js 3.11.174 · Tesseract.js 5.1.1 OCR · jsPDF 2.5.1 · @xenova/transformers 2.17.2 · Bengali (India) TTS · BengaliDictionary · GTranslate · 100% Client-Side
   </footer>
 </div>
 
@@ -1873,7 +2182,10 @@ window.gtranslateSettings = {
     window.addEventListener('drop', (e) => {
       e.preventDefault();
       if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        loadPdfFile(e.dataTransfer.files[0]);
+        const dtFiles = e.dataTransfer.files;
+        if (dtFiles[0] && /\.pdf$/i.test(dtFiles[0].name)) {
+          loadPdfFile(dtFiles[0]);
+        }
       }
     });
 
@@ -4892,104 +5204,1070 @@ window.gtranslateSettings = {
   }
 })();
 </script>
-  <script>
-// Disable right-click
-document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+<!-- ═══════════════ BENGALI (INDIA) TTS READER MODULE (FIXED BUILD #2) ═══════════════ -->
+<script type="module">
+/* ═══════════════════════════════════════════════════════════════════
+   Bengali (India) TTS Reader — fixed build #2
+   Fixes:
+     • Removed facebook/mms-tts-ben (PyTorch repo — no ONNX, no tokenizer.json)
+     • Default = onnx-community/mms-tts-ben (working ONNX VITS)
+     • Fallback = Xenova/mms-tts-ben only
+     • Clear "switch to Browser Voice" escape hatch if both fail
+   ═══════════════════════════════════════════════════════════════════ */
+
+const byId  = (id) => document.getElementById(id);
+const synth = window.speechSynthesis || null;
+
+/* ✅ Only these two work with Transformers.js v3 */
+const MODEL_CANDIDATES = [
+  'onnx-community/mms-tts-ben',
+  'Xenova/mms-tts-ben',
+];
+const DEFAULT_MODEL = MODEL_CANDIDATES[0];
+
+const state = {
+  engine: 'browser',
+  voices: [],
+  tf: null,
+  tts: null,
+  loading: false,
+  fileProgress: new Map(),
+  chunks: [],
+  chunkIndex: 0,
+  speakGeneration: 0,
+  playing: false,
+  paused: false,
+  pauseResolvers: [],
+  audioUrl: null,
+  mediaSessionReady: false,
+  notifShown: false,
+  wakeLock: null,
+  wakeLockActive: false,
+};
+
+/* ── env helpers ── */
+function hasCacheStorage() {
+  try {
+    return typeof caches !== 'undefined'
+        && caches
+        && typeof caches.open === 'function';
+  } catch { return false; }
+}
+const isInsecure = !window.isSecureContext;
+
+/* ── logging ── */
+function log(msg, kind = 'info') {
+  const box = byId('log');
+  if (!box) return;
+  const line = document.createElement('div');
+  line.className = 'log-line ' + kind;
+  const t = new Date().toLocaleTimeString([], { hour12: false });
+  line.textContent = `[${t}] ${msg}`;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+  while (box.children.length > 400) box.removeChild(box.firstChild);
+}
+const fmtBytes = (n) => {
+  if (n == null || isNaN(n)) return '?';
+  if (n < 1024) return n + ' B';
+  if (n < 1048576) return (n / 1024).toFixed(1) + ' KB';
+  if (n < 1073741824) return (n / 1048576).toFixed(1) + ' MB';
+  return (n / 1073741824).toFixed(2) + ' GB';
+};
+const escapeHtml = (s) => String(s).replace(/[&<>"']/g, c =>
+  ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
+function setBar(pct, text) {
+  const barEl = byId('bar');
+  const progEl = byId('progressText');
+  if (barEl) barEl.style.width = Math.max(0, Math.min(100, pct)) + '%';
+  if (text !== undefined && progEl) progEl.textContent = text;
+}
+function setBusy(b) {
+  const btn = byId('speakBtn');
+  if (!btn) return;
+  btn.disabled = b;
+  btn.innerHTML = b ? '<span class="spin"></span> Working…' : '▶️ Speak · বলুন';
+}
+
+/* ── ICON for MediaSession / notifications ── */
+let ICON_URL = '';
+(function makeIcon() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 512;
+  const ctx = c.getContext('2d');
+  const g = ctx.createLinearGradient(0, 0, 512, 512);
+  g.addColorStop(0, '#7c5cff');
+  g.addColorStop(1, '#22d3ee');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 512, 512);
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  ctx.font = 'bold 340px "Noto Sans Bengali", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('ব', 256, 290);
+  ICON_URL = c.toDataURL('image/png');
+})();
+
+if (isInsecure) {
+  byId('secWarn')?.classList.remove('hidden');
+  log('Non-secure context — Cache Storage / Media Session may be blocked.', 'warn');
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   VOICES — Bengali (India)
+   ═══════════════════════════════════════════════════════════════════ */
+const normLang = (l) => (l || '').toLowerCase().replace('_', '-');
+
+function populateVoices() {
+  if (!synth) { log('Web Speech API unavailable.', 'err'); return; }
+  const all = synth.getVoices();
+  if (!all || !all.length) return;
+  state.voices = all;
+
+  const bnIN  = all.filter(v => normLang(v.lang) === 'bn-in');
+  const bnAll = all.filter(v => normLang(v.lang).startsWith('bn-'));
+
+  const sel = byId('voiceSelect');
+  if (!sel) return;
+  sel.innerHTML = '';
+
+  if (bnIN.length) {
+    bnIN.sort((a, b) => Number(b.localService) - Number(a.localService));
+    bnIN.forEach(v => {
+      const tag = v.localService ? ' • offline' : ' • online';
+      sel.add(new Option(`${v.name} (${v.lang})${tag}`, v.name));
+    });
+    byId('voiceWarn')?.classList.add('hidden');
+    log(`✔ ${bnIN.length} Bengali (India) voice(s) found.`, 'ok');
+  } else if (bnAll.length) {
+    bnAll.forEach(v => sel.add(new Option(`${v.name} (${v.lang}) — fallback`, v.name)));
+    byId('voiceWarn')?.classList.remove('hidden');
+    log(`No bn-IN voice; falling back to ${bnAll.length} other Bengali voice(s).`, 'warn');
+  } else {
+    sel.add(new Option('— No Bengali voice installed —', ''));
+    byId('voiceWarn')?.classList.remove('hidden');
+    log('No Bengali voices found. Use the Neural tab, or install a bn-IN voice.', 'warn');
+  }
+}
+
+function getSelectedVoice() {
+  const name = byId('voiceSelect')?.value || '';
+  return state.voices.find(v => v.name === name) || null;
+}
+
+if (synth) {
+  populateVoices();
+  synth.addEventListener?.('voiceschanged', populateVoices);
+  synth.onvoiceschanged = populateVoices;
+  setTimeout(populateVoices, 300);
+  setTimeout(populateVoices, 1500);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PDF extraction
+   ═══════════════════════════════════════════════════════════════════ */
+let pdfjsLoaded = false;
+async function loadPdfJs() {
+  if (window.pdfjsLib) {
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    pdfjsLoaded = true;
+    return window.pdfjsLib;
+  }
+  if (pdfjsLoaded) return window.pdfjsLib;
+  await new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    s.onload = resolve;
+    s.onerror = () => reject(new Error('PDF.js failed to load'));
+    document.head.appendChild(s);
+  });
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  pdfjsLoaded = true;
+  return window.pdfjsLib;
+}
+
+async function extractPdfText(file, onProgress) {
+  const pdfjs = await loadPdfJs();
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjs.getDocument({ data: buf }).promise;
+  const total = pdf.numPages;
+  let out = '';
+
+  for (let i = 1; i <= total; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const items = content.items.filter(it => it.str && it.str.trim());
+
+    items.sort((a, b) => {
+      const ya = a.transform[5], yb = b.transform[5];
+      if (Math.abs(ya - yb) > 5) return yb - ya;
+      return a.transform[4] - b.transform[4];
+    });
+
+    let pageText = '';
+    let lastY = null;
+    for (const it of items) {
+      if (lastY !== null && Math.abs(lastY - it.transform[5]) > 5) pageText += '\n';
+      pageText += it.str;
+      lastY = it.transform[5];
+    }
+    out += pageText.trim() + '\n\n';
+    if (onProgress) onProgress(i, total);
+  }
+  return out.trim();
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TEXT ANALYSIS
+   ═══════════════════════════════════════════════════════════════════ */
+function analyzeText(text) {
+  const t = text.trim();
+  const chars = t.length;
+  const noSpaces = t.replace(/\s+/g, '').length;
+  const words = t ? t.split(/\s+/).filter(Boolean).length : 0;
+  const sentences = t ? (t.split(/(?<=[।!?\.])\s*/).filter(s => s.trim()).length || 1) : 0;
+  const rate = parseFloat(byId('rate')?.value || byId('speed')?.value || 1);
+  const totalSec = words ? Math.round((words / 130) * 60 / rate) : 0;
+  const readTime = totalSec < 60 ? `${totalSec}s`
+    : `${Math.floor(totalSec / 60)}m ${totalSec % 60}s`;
+  return { chars, noSpaces, words, sentences, readTime, totalSec };
+}
+
+function updateAnalysis() {
+  const txtEl = byId('text');
+  if (!txtEl) return;
+  const a = analyzeText(txtEl.value);
+  byId('statChars').textContent = a.chars.toLocaleString();
+  byId('statWords').textContent = a.words.toLocaleString();
+  byId('statSentences').textContent = a.sentences.toLocaleString();
+  byId('statTime').textContent = a.readTime;
+  const chunks = chunkText(txtEl.value).length;
+  byId('statExtra').textContent =
+    `${a.noSpaces.toLocaleString()} non-space chars · ${chunks} speech chunk(s) · ~${a.totalSec}s`;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CHUNKING
+   ═══════════════════════════════════════════════════════════════════ */
+function chunkText(text, maxLen = 220) {
+  text = (text || '').replace(/\r\n?/g, '\n').trim();
+  if (!text) return [];
+
+  const pieces = text.split(/(?<=[।!?\.])\s*|\n+/).filter(p => p && p.trim());
+  const chunks = [];
+  let cur = '';
+  const push = (s) => { if (s.trim()) chunks.push(s.trim()); };
+
+  for (const p of pieces) {
+    const t = p.trim();
+    if (!t) continue;
+
+    if ((cur + ' ' + t).trim().length <= maxLen) {
+      cur = (cur + ' ' + t).trim();
+    } else {
+      push(cur);
+      cur = '';
+      if (t.length > maxLen) {
+        const words = t.split(/\s+/);
+        let part = '';
+        for (const w of words) {
+          if ((part + ' ' + w).trim().length > maxLen && part) {
+            push(part);
+            part = w;
+          } else {
+            part = (part + ' ' + w).trim();
+          }
+        }
+        cur = part;
+      } else {
+        cur = t;
+      }
+    }
+  }
+  push(cur);
+  return chunks;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TRANSFORMERS.JS
+   ═══════════════════════════════════════════════════════════════════ */
+const CDNS = [
+  'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3',
+  'https://esm.sh/@huggingface/transformers@3',
+  'https://unpkg.com/@huggingface/transformers@3',
+];
+
+async function loadTransformers() {
+  let lastErr;
+  for (const url of CDNS) {
+    try {
+      log('Importing Transformers.js from ' + new URL(url).host + ' …');
+      const mod = await import(/* webpackIgnore: true */ url);
+      log('Transformers.js ready ✔', 'ok');
+      return mod;
+    } catch (e) {
+      lastErr = e;
+      log('CDN failed (' + new URL(url).host + '): ' + e.message, 'warn');
+    }
+  }
+  throw new Error('Could not load Transformers.js from any CDN. ' + (lastErr?.message || ''));
+}
+
+function onModelProgress(p) {
+  try {
+    const file = p.file || p.name || 'model file';
+    if (p.status === 'initiate') {
+      state.fileProgress.set(file, { loaded: 0, total: 0 });
+      log('↓ request ' + file);
+    } else if (p.status === 'progress') {
+      state.fileProgress.set(file, { loaded: p.loaded || 0, total: p.total || 0 });
+      let loaded = 0, total = 0;
+      for (const v of state.fileProgress.values()) { loaded += v.loaded; total += v.total; }
+      const pct = total > 0 ? (loaded / total) * 100 : 0;
+      setBar(pct, `${file} — ${fmtBytes(p.loaded)} / ${fmtBytes(p.total)} (${pct.toFixed(0)}%)`);
+    } else if (p.status === 'done') {
+      const v = state.fileProgress.get(file);
+      if (v && v.total) v.loaded = v.total;
+      log('✔ downloaded ' + file, 'ok');
+    } else if (p.status === 'ready') {
+      log('Model files ready: ' + (p.model || ''), 'ok');
+    }
+  } catch {}
+}
+
+/* ── Try to load one model ── */
+async function tryLoadOneModel(id) {
+  const { pipeline, env } = state.tf;
+
+  env.allowLocalModels  = false;
+  env.allowRemoteModels = true;
+  env.useBrowserCache   = hasCacheStorage();
+
+  log(`Trying model: ${id} …`);
+  try {
+    return await pipeline('text-to-speech', id, {
+      progress_callback: onModelProgress,
+    });
+  } catch (e1) {
+    if (/browser cache is not available/i.test(e1.message || '')) {
+      log('Cache Storage missing — retrying without cache…', 'warn');
+      env.useBrowserCache = false;
+      return await pipeline('text-to-speech', id, {
+        progress_callback: onModelProgress,
+      });
+    }
+    throw e1;
+  }
+}
+
+async function loadModel() {
+  if (state.tts) return true;
+  if (state.loading) { log('Already loading…', 'warn'); return false; }
+
+  state.loading = true;
+  state.fileProgress.clear();
+  setBusy(true);
+  setBar(0, 'Starting…');
+  byId('modelState').className = 'tts-state-box';
+  byId('modelState').textContent = '⏳ Loading neural model…';
+  log('Loading neural model (first time = big download, then cached)…');
+
+  try {
+    if (!state.tf) state.tf = await loadTransformers();
+
+    /* Build candidate list: custom ID first, then the known-working ones */
+    const custom = (byId('modelId').value || '').trim();
+    const list = [];
+    if (custom) list.push(custom);
+    for (const id of MODEL_CANDIDATES) if (!list.includes(id)) list.push(id);
+    /* Never include facebook/mms-tts-ben — it is PyTorch-only */
+
+    const t0 = performance.now();
+    let lastErr = null;
+
+    for (const id of list) {
+      try {
+        state.tts = await tryLoadOneModel(id);
+        const secs = ((performance.now() - t0) / 1000).toFixed(1);
+        setBar(100, 'Model ready ✔');
+        byId('modelState').className = 'tts-state-box ok';
+        byId('modelState').innerHTML =
+          `✅ Loaded: <b>${escapeHtml(id)}</b> (ready in ${secs}s)` +
+          (hasCacheStorage() ? ' · cached for offline' : ' · not cached (http://)');
+        byId('modelId').value = id;
+        log(`Model ready in ${secs}s ✔`, 'ok');
+        refreshCacheInfo();
+        return true;
+      } catch (e) {
+        lastErr = e;
+        log(`Model "${id}" failed: ${e.message || e}`, 'warn');
+      }
+    }
+
+    throw lastErr || new Error('No neural model could be loaded');
+
+  } catch (err) {
+    console.error(err);
+    const msg = err?.message || String(err);
+    log('Model load failed: ' + msg, 'err');
+    byId('modelState').className = 'tts-state-box err';
+    byId('modelState').innerHTML =
+      '❌ <b>Neural model unavailable</b><br>' +
+      '<span class="small">' + escapeHtml(msg) + '</span>' +
+      '<ul class="small">' +
+        '<li>Both <code>onnx-community/mms-tts-ben</code> and <code>Xenova/mms-tts-ben</code> failed to load.</li>' +
+        '<li>This is usually a <b>network / CDN</b> issue — check your connection and try Retry.</li>' +
+        '<li>Or switch to the <b>⚡ Browser Voice</b> tab: <b>zero download</b>, works on any device with a Bengali (India) voice installed.</li>' +
+        '<li><code>facebook/mms-tts-ben</code> cannot be used — it has no ONNX files and no <code>tokenizer.json</code>.</li>' +
+      '</ul>' +
+      '<div class="err-actions">' +
+        '<button type="button" class="btn btn-ghost btn-sm" id="retryModelBtn">🔄 Retry</button>' +
+        '<button type="button" class="btn btn-primary btn-sm" id="switchToBrowserBtn">⚡ Use Browser Voice (0 MB)</button>' +
+      '</div>';
+    setBar(0, 'Failed');
+    state.tts = null;
+
+    /* Wire the escape-hatch buttons */
+    byId('retryModelBtn')?.addEventListener('click', () => loadModel());
+    byId('switchToBrowserBtn')?.addEventListener('click', () => switchToBrowserEngine());
+
+    return false;
+  } finally {
+    state.loading = false;
+    setBusy(false);
+  }
+}
+
+/* ── Switch to Browser engine ── */
+function switchToBrowserEngine() {
+  document.querySelectorAll('.tts-tabs .tab').forEach(t => t.classList.toggle('active', t.dataset.engine === 'browser'));
+  state.engine = 'browser';
+  byId('panel-browser')?.classList.remove('hidden');
+  byId('panel-neural')?.classList.add('hidden');
+  byId('engineInfo').textContent = '⚡ Web Speech API (bn-IN)';
+  stopAll();
+  log('Switched to Browser Voice (bn-IN). Press Speak to test.', 'ok');
+  /* If a Bengali voice exists, speak immediately */
+  if (byId('text')?.value.trim()) onSpeak();
+}
+
+/* ── WAV encoder ── */
+function writeStr(view, offset, str) {
+  for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+}
+function encodeWAV(samples, sampleRate) {
+  const buffer = new ArrayBuffer(44 + samples.length * 2);
+  const view = new DataView(buffer);
+  writeStr(view, 0, 'RIFF');
+  view.setUint32(4, 36 + samples.length * 2, true);
+  writeStr(view, 8, 'WAVE');
+  writeStr(view, 12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  writeStr(view, 36, 'data');
+  view.setUint32(40, samples.length * 2, true);
+  let off = 44;
+  for (let i = 0; i < samples.length; i++, off += 2) {
+    let s = samples[i];
+    s = s < -1 ? -1 : s > 1 ? 1 : s;
+    view.setInt16(off, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+  }
+  return new Blob([view], { type: 'audio/wav' });
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MEDIA SESSION
+   ═══════════════════════════════════════════════════════════════════ */
+function initMediaSession() {
+  if (!('mediaSession' in navigator)) return;
+  if (state.mediaSessionReady) return;
+  state.mediaSessionReady = true;
+  try {
+    navigator.mediaSession.setActionHandler('play',  () => resumePlayback());
+    navigator.mediaSession.setActionHandler('pause', () => pausePlayback());
+    navigator.mediaSession.setActionHandler('stop',  () => stopAll());
+    navigator.mediaSession.setActionHandler('previoustrack', () => jumpChunk(-1));
+    navigator.mediaSession.setActionHandler('nexttrack',     () => jumpChunk(+1));
+  } catch (e) { console.warn('MediaSession handlers:', e); }
+}
+
+function updateMediaSession() {
+  if (!('mediaSession' in navigator)) return;
+  try {
+    initMediaSession();
+    const total = state.chunks.length;
+    const idx = state.chunkIndex;
+    const current = state.chunks[idx] || '';
+    const snippet = current.length > 60 ? current.slice(0, 57) + '…' : (current || 'বাংলা TTS');
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: snippet,
+      artist: 'বাংলা (ভারত) · Bengali (India) TTS',
+      album: total ? `Chunk ${idx + 1} / ${total}` : 'Text to Speech',
+      artwork: [
+        { src: ICON_URL, sizes: '512x512', type: 'image/png' },
+        { src: ICON_URL, sizes: '256x256', type: 'image/png' },
+        { src: ICON_URL, sizes: '128x128', type: 'image/png' },
+      ],
+    });
+    navigator.mediaSession.playbackState =
+      state.playing && !state.paused ? 'playing' : 'paused';
+  } catch (e) { console.warn('MediaSession metadata:', e); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   NOTIFICATIONS
+   ═══════════════════════════════════════════════════════════════════ */
+function requestNotifPermission() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'default') {
+    Notification.requestPermission().then(p => {
+      if (p === 'granted') log('Notifications enabled.', 'ok');
+    });
+  }
+}
+
+function showStartNotification(text) {
+  try {
+    if (!('Notification' in window)) return;
+    if (Notification.permission !== 'granted') return;
+    const total = state.chunks.length;
+    const preview = text.length > 80 ? text.slice(0, 77) + '…' : text;
+    const n = new Notification('🔊 বাংলা TTS শুরু হচ্ছে', {
+      body: `${preview}\n\n${total} chunk(s) · Bengali (India)`,
+      icon: ICON_URL,
+      badge: ICON_URL,
+      tag: 'bengali-tts-reading',
+      renotify: true,
+      silent: true,
+    });
+    n.onclick = () => { try { window.focus(); n.close(); } catch {} };
+    setTimeout(() => { try { n.close(); } catch {} }, 7000);
+  } catch (e) { console.warn('Notification:', e); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WAKE LOCK
+   ═══════════════════════════════════════════════════════════════════ */
+async function requestWakeLock() {
+  if (!('wakeLock' in navigator) || state.wakeLockActive) return;
+  try {
+    state.wakeLock = await navigator.wakeLock.request('screen');
+    state.wakeLockActive = true;
+    state.wakeLock.addEventListener('release', () => {
+      state.wakeLockActive = false;
+      state.wakeLock = null;
+    });
+  } catch {}
+}
+function releaseWakeLock() {
+  if (state.wakeLock) { try { state.wakeLock.release(); } catch {} state.wakeLock = null; }
+  state.wakeLockActive = false;
+}
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && state.playing && !state.wakeLockActive) requestWakeLock();
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+   PAUSE / RESUME / STOP
+   ═══════════════════════════════════════════════════════════════════ */
+function waitIfPaused() {
+  if (!state.paused) return Promise.resolve();
+  return new Promise(res => state.pauseResolvers.push(res));
+}
+
+function pausePlayback() {
+  if (!state.playing || state.paused) return;
+  state.paused = true;
+  try {
+    if (state.engine === 'browser') synth?.pause();
+    else byId('player')?.pause();
+  } catch {}
+  const pauseBtn = byId('pauseBtn');
+  if (pauseBtn) pauseBtn.innerHTML = '▶️ Resume';
+  updateMediaSession();
+  log('Paused.', 'info');
+}
+
+function resumePlayback() {
+  if (!state.paused) return;
+  state.paused = false;
+  const rs = state.pauseResolvers.splice(0);
+  rs.forEach(r => r());
+  try {
+    if (state.engine === 'browser') synth?.resume();
+    else byId('player')?.play().catch(() => {});
+  } catch {}
+  const pauseBtn = byId('pauseBtn');
+  if (pauseBtn) pauseBtn.innerHTML = '⏸ Pause';
+  updateMediaSession();
+  log('Resumed.', 'info');
+}
+
+function stopAll() {
+  state.speakGeneration++;
+  state.playing = false;
+  state.paused = false;
+  state.chunkIndex = 0;
+  try { synth?.cancel(); } catch {}
+  try { byId('player')?.pause(); } catch {}
+  state.pauseResolvers.splice(0).forEach(r => r());
+  const pauseBtn = byId('pauseBtn');
+  if (pauseBtn) {
+    pauseBtn.disabled = true;
+    pauseBtn.innerHTML = '⏸ Pause';
+  }
+  if (byId('chunkInfo')) byId('chunkInfo').textContent = 'Stopped';
+  if (byId('chunkBar')) byId('chunkBar').style.width = '0%';
+  updateMediaSession();
+  releaseWakeLock();
+  log('Stopped.', 'info');
+}
+
+function jumpChunk(delta) {
+  if (!state.chunks.length) return;
+  const target = Math.max(0, Math.min(state.chunks.length - 1, state.chunkIndex + delta));
+  log(`Jump → chunk ${target + 1}/${state.chunks.length}`, 'info');
+  const gen = ++state.speakGeneration;
+  try { synth?.cancel(); } catch {}
+  try { byId('player')?.pause(); } catch {}
+  state.paused = false;
+  const pauseBtn = byId('pauseBtn');
+  if (pauseBtn) pauseBtn.innerHTML = '⏸ Pause';
+  speakFrom(target, gen).catch(e => log('Jump error: ' + e.message, 'err'));
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CHUNK UI
+   ═══════════════════════════════════════════════════════════════════ */
+function updateChunkUI() {
+  const total = state.chunks.length;
+  const i = state.chunkIndex;
+  const infoEl = byId('chunkInfo');
+  const barEl = byId('chunkBar');
+  if (!infoEl || !barEl) return;
+  if (!state.playing && !state.paused) {
+    infoEl.textContent = total ? `${total} chunk(s) ready` : 'Ready';
+    barEl.style.width = '0%';
+    return;
+  }
+  infoEl.textContent = `Reading chunk ${i + 1} / ${total}`;
+  barEl.style.width = total ? `${((i + 1) / total) * 100}%` : '0%';
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   BROWSER TTS
+   ═══════════════════════════════════════════════════════════════════ */
+function speakBrowserChunk(text) {
+  return new Promise((resolve, reject) => {
+    if (!synth) return reject(new Error('Web Speech API unavailable'));
+    const u = new SpeechSynthesisUtterance(text);
+    const voice = getSelectedVoice();
+    if (voice) { u.voice = voice; u.lang = voice.lang; }
+    else       { u.lang = 'bn-IN'; }
+    u.rate = parseFloat(byId('rate')?.value || 1);
+    u.pitch = parseFloat(byId('pitch')?.value || 1);
+    u.volume = 1;
+    u.onend = () => resolve();
+    u.onerror = (e) => {
+      if (e.error === 'interrupted' || e.error === 'canceled') return resolve();
+      reject(new Error('speech error: ' + e.error));
+    };
+    synth.speak(u);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   NEURAL TTS
+   ═══════════════════════════════════════════════════════════════════ */
+async function speakNeuralChunk(text, gen) {
+  if (!state.tts) throw new Error('Neural model not loaded');
+  if (gen !== state.speakGeneration) return;
+
+  const out = await state.tts(text);
+  if (gen !== state.speakGeneration) return;
+
+  const audio = out?.audio ?? out;
+  const sr = out?.sampling_rate ?? 16000;
+  if (!audio || !audio.length) throw new Error('Empty audio from model');
+
+  const wav = encodeWAV(audio, sr);
+  await waitIfPaused();
+  if (gen !== state.speakGeneration) return;
+  await playWavOnce(wav);
+}
+
+function playWavOnce(blob) {
+  return new Promise((resolve) => {
+    const player = byId('player');
+    if (!player) return resolve();
+    if (state.audioUrl) URL.revokeObjectURL(state.audioUrl);
+    state.audioUrl = URL.createObjectURL(blob);
+    player.src = state.audioUrl;
+    player.playbackRate = parseFloat(byId('speed')?.value || 1);
+    byId('playerWrap')?.classList.remove('hidden');
+    const dl = byId('downloadWav');
+    if (dl) {
+      dl.href = state.audioUrl;
+      dl.download = 'bengali-tts-' + Date.now() + '.wav';
+    }
+    const done = () => { player.onended = null; player.onerror = null; resolve(); };
+    player.onended = done;
+    player.onerror = done;
+    player.play().catch((e) => {
+      log('Autoplay blocked — press ▶ on the player. (' + e.message + ')', 'warn');
+      done();
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ORCHESTRATOR
+   ═══════════════════════════════════════════════════════════════════ */
+async function speakFrom(startIndex, existingGen) {
+  if (!state.chunks.length) return;
+  const gen = existingGen ?? ++state.speakGeneration;
+
+  state.playing = true;
+  state.paused = false;
+  const pauseBtn = byId('pauseBtn');
+  if (pauseBtn) {
+    pauseBtn.disabled = false;
+    pauseBtn.innerHTML = '⏸ Pause';
+  }
+  initMediaSession();
+  requestWakeLock();
+  if (!state.notifShown) {
+    state.notifShown = true;
+    requestNotifPermission();
+    showStartNotification(state.chunks[startIndex] || '');
+  }
+
+  log(`Reading ${state.chunks.length} chunk(s) from #${startIndex + 1} (${state.engine}).`, 'ok');
+
+  for (let i = startIndex; i < state.chunks.length; i++) {
+    if (gen !== state.speakGeneration) return;
+    await waitIfPaused();
+    if (gen !== state.speakGeneration) return;
+
+    state.chunkIndex = i;
+    updateMediaSession();
+    updateChunkUI();
+
+    try {
+      if (state.engine === 'browser') await speakBrowserChunk(state.chunks[i]);
+      else                              await speakNeuralChunk(state.chunks[i], gen);
+    } catch (e) {
+      if (gen === state.speakGeneration) log('Chunk error: ' + e.message, 'err');
+    }
+  }
+
+  if (gen !== state.speakGeneration) return;
+
+  state.playing = false;
+  state.paused = false;
+  state.chunkIndex = 0;
+  if (pauseBtn) {
+    pauseBtn.disabled = true;
+    pauseBtn.innerHTML = '⏸ Pause';
+  }
+  updateMediaSession();
+  updateChunkUI();
+  releaseWakeLock();
+  log('Reading complete ✔', 'ok');
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SPEAK
+   ═══════════════════════════════════════════════════════════════════ */
+async function onSpeak() {
+  const txtEl = byId('text');
+  const text = (txtEl?.value || '').trim();
+  if (!text) { log('Please enter some Bengali text first.', 'warn'); txtEl?.focus(); return; }
+
+  if (state.paused) { resumePlayback(); return; }
+  if (state.playing) { pausePlayback(); return; }
+
+  const chunks = chunkText(text);
+  if (!chunks.length) { log('No speech chunks generated.', 'warn'); return; }
+  state.chunks = chunks;
+  state.chunkIndex = 0;
+  state.notifShown = false;
+
+  if (state.engine === 'neural' && !state.tts) {
+    const ok = await loadModel();
+    if (!ok) {
+      /* Auto-suggest switch */
+      log('Neural model unavailable. Click “Use Browser Voice” or switch tabs.', 'warn');
+      return;
+    }
+  }
+
+  speakFrom(0).catch(e => log('Speak error: ' + e.message, 'err'));
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CACHE INFO
+   ═══════════════════════════════════════════════════════════════════ */
+async function refreshCacheInfo() {
+  const box = byId('cacheInfo');
+  if (!box) return;
+  if (!hasCacheStorage()) { box.textContent = '💾 Cache unavailable (http://)'; return; }
+  try {
+    const modelId = (byId('modelId')?.value || DEFAULT_MODEL).trim().toLowerCase();
+    const names = await caches.keys();
+    let count = 0;
+    for (const name of names) {
+      const cache = await caches.open(name);
+      const keys = await cache.keys();
+      for (const req of keys) {
+        if (req.url.toLowerCase().includes(modelId)) count++;
+      }
+    }
+    box.textContent = count
+      ? `💾 cached: ${count} file${count > 1 ? 's' : ''}`
+      : '💾 not cached yet';
+  } catch { box.textContent = '💾 cache check failed'; }
+}
+
+async function clearModelCache() {
+  if (!hasCacheStorage()) { log('Cache API unavailable — nothing to clear.', 'warn'); return; }
+  try {
+    const names = await caches.keys();
+    let n = 0;
+    for (const name of names) {
+      if (/transformers|onnx|huggingface/i.test(name)) { await caches.delete(name); n++; }
+    }
+    state.tts = null;
+    const stateBox = byId('modelState');
+    if (stateBox) {
+      stateBox.className = 'tts-state-box';
+      stateBox.textContent = 'Cache cleared. Model must be downloaded again.';
+    }
+    setBar(0, 'Idle');
+    log(`Cleared ${n} cache bucket(s).`, 'ok');
+    refreshCacheInfo();
+  } catch (e) { log('Failed to clear cache: ' + e.message, 'err'); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   UI WIRING
+   ═══════════════════════════════════════════════════════════════════ */
+document.querySelectorAll('.tts-tabs .tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tts-tabs .tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    state.engine = tab.dataset.engine;
+    byId('panel-browser')?.classList.toggle('hidden', state.engine !== 'browser');
+    byId('panel-neural')?.classList.toggle('hidden', state.engine !== 'neural');
+    byId('engineInfo').textContent = state.engine === 'browser'
+      ? '⚡ Web Speech API (bn-IN)'
+      : '🧠 Neural ONNX (Bengali)';
+    stopAll();
+    if (state.engine === 'neural') refreshCacheInfo();
+  });
+});
+
+document.querySelectorAll('#chips .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const txtEl = byId('text');
+    if (!txtEl) return;
+    txtEl.value = chip.textContent;
+    txtEl.focus();
+    updateAnalysis();
+  });
+});
+
+function wireSlider(id, valId, suffix = '') {
+  const s = byId(id), v = byId(valId);
+  if (!s || !v) return null;
+  const upd = () => { v.textContent = parseFloat(s.value).toFixed(2) + suffix; };
+  s.addEventListener('input', upd);
+  upd();
+  return s;
+}
+wireSlider('rate', 'rateVal', '×');
+wireSlider('pitch', 'pitchVal', '');
+const speedSlider = wireSlider('speed', 'speedVal', '×');
+speedSlider?.addEventListener('input', () => {
+  const p = byId('player');
+  if (p) p.playbackRate = parseFloat(speedSlider.value);
+});
+byId('rate')?.addEventListener('input', updateAnalysis);
+
+let analysisTimer = null;
+byId('text')?.addEventListener('input', () => {
+  clearTimeout(analysisTimer);
+  analysisTimer = setTimeout(updateAnalysis, 120);
+});
+
+byId('clearBtn')?.addEventListener('click', () => {
+  const txtEl = byId('text');
+  if (txtEl) txtEl.value = '';
+  updateAnalysis();
+  if (byId('pdfStatus')) byId('pdfStatus').textContent = '';
+  log('Text cleared.', 'info');
+});
+
+byId('pdfBtn')?.addEventListener('click', () => byId('pdfInput')?.click());
+byId('pdfInput')?.addEventListener('change', async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  if (byId('pdfStatus')) byId('pdfStatus').textContent = 'Reading PDF…';
+  log('Loading PDF: ' + file.name + ' (' + fmtBytes(file.size) + ')');
+  try {
+    const text = await extractPdfText(file, (i, total) => {
+      if (byId('pdfStatus')) byId('pdfStatus').textContent = `Extracting page ${i}/${total}…`;
+    });
+    const txtEl = byId('text');
+    if (txtEl) txtEl.value = text;
+    updateAnalysis();
+    if (byId('pdfStatus')) byId('pdfStatus').textContent = `✔ ${file.name} — ${text.length.toLocaleString()} chars extracted`;
+    log('PDF text extracted ✔', 'ok');
+    if (byId('autoRead')?.checked) {
+      log('Auto-reading PDF…', 'info');
+      setTimeout(onSpeak, 200);
+    }
+  } catch (err) {
+    console.error(err);
+    if (byId('pdfStatus')) byId('pdfStatus').textContent = '❌ PDF extraction failed';
+    log('PDF error: ' + (err?.message || err), 'err');
+  } finally {
+    e.target.value = '';
+  }
+});
+
+byId('speakBtn')?.addEventListener('click', onSpeak);
+byId('pauseBtn')?.addEventListener('click', () => {
+  if (state.paused) resumePlayback();
+  else pausePlayback();
+});
+byId('stopBtn')?.addEventListener('click', stopAll);
+
+byId('loadModelBtn')?.addEventListener('click', () => loadModel());
+byId('clearCacheBtn')?.addEventListener('click', clearModelCache);
+byId('checkCacheBtn')?.addEventListener('click', refreshCacheInfo);
+byId('modelId')?.addEventListener('change', refreshCacheInfo);
+
+byId('clearLog')?.addEventListener('click', () => {
+  const logBox = byId('log');
+  if (logBox) logBox.innerHTML = '';
+});
+
+byId('text')?.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); onSpeak(); }
+});
+
+document.addEventListener('keydown', (e) => {
+  const tag = (document.activeElement?.tagName || '').toLowerCase();
+  if (tag === 'textarea' || tag === 'input') return;
+  if (e.code === 'Space' && !e.repeat) {
+    e.preventDefault();
+    if (state.playing) pausePlayback();
+    else if (state.paused) resumePlayback();
+  }
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+   BOOT
+   ═══════════════════════════════════════════════════════════════════ */
+updateAnalysis();
+if (byId('engineInfo')) byId('engineInfo').textContent = '⚡ Web Speech API (bn-IN)';
+refreshCacheInfo();
+
+log('Bengali TTS Reader ready. Engine: Browser (bn-IN).', 'ok');
+log('Tip: Ctrl+Enter = Speak · Space = Play/Pause.', 'info');
+if (!synth) log('Web Speech API unsupported — use the 🧠 Neural tab.', 'warn');
+if (!hasCacheStorage()) {
+  log('Cache Storage unavailable (http:// or file://). Neural model will re-download each session.', 'warn');
+}
+
+window.addEventListener('beforeunload', () => {
+  if (state.audioUrl) URL.revokeObjectURL(state.audioUrl);
+  try { synth?.cancel(); } catch {}
+});
+</script>
+
+<!-- ═══════════════ SECURITY & RUNTIME HARDENING ═══════════════ -->
+<script>
+// Disable right-click on non-form elements
+document.addEventListener('contextmenu', (e) => {
+  if (e.target && e.target.closest && e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+  e.preventDefault();
+});
 
 function ctrlShiftKey(e, keyCode) {
   return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
 }
 
-document.onkeydown = (e) => {
-  // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
+document.addEventListener('keydown', (e) => {
   if (
-    event.keyCode === 123 ||
+    e.keyCode === 123 ||
     ctrlShiftKey(e, 'I') ||
     ctrlShiftKey(e, 'J') ||
     ctrlShiftKey(e, 'C') ||
     (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))
-  )
-    return false;
-};
-</script>
-<script>
- if (typeof document.onselectstart!="undefined" ) {
-  document.onselectstart=new Function ("return false" );
- }
- else {
-  document.onmousedown=new Function ("return false" );
-  document.onmouseup=new Function ("return true" );
- }
-</script>
-<script>
-   document.onkeydown = function(e) {
-if(event.keyCode == 123) {
-    return false;
-}
-if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)){
-    return false;
-}
-if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)){
-    return false;
-}
-if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)){
-    return false;
-}
-if(e.ctrlKey && e.keyCode == 'C'.charCodeAt(0)){
-    return false;
-}
-if(e.ctrlKey && e.keyCode == 'X'.charCodeAt(0)){
-    return false;
-}
-if(e.ctrlKey && e.keyCode == 'Y'.charCodeAt(0)){
-    return false;
-}
-if(e.ctrlKey && e.keyCode == 'Z'.charCodeAt(0)){
-    return false;
-}
-if(e.ctrlKey && e.keyCode == 'V'.charCodeAt(0)){
-    return false;
-}
-if (e.keyCode == 67 && e.shiftKey && (e.ctrlKey || e.metaKey)){
-    return false;
-}
-if (e.keyCode == 'J'.charCodeAt(0) && e.altKey && (e.ctrlKey || e.metaKey)){
-    return false;
-}
-if (e.keyCode == 'I'.charCodeAt(0) && e.altKey && (e.ctrlKey || e.metaKey)){
-    return false;
-}
-if ((e.keyCode == 'V'.charCodeAt(0) && e.metaKey) || (e.metaKey && e.altKey)){
-    return false;
-}
-if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)){
-    return false;
-}
-if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)){
-    return false;
-}
-if(e.ctrlKey && e.keyCode == 'H'.charCodeAt(0)){
-    return false;
-}
-if(e.ctrlKey && e.keyCode == 'A'.charCodeAt(0)){
-    return false;
-}
-if(e.ctrlKey && e.keyCode == 'F'.charCodeAt(0)){
-    return false;
-}
-if(e.ctrlKey && e.keyCode == 'E'.charCodeAt(0)){
-    return false;
-}
-}
-if (document.addEventListener) {
-    document.addEventListener('contextmenu', function(e) {
+  ) {
     e.preventDefault();
-    }, false);
-}else{
-    document.attachEvent('oncontextmenu', function() {
-    window.event.returnValue = false;
-    });
-}
+    return false;
+  }
+});
+</script>
+<script>
+ if (typeof document.onselectstart !== "undefined") {
+  document.onselectstart = function (e) {
+    if (e && e.target && e.target.closest && e.target.closest('input, textarea, select, [contenteditable="true"]')) return true;
+    return false;
+  };
+ }
+</script>
+<script>
+   document.addEventListener('keydown', function(e) {
+    if (e.keyCode == 123) {
+        e.preventDefault();
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+        e.preventDefault();
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+        e.preventDefault();
+        return false;
+    }
+    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+        e.preventDefault();
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+        e.preventDefault();
+        return false;
+    }
+    if (e.keyCode == 67 && e.shiftKey && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        return false;
+    }
+    if (e.keyCode == 'J'.charCodeAt(0) && e.altKey && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        return false;
+    }
+    if (e.keyCode == 'I'.charCodeAt(0) && e.altKey && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        return false;
+    }
+    if ((e.keyCode == 'C'.charCodeAt(0) && e.shiftKey && (e.ctrlKey || e.metaKey))) {
+        e.preventDefault();
+        return false;
+    }
+  });
 </script>
 
 <script>
@@ -5489,8 +6767,6 @@ if (document.addEventListener) {
   }
 
 })(window, document);
-
-
 </script>
 </body>
 </html>

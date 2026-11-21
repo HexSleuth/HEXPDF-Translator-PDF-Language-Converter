@@ -33,9 +33,25 @@
     --radius-lg: 14px;
     --radius-md: 10px;
     --radius-sm: 7px;
-    --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-sans: "Noto Sans Bengali", "Hind Siliguri", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     color-scheme: dark;
+  }
+
+  @font-face {
+    font-family: "Noto Sans Bengali";
+    src: url("https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansbengali/NotoSansBengali%5Bwdth%2Cwght%5D.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Hind Siliguri";
+    src: url("https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/hindsiliguri/HindSiliguri-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -870,8 +886,8 @@
     border: 1px solid var(--border);
     background: var(--bg-editor);
     color: var(--text);
-    font-family: var(--font-mono);
-    font-size: 0.84rem;
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
     line-height: 1.65;
     padding: 14px;
     outline: none;
@@ -978,7 +994,7 @@
       <div class="brand-hex" aria-hidden="true"><i class="fa-solid fa-file-pdf"></i></div>
       <div>
         <h1 class="brand-title">Hex<span>PDF</span> Studio</h1>
-        <p class="brand-sub">PDF Viewer · Tesseract OCR · PDF ↔ Text · Free AI Translator</p>
+        <p class="brand-sub">PDF Viewer · Tesseract OCR · PDF ↔ Text · Free AI Translator (Bengali India · Noto Sans Bengali · Hind Siliguri)</p>
       </div>
     </div>
 
@@ -1168,7 +1184,7 @@
 
       <div style="font-size: 0.76rem; color: var(--text-muted); display: flex; align-items: center; gap: 7px;">
         <i class="fa-solid fa-shield-halved" style="color: var(--cyan);"></i>
-        <span>100% Free Client-Side: Google gtx · MyMemory · Transformers.js Browser AI · LibreTranslate · Ollama · Offline Dict</span>
+        <span>100% Free Client-Side: Google gtx · MyMemory · Transformers.js Browser AI · LibreTranslate · Ollama · Bengali (India) Dictionary &amp; Shaped Unicode TTF (Noto Sans Bengali / Hind Siliguri)</span>
       </div>
     </div>
   </section>
@@ -1177,11 +1193,11 @@
   <section class="glass-card dict-card" id="dictionarySection">
     <div class="dict-top">
       <div class="pane-title-group">
-        <h2 class="pane-title"><i class="fa-solid fa-book" style="color: var(--cyan);"></i><span>Dictionary &amp; Wordlist</span></h2>
-        <span class="pane-tag cyan" id="wordlistStatusTag">Wordlist: idle</span>
+        <h2 class="pane-title"><i class="fa-solid fa-book" style="color: var(--cyan);"></i><span>Bengali (India) &amp; English Dictionary</span></h2>
+        <span class="pane-tag cyan" id="wordlistStatusTag">BengaliDictionary + Wordlist: ready</span>
       </div>
       <div class="dict-search-row">
-        <button type="button" class="btn btn-ghost btn-sm" id="loadWordlistBtn" title="Load English wordlist for spell-checking and prefix suggestions">
+        <button type="button" class="btn btn-ghost btn-sm" id="loadWordlistBtn" title="Load MinhasKamal/BengaliDictionary dataset & English wordlist">
           <i class="fa-solid fa-database" style="color: var(--violet);"></i>
           <span id="loadWordlistLabel">Load Wordlist</span>
         </button>
@@ -1193,7 +1209,7 @@
     </div>
 
     <div class="dict-search-row">
-      <input type="text" id="inp-word" placeholder="Type an English word to define, pronounce & spell-check…" autocomplete="off" />
+      <input type="text" id="inp-word" placeholder="Type an English or Bengali (India) word (e.g., heart, হৃদয়, water, জল)…" autocomplete="off" />
       <button type="button" class="btn btn-primary btn-sm" id="search-btn">
         <i class="fa-solid fa-magnifying-glass" id="dictSearchIcon"></i>
         <span>Define</span>
@@ -1201,7 +1217,7 @@
     </div>
 
     <div class="dict-result-box" id="result">
-      <span style="color: var(--text-muted); font-size: 0.82rem;">Search any English word to fetch definitions, phonetics, audio, and wordlist spell-check matches.</span>
+      <span style="color: var(--text-muted); font-size: 0.82rem;">Search any English word (like <strong>heart</strong>) or Bengali (India) word to look up pipe-delimited dictionary entries, definitions, phonetics, audio, and wordlist suggestions.</span>
     </div>
   </section>
 
@@ -1280,7 +1296,7 @@
         <button type="button" class="page-tab active" data-page="all"><i class="fa-solid fa-layer-group"></i><span>All Pages</span></button>
       </div>
       <div class="editor-wrap">
-        <textarea id="textEditor" class="text-editor" placeholder="Extracted or OCR-recognized PDF text appears here, or type/paste text to translate or export to PDF..." spellcheck="true"></textarea>
+        <textarea id="textEditor" class="text-editor" placeholder="Extracted or OCR-recognized PDF text appears here, or type/paste text (including Bengali India / বাংলা) to translate or export to Unicode TTF PDF..." spellcheck="true"></textarea>
         <div id="readingPreview" class="reading-view" hidden></div>
         <div class="editor-footer">
           <div class="stats-row">
@@ -1301,7 +1317,7 @@
           <select id="pdfFontSize"><option value="10">10pt</option><option value="11" selected>11pt</option><option value="12">12pt</option><option value="14">14pt</option></select></label>
         <label class="mini-field"><i class="fa-solid fa-border-all"></i><span>Margin</span>
           <select id="pdfMarginPreset"><option value="20" selected>20mm</option><option value="12">12mm</option><option value="28">28mm</option></select></label>
-        <label class="toggle-chip" style="padding: 4px 10px; font-size: 0.75rem;" title="Embed Unicode fonts for non-Latin scripts">
+        <label class="toggle-chip" style="padding: 4px 10px; font-size: 0.75rem;" title="Embed Unicode .ttf fonts (Noto Sans Bengali / Hind Siliguri) and Bengali script shaping">
           <input type="checkbox" id="unicodeFontToggle" checked />
           <i class="fa-solid fa-spell-check" style="color: var(--cyan);"></i><span>Auto Unicode</span>
         </label>
@@ -1314,7 +1330,7 @@
 
   <footer class="footer">
     <i class="fa-solid fa-hexagon-nodes" style="color: var(--cyan);"></i>
-    HexPDF Studio · PDF.js 3.11.174 · Tesseract.js 5.1.1 OCR · jsPDF 2.5.1 · @xenova/transformers 2.17.2 · GTranslate · 100% Client-Side
+    HexPDF Studio · PDF.js 3.11.174 · Tesseract.js 5.1.1 OCR · jsPDF 2.5.1 · @xenova/transformers 2.17.2 · BengaliDictionary (MinhasKamal) · Bengali (India) · Noto Sans Bengali &amp; Hind Siliguri TTF · GTranslate · 100% Client-Side
   </footer>
 </div>
 
@@ -1392,17 +1408,154 @@ window.gtranslateSettings = {
 </script>
 <script src="https://cdn.gtranslate.net/widgets/latest/dropdown.js" defer></script>
 
-<!-- ═══════════════ DICTIONARY & WORDLIST LOADER ═══════════════ -->
+<!-- ═══════════════ DICTIONARY & WORDLIST LOADER (MinhasKamal/BengaliDictionary + Bengali India) ═══════════════ -->
 <script>
 (() => {
   'use strict';
 
+  /***********************************************************
+   * Converted from Java Dictionary by Minhas Kamal (04-Aug-2016)
+   * Website: github.com/MinhasKamal/BengaliDictionary
+   * Upgraded to Target Language: Bengali (India) [bn-IN]
+   ***********************************************************/
+  class BengaliDictionary {
+    constructor(entries = null) {
+      this.map = new Map();
+      this.reverseMap = new Map();
+      if (entries) {
+        this.loadFromText(entries);
+      } else {
+        this.seedDefaultEntries();
+      }
+    }
+
+    /**
+     * Parses MinhasKamal/BengaliDictionary pipe-delimited lines:
+     * e.g. "|heart|হৃদয়, অন্তর"
+     */
+    loadFromText(rawText) {
+      if (!rawText) return;
+      const lines = String(rawText).split(/\r?\n/);
+      for (const line of lines) {
+        if (!line || line.length < 3) continue;
+        const startIdx = line.startsWith('|') ? 1 : 0;
+        const separator = line.indexOf('|', startIdx);
+        if (separator !== -1) {
+          const word = line.substring(startIdx, separator).trim().toLowerCase();
+          const meaning = line.substring(separator + 1).trim();
+          if (word && meaning) {
+            this.map.set(word, meaning);
+            this._indexReverse(word, meaning);
+          }
+        }
+      }
+    }
+
+    _indexReverse(enWord, bnMeaning) {
+      const parts = bnMeaning.split(/[,;/|]+/).map((p) => p.trim()).filter(Boolean);
+      for (const part of parts) {
+        const key = part.toLowerCase();
+        if (!this.reverseMap.has(key)) {
+          this.reverseMap.set(key, enWord);
+        }
+      }
+    }
+
+    seedDefaultEntries() {
+      const seededLines = [
+        '|heart|হৃদয়, হৃৎপিণ্ড, অন্তর',
+        '|water|জল, পানি',
+        '|book|বই, পুস্তক',
+        '|world|বিশ্ব, জগৎ, পৃথিবী',
+        '|language|ভাষা',
+        '|india|ভারত, ভারতবর্ষ',
+        '|bengali|বাংলা ভাষা, বাঙালি',
+        '|sun|সূর্য, রবি',
+        '|moon|চাঁদ, চন্দ্র',
+        '|sky|আকাশ, গগন',
+        '|earth|পৃথিবী, ধরা, বসুন্ধরা',
+        '|fire|আগুন, অগ্নি',
+        '|air|বায়ু, বাতাস',
+        '|friend|বন্ধু, মিত্র',
+        '|teacher|শিক্ষক, গুরু',
+        '|student|ছাত্র, শিক্ষার্থী',
+        '|house|বাড়ি, গৃহ, আলয়',
+        '|school|বিদ্যালয়, পাঠশালা',
+        '|document|নথি, দলিল',
+        '|page|পৃষ্ঠা, পাতা',
+        '|word|শব্দ, পদ',
+        '|line|লাইন, পঙ্ক্তি',
+        '|text|পাঠ্য, লেখা',
+        '|font|হরফ, ফন্ট',
+        '|freedom|স্বাধীনতা, মুক্তি',
+        '|peace|শান্তি',
+        '|knowledge|জ্ঞান, বিদ্যা',
+        '|love|ভালোবাসা, প্রেম',
+        '|mother|মা, জননী',
+        '|father|বাবা, পিতা',
+        '|brother|ভাই, ভ্রাতা',
+        '|sister|বোন, ভগিনী',
+        '|morning|সকাল, প্রভাত',
+        '|evening|সন্ধ্যা',
+        '|night|রাত, রাত্রি',
+        '|day|দিন, দিবস',
+        '|time|সময়, কাল',
+        '|life|জীবন',
+        '|hope|আশা, ভরসা',
+        '|truth|সত্য, সত্যতা',
+        '|river|নদী, সরিৎ',
+        '|tree|গাছ, বৃক্ষ, তরু',
+        '|flower|ফুল, পুষ্প',
+        '|bird|পাখি, বিহঙ্গ',
+        '|city|শহর, নগর',
+        '|village|গ্রাম, গাঁ',
+        '|food|খাবার, খাদ্য, আহার',
+        '|travel|ভ্রমণ, সফর',
+        '|translate|অনুবাদ করা',
+        '|dictionary|অভিধান'
+      ];
+      this.loadFromText(seededLines.join('\n'));
+    }
+
+    search(word) {
+      if (!word) return null;
+      const clean = String(word).trim().toLowerCase();
+      if (this.map.has(clean)) {
+        return {
+          word: clean,
+          meaningBn: this.map.get(clean),
+          locale: 'bn-IN',
+          source: 'MinhasKamal/BengaliDictionary (Bengali India)'
+        };
+      }
+      if (this.reverseMap.has(clean)) {
+        const enMatch = this.reverseMap.get(clean);
+        return {
+          word: enMatch,
+          meaningBn: this.map.get(enMatch) || clean,
+          locale: 'bn-IN',
+          source: 'MinhasKamal/BengaliDictionary (Reverse bn-IN)'
+        };
+      }
+      return null;
+    }
+
+    get size() {
+      return this.map.size;
+    }
+  }
+
   const DICT_API_URL = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
+  const BENGALI_DICT_URLS = [
+    'https://raw.githubusercontent.com/MinhasKamal/BengaliDictionary/master/BengaliDictionary_17.txt',
+    'https://raw.githubusercontent.com/MinhasKamal/BengaliDictionary/master/BengaliDictionary.txt'
+  ];
   const WORDLIST_URLS = [
     'https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt',
     'https://cdn.jsdelivr.net/npm/an-array-of-english-words@2.0.0/index.json'
   ];
 
+  const bengaliDict = new BengaliDictionary();
   const entryCache = new Map();
   let wordSet = null;
   let wordListArray = null;
@@ -1417,16 +1570,35 @@ window.gtranslateSettings = {
     }[c]));
   }
 
+  async function fetchRemoteBengaliDictionaryIfAvailable() {
+    for (const url of BENGALI_DICT_URLS) {
+      try {
+        const resp = await fetch(url);
+        if (!resp.ok) continue;
+        const txt = await resp.text();
+        if (txt && txt.includes('|')) {
+          bengaliDict.loadFromText(txt);
+          return true;
+        }
+      } catch {
+        /* Keep seeded Bengali (India) dictionary */
+      }
+    }
+    return false;
+  }
+
   async function ensureWordlistLoaded() {
-    if (wordSet) return wordSet;
+    if (wordSet && bengaliDict.size > 60) return wordSet;
     if (loadingWordlistPromise) return loadingWordlistPromise;
 
     const tag = $('#wordlistStatusTag');
     const btnLabel = $('#loadWordlistLabel');
-    if (tag) tag.textContent = 'Wordlist: loading…';
+    if (tag) tag.textContent = 'BengaliDictionary + Wordlist: loading…';
     if (btnLabel) btnLabel.textContent = 'Loading…';
 
     loadingWordlistPromise = (async () => {
+      await fetchRemoteBengaliDictionaryIfAvailable();
+
       for (const url of WORDLIST_URLS) {
         try {
           const resp = await fetch(url);
@@ -1443,7 +1615,7 @@ window.gtranslateSettings = {
           if (clean.length > 100) {
             wordListArray = clean;
             wordSet = new Set(clean);
-            if (tag) tag.textContent = `Wordlist: ${clean.length.toLocaleString()} words`;
+            if (tag) tag.textContent = `bn-IN (${bengaliDict.size}) · Wordlist: ${clean.length.toLocaleString()}`;
             if (btnLabel) btnLabel.textContent = 'Wordlist Ready';
             return wordSet;
           }
@@ -1451,9 +1623,9 @@ window.gtranslateSettings = {
           console.warn('[HexPDF Dictionary] wordlist source failed:', url, err);
         }
       }
-      wordSet = new Set();
-      if (tag) tag.textContent = 'Wordlist: offline fallback';
-      if (btnLabel) btnLabel.textContent = 'Retry Wordlist';
+      wordSet = new Set(bengaliDict.map.keys());
+      if (tag) tag.textContent = `bn-IN Dict: ${bengaliDict.size} words`;
+      if (btnLabel) btnLabel.textContent = 'Wordlist Ready';
       return wordSet;
     })().finally(() => {
       loadingWordlistPromise = null;
@@ -1463,12 +1635,17 @@ window.gtranslateSettings = {
   }
 
   function findSuggestions(query, limit = 6) {
-    if (!wordListArray || !wordListArray.length || !query) return [];
+    if (!query) return [];
     const q = query.toLowerCase();
     const out = [];
-    for (let i = 0; i < wordListArray.length && out.length < limit; i++) {
-      const w = wordListArray[i];
-      if (w.startsWith(q) && w !== q) out.push(w);
+    for (const k of bengaliDict.map.keys()) {
+      if (k.startsWith(q) && k !== q && out.length < limit) out.push(k);
+    }
+    if (wordListArray && wordListArray.length) {
+      for (let i = 0; i < wordListArray.length && out.length < limit; i++) {
+        const w = wordListArray[i];
+        if (w.startsWith(q) && w !== q && !out.includes(w)) out.push(w);
+      }
     }
     return out;
   }
@@ -1486,16 +1663,48 @@ window.gtranslateSettings = {
     if (!cleanWord) throw new Error('Empty word');
     if (entryCache.has(cleanWord)) return entryCache.get(cleanWord);
 
-    const response = await fetch(`${DICT_API_URL}${encodeURIComponent(cleanWord)}`);
-    if (!response.ok) {
-      throw new Error(`Dictionary HTTP ${response.status}`);
+    const bnHit = bengaliDict.search(cleanWord);
+
+    try {
+      const response = await fetch(`${DICT_API_URL}${encodeURIComponent(cleanWord)}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data) && data.length) {
+          const enriched = {
+            ...data[0],
+            bengaliIndiaMeaning: bnHit ? bnHit.meaningBn : ''
+          };
+          entryCache.set(cleanWord, enriched);
+          return enriched;
+        }
+      }
+    } catch {
+      /* Fall back to BengaliDictionary entry if offline */
     }
-    const data = await response.json();
-    if (!Array.isArray(data) || !data.length) {
-      throw new Error('Word not found');
+
+    if (bnHit) {
+      const syntheticEntry = {
+        word: bnHit.word,
+        phonetic: 'Bengali (India) · bn-IN',
+        phonetics: [],
+        bengaliIndiaMeaning: bnHit.meaningBn,
+        meanings: [
+          {
+            partOfSpeech: 'bn-IN dictionary',
+            definitions: [
+              {
+                definition: `বাংলা (ভারত) অর্থ: ${bnHit.meaningBn}`,
+                example: ''
+              }
+            ]
+          }
+        ]
+      };
+      entryCache.set(cleanWord, syntheticEntry);
+      return syntheticEntry;
     }
-    entryCache.set(cleanWord, data[0]);
-    return data[0];
+
+    throw new Error('Word not found');
   }
 
   window.playSound = function playSound() {
@@ -1506,10 +1715,14 @@ window.gtranslateSettings = {
   };
 
   window.HexDictionary = {
+    bengaliDictionary: bengaliDict,
+    searchBengali: (w) => bengaliDict.search(w),
     lookup: fetchDictionaryEntry,
     loadWordlist: ensureWordlistLoaded,
     isKnownWord(word) {
-      return wordSet ? wordSet.has(String(word || '').toLowerCase()) : null;
+      const low = String(word || '').toLowerCase();
+      if (bengaliDict.map.has(low)) return true;
+      return wordSet ? wordSet.has(low) : null;
     }
   };
 
@@ -1526,8 +1739,8 @@ window.gtranslateSettings = {
     if (!inpWord || !searchBtn || !resultBox) return;
 
     inpWord.addEventListener('input', () => {
-      if (/[^a-zA-Z0-9\s'-]/.test(inpWord.value)) {
-        inpWord.value = inpWord.value.replace(/[^a-zA-Z0-9\s'-]/g, '');
+      if (/[^a-zA-Z0-9\u0980-\u09FF\s'-]/.test(inpWord.value)) {
+        inpWord.value = inpWord.value.replace(/[^a-zA-Z0-9\u0980-\u09FF\s'-]/g, '');
       }
     });
 
@@ -1559,7 +1772,7 @@ window.gtranslateSettings = {
       if (insertBtn) insertBtn.disabled = true;
       lastFormattedEntry = '';
 
-      resultBox.innerHTML = `<p style="margin:0; color:var(--text-muted); font-size:0.82rem;"><i class="fa-solid fa-spinner fa-spin" style="color:var(--cyan);"></i> Fetching definition for <strong>${escapeHtml(word)}</strong>…</p>`;
+      resultBox.innerHTML = `<p style="margin:0; color:var(--text-muted); font-size:0.82rem;"><i class="fa-solid fa-spinner fa-spin" style="color:var(--cyan);"></i> Fetching definition &amp; Bengali (India) entry for <strong>${escapeHtml(word)}</strong>…</p>`;
 
       try {
         const entry = await fetchDictionaryEntry(word);
@@ -1569,6 +1782,7 @@ window.gtranslateSettings = {
         const phonetic = entry.phonetic || (entry.phonetics && entry.phonetics.find((p) => p && p.text)?.text) || '';
         const definition = defObj.definition || 'No definition available.';
         const example = defObj.example || '';
+        const bnMeaning = entry.bengaliIndiaMeaning || (bengaliDict.search(entry.word || word)?.meaningBn) || '';
         const audioUrl = pickAudioUrl(entry);
 
         if (soundEl) {
@@ -1577,8 +1791,8 @@ window.gtranslateSettings = {
         }
 
         const spellBadge = wordSet
-          ? (wordSet.has(word.toLowerCase())
-            ? `<span style="color:var(--ok);"><i class="fa-solid fa-check"></i> In Wordlist</span>`
+          ? ((wordSet.has(word.toLowerCase()) || bengaliDict.map.has(word.toLowerCase()))
+            ? `<span style="color:var(--ok);"><i class="fa-solid fa-check"></i> In Wordlist / bn-IN</span>`
             : `<span style="color:var(--warn);"><i class="fa-solid fa-circle-question"></i> Not in Wordlist</span>`)
           : '';
 
@@ -1592,11 +1806,12 @@ window.gtranslateSettings = {
             ${phonetic ? `<span>${escapeHtml(phonetic)}</span>` : ''}
             ${spellBadge}
           </div>
+          ${bnMeaning ? `<p class="dict-meaning" style="color:var(--cyan); font-weight:600;">বাংলা (ভারত · bn-IN): ${escapeHtml(bnMeaning)}</p>` : ''}
           <p class="dict-meaning">${escapeHtml(definition)}</p>
           ${example ? `<p class="dict-example">"${escapeHtml(example)}"</p>` : ''}
         `;
 
-        lastFormattedEntry = `${entry.word || word} (${partOfSpeech}${phonetic ? `, ${phonetic}` : ''}): ${definition}${example ? ` — Example: "${example}"` : ''}`;
+        lastFormattedEntry = `${entry.word || word}${bnMeaning ? ` [বাংলা (ভারত): ${bnMeaning}]` : ''} (${partOfSpeech}${phonetic ? `, ${phonetic}` : ''}): ${definition}${example ? ` — Example: "${example}"` : ''}`;
         if (insertBtn) insertBtn.disabled = false;
       } catch (_err) {
         if (!wordSet) {
@@ -1643,7 +1858,7 @@ window.gtranslateSettings = {
 })();
 </script>
 
-<!-- ═══════════════ HEXPDF STUDIO (13-SECTION ARCHITECTURE + UPGRADED ENGINES + OCR) ═══════════════ -->
+<!-- ═══════════════ HEXPDF STUDIO (13-SECTION ARCHITECTURE + UPGRADED ENGINES + OCR + SHAPED BENGALI) ═══════════════ -->
 <script>
   (() => {
     'use strict';
@@ -1825,13 +2040,14 @@ window.gtranslateSettings = {
     }
 
     /* =======================================================================
-       4. Language Catalog, Script Detection & Noto/DejaVu TTF Font Registry
+       4. Language Catalog, Script Detection & Unicode TTF Font Registry
+          (Noto Sans Bengali & Hind Siliguri — Never Legacy ANSI SutonnyMJ)
        ======================================================================= */
     const LANGUAGES = [
       ['auto', 'Auto-detect'],
       ['af', 'Afrikaans'], ['sq', 'Albanian'], ['am', 'Amharic'], ['ar', 'Arabic (العربية)'],
       ['hy', 'Armenian'], ['az', 'Azerbaijani'], ['eu', 'Basque'], ['be', 'Belarusian'],
-      ['bn', 'Bengali (বাংলা)'], ['bs', 'Bosnian'], ['bg', 'Bulgarian'], ['ca', 'Catalan'],
+      ['bn-IN', 'Bengali (India · বাংলা ভারত)'], ['bn', 'Bengali (বাংলা)'], ['bs', 'Bosnian'], ['bg', 'Bulgarian'], ['ca', 'Catalan'],
       ['ceb', 'Cebuano'], ['zh', 'Chinese'], ['zh-CN', 'Chinese (Simplified)'],
       ['zh-TW', 'Chinese (Traditional)'], ['co', 'Corsican'], ['hr', 'Croatian'],
       ['cs', 'Czech'], ['da', 'Danish'], ['nl', 'Dutch'], ['en', 'English'],
@@ -1863,8 +2079,10 @@ window.gtranslateSettings = {
 
     const RTL_CODES = new Set(['ar', 'he', 'ur', 'fa', 'ps', 'sd', 'yi', 'ug']);
 
+    /* Always Unicode .ttf fonts (Noto Sans Bengali, Hind Siliguri, Noto Sans, DejaVuSans) — never ANSI SutonnyMJ */
     const SCRIPT_FONT_URLS = {
       bengali: [
+        'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/hindsiliguri/HindSiliguri-Regular.ttf',
         'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansbengali/NotoSansBengali%5Bwdth%2Cwght%5D.ttf',
         'https://cdn.jsdelivr.net/gh/notofonts/bengali@main/fonts/NotoSansBengali/unhinted/ttf/NotoSansBengali-Regular.ttf'
       ],
@@ -1940,6 +2158,10 @@ window.gtranslateSettings = {
 
       if (/[^\u0000-\u00FF]/.test(sample)) return 'dejavu';
       return null;
+    }
+
+    function hasBengaliScript(text) {
+      return /[\u0980-\u09FF]/.test(String(text || ''));
     }
 
     function isRtlTextOrLang(text, langCode = '') {
@@ -2034,8 +2256,8 @@ window.gtranslateSettings = {
         'This document was generated directly in browser memory using jsPDF to demonstrate instant PDF rendering, coordinate-accurate text extraction, and free AI translation.',
         'Key Features Included:',
         '1. Fast Page-1 Canvas Preview: Page 1 renders immediately onto high-DPI canvas while remaining pages extract in the background.',
-        '2. Multi-Engine Zero-Cost AI Translation: Supports Google gtx, MyMemory, Transformers.js browser AI models, LibreTranslate, Ollama, and offline dictionaries.',
-        '3. Script-Aware Unicode PDF Export: Automatically embeds Noto Sans or DejaVu fonts for Bengali, Hindi, Arabic, Tamil, CJK, and European scripts.'
+        '2. Multi-Engine Zero-Cost AI Translation: Supports Google gtx, MyMemory, Transformers.js browser AI models, LibreTranslate, Ollama, and Bengali (India) dictionary.',
+        '3. Script-Aware Unicode TTF Export: Automatically embeds Noto Sans Bengali & Hind Siliguri Unicode .ttf fonts for Bengali (India) and other scripts.'
       ];
 
       let cursorY = 108;
@@ -2236,7 +2458,7 @@ window.gtranslateSettings = {
     async function runTesseractOcrOnPdf() {
       if (state.busy || !state.pdfProxy) return;
       if (!window.Tesseract || typeof window.Tesseract.createWorker !== 'function') {
-        setStatus('Tesseract.js library failed to load. Check your connection.', 'err');
+        setStatus('Tesseract.js library failed to load. Check your internet connection.', 'err');
         showToast('Tesseract.js unavailable', 'fa-circle-exclamation');
         return;
       }
@@ -2743,7 +2965,7 @@ window.gtranslateSettings = {
 
     /* =======================================================================
        9. Zero-Cost Multi-Engine AI Translation (Google gtx, MyMemory,
-          Transformers.js, LibreTranslate, Ollama & Offline Dict + Auto-Fallback)
+          Transformers.js, LibreTranslate, Ollama & Bengali India Dict + Auto-Fallback)
        ======================================================================= */
     const DICTIONARIES = {
       es: {
@@ -2831,13 +3053,13 @@ window.gtranslateSettings = {
         i: 'আমি', you: 'আপনি', he: 'সে', she: 'সে', we: 'আমরা', they: 'তারা',
         my: 'আমার', your: 'আপনার', our: 'আমাদের', in: 'মধ্যে', on: 'উপরে', to: 'প্রতি',
         from: 'থেকে', of: 'এর', for: 'জন্য', with: 'সাথে', without: 'ছাড়া', not: 'না',
-        yes: 'হ্যাঁ', all: 'সব', more: 'আরও', very: 'খুব', now: 'এখন', hello: 'হ্যালো',
+        yes: 'হ্যাঁ', all: 'সব', more: 'আরও', very: 'খুব', now: 'এখন', hello: 'নমস্কার',
         world: 'বিশ্ব', good: 'ভালো', new: 'নতুন', first: 'প্রথম', day: 'দিন', year: 'বছর',
         time: 'সময়', people: 'মানুষ', life: 'জীবন', water: 'জল', house: 'বাড়ি', book: 'বই',
         question: 'প্রশ্ন', answer: 'উত্তর', problem: 'সমস্যা', part: 'অংশ', page: 'পৃষ্ঠা',
         document: 'নথি', text: 'পাঠ্য', word: 'শব্দ', language: 'ভাষা', file: 'ফাইল',
         line: 'লাইন', title: 'শিরোনাম', welcome: 'স্বাগতম', sample: 'নমুনা', browser: 'ব্রাউজার',
-        free: 'বিনামূল্যে'
+        free: 'বিনামূল্যে', heart: 'হৃদয়', india: 'ভারত', bengali: 'বাংলা'
       },
       hi: {
         the: 'यह', a: 'एक', and: 'और', or: 'या', but: 'लेकिन', is: 'है', are: 'हैं',
@@ -2876,7 +3098,10 @@ window.gtranslateSettings = {
 
     function applyDictionary(text, table) {
       return text.replace(/[\p{L}\p{M}'’]+/gu, (token) => {
-        const translated = table[token.toLowerCase()];
+        const lower = token.toLowerCase();
+        const bnObj = window.HexDictionary && window.HexDictionary.searchBengali ? window.HexDictionary.searchBengali(lower) : null;
+        const bnFirst = bnObj && bnObj.meaningBn ? bnObj.meaningBn.split(',')[0].trim() : null;
+        const translated = table[lower] || bnFirst;
         if (!translated) return token;
         if (token.length > 1 && token === token.toUpperCase()) return translated.toUpperCase();
         if (token[0] === token[0].toUpperCase()) {
@@ -3170,8 +3395,8 @@ window.gtranslateSettings = {
     async function googleTranslate(text, from, to) {
       const url = new URL('https://translate.googleapis.com/translate_a/single');
       url.searchParams.set('client', 'gtx');
-      url.searchParams.set('sl', from || 'auto');
-      url.searchParams.set('tl', to);
+      url.searchParams.set('sl', (!from || from === 'auto') ? 'auto' : baseLang(from));
+      url.searchParams.set('tl', baseLang(to));
       url.searchParams.set('dt', 't');
       url.searchParams.set('q', text);
       const r = await fetch(url.toString());
@@ -3202,8 +3427,8 @@ window.gtranslateSettings = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           q: text,
-          source: (!from || from === 'auto') ? 'auto' : from,
-          target: to,
+          source: (!from || from === 'auto') ? 'auto' : baseLang(from),
+          target: baseLang(to),
           format: 'text'
         })
       });
@@ -3214,9 +3439,10 @@ window.gtranslateSettings = {
     }
 
     async function ollamaTranslate(text, from, to, model) {
+      const targetLabel = to === 'bn-IN' ? 'Bengali (India)' : to;
       const prompt =
         'Translate the following text' + (from && from !== 'auto' ? ' from ' + from : '') +
-        ' into ' + to + '. Preserve the exact number of lines and all line breaks. ' +
+        ' into ' + targetLabel + '. Preserve the exact number of lines and all line breaks. ' +
         'Reply with the translation only — no notes, no quotes.\n\n' + text;
       const r = await fetch('http://localhost:11434/api/generate', {
         method: 'POST',
@@ -3242,7 +3468,7 @@ window.gtranslateSettings = {
               return await myMemoryTranslate(text, src, tgt);
             } catch {
               const dict = resolveDictionary(src, tgt);
-              if (dict) return applyDictionary(text, dict);
+              if (dict || baseLang(tgt) === 'bn') return applyDictionary(text, dict || {});
               throw primaryErr;
             }
           }
@@ -3256,13 +3482,13 @@ window.gtranslateSettings = {
       const allowFallback = els.autoFallbackToggle && els.autoFallbackToggle.checked;
 
       if (els.fastModeToggle.checked) {
-        if (!dictTable) return null;
+        if (!dictTable && baseLang(tgt) !== 'bn') return null;
         return {
           kind: 'dict',
           provider: 'dict',
-          label: `Offline Dictionary (${baseLang(src)}↔${baseLang(tgt)})`,
+          label: `Offline Bengali (India) Dict (${baseLang(src)}↔${baseLang(tgt)})`,
           supportsBatch: true,
-          translate: (text) => applyDictionary(text, dictTable)
+          translate: (text) => applyDictionary(text, dictTable || {})
         };
       }
 
@@ -3328,7 +3554,7 @@ window.gtranslateSettings = {
         return {
           kind: 'dict',
           provider: 'dict',
-          label: `Offline Dictionary (${baseLang(src)}↔${baseLang(tgt)})`,
+          label: `Offline Bengali (India) Dict (${baseLang(src)}↔${baseLang(tgt)})`,
           supportsBatch: true,
           translate: (text) => applyDictionary(text, dictTable)
         };
@@ -3415,9 +3641,11 @@ window.gtranslateSettings = {
     }
 
     /* =======================================================================
-       10. Script-Aware Unicode Font Embedding & Dual PDF Export Modes
+       10. Script-Aware Unicode TTF Font Embedding (Hind Siliguri & Noto Sans Bengali)
+           + Bengali OpenType Shaping Engine for Accurate Conjuncts & Matras
        ======================================================================= */
     const fontBase64Cache = new Map();
+    let bengaliFontsReadyPromise = null;
 
     function arrayBufferToBase64(buffer) {
       const bytes = new Uint8Array(buffer);
@@ -3427,6 +3655,24 @@ window.gtranslateSettings = {
         binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
       }
       return btoa(binary);
+    }
+
+    async function ensureBengaliShapingFontsLoaded() {
+      if (bengaliFontsReadyPromise) return bengaliFontsReadyPromise;
+      bengaliFontsReadyPromise = (async () => {
+        if (document.fonts && typeof document.fonts.load === 'function') {
+          try {
+            await Promise.all([
+              document.fonts.load('400 16px "Hind Siliguri"'),
+              document.fonts.load('400 16px "Noto Sans Bengali"'),
+              document.fonts.load('700 16px "Hind Siliguri"')
+            ]);
+          } catch {
+            /* Best-effort font readiness */
+          }
+        }
+      })();
+      return bengaliFontsReadyPromise;
     }
 
     async function resolveUnicodeFontForScript(scriptKey) {
@@ -3448,7 +3694,7 @@ window.gtranslateSettings = {
           fontBase64Cache.set(scriptKey, b64);
           return b64;
         } catch {
-          /* Try next CDN fallback */
+          /* Try next Unicode .ttf CDN fallback */
         }
       }
       return null;
@@ -3466,7 +3712,10 @@ window.gtranslateSettings = {
         return 'helvetica';
       }
 
-      setStatus(`Embedding Unicode font (${requiredScript}) for crisp glyph rendering…`, 'busy');
+      const fontLabel = requiredScript === 'bengali'
+        ? 'Hind Siliguri & Noto Sans Bengali (.ttf)'
+        : `${requiredScript} (.ttf)`;
+      setStatus(`Embedding Unicode font ${fontLabel} for crisp glyph rendering…`, 'busy');
       const fontB64 = await resolveUnicodeFontForScript(requiredScript);
       if (fontB64) {
         const vfsName = `HexPdf_${requiredScript}.ttf`;
@@ -3480,13 +3729,76 @@ window.gtranslateSettings = {
       return 'helvetica';
     }
 
-    /* Mode A: Layout-Preserved Translated PDF */
+    /**
+     * Renders a shaped Bengali/Indic text run onto a temporary canvas using the
+     * browser's OpenType/HarfBuzz shaper with Hind Siliguri / Noto Sans Bengali,
+     * returning a PNG data URL + dimensions so conjuncts (যুক্তাক্ষর) and vowel
+     * signs (কার/মাত্রা) never break or detach in PDF viewers.
+     */
+    function renderShapedBengaliTextPng(text, fontSizePt, maxWidthPt, isBold = false) {
+      const clean = String(text || '').replace(/\u200B/g, '');
+      if (!clean.trim()) return null;
+
+      const scale = 3; // High-DPI 216-equivalent crisp rasterization
+      const weight = isBold ? '700' : '400';
+      const fontSpec = `${weight} ${fontSizePt}px "Hind Siliguri", "Noto Sans Bengali", sans-serif`;
+
+      const measureCanvas = document.createElement('canvas');
+      const mCtx = measureCanvas.getContext('2d');
+      mCtx.font = fontSpec;
+      mCtx.textBaseline = 'alphabetic';
+
+      const measuredW = Math.max(8, mCtx.measureText(clean).width);
+      const fitScale = maxWidthPt && measuredW > maxWidthPt ? Math.max(0.65, maxWidthPt / measuredW) : 1;
+      const effectiveSize = fontSizePt * fitScale;
+      const effectiveFont = `${weight} ${effectiveSize}px "Hind Siliguri", "Noto Sans Bengali", sans-serif`;
+
+      mCtx.font = effectiveFont;
+      const finalW = Math.max(8, mCtx.measureText(clean).width);
+      const ascent = Math.max(effectiveSize * 0.95, (mCtx.measureText(clean).actualBoundingBoxAscent || effectiveSize * 0.95));
+      const descent = Math.max(effectiveSize * 0.45, (mCtx.measureText(clean).actualBoundingBoxDescent || effectiveSize * 0.45));
+      const padX = Math.max(4, effectiveSize * 0.12);
+      const totalWpt = finalW + padX * 2;
+      const totalHpt = ascent + descent + effectiveSize * 0.2;
+
+      const outCanvas = document.createElement('canvas');
+      outCanvas.width = Math.max(16, Math.ceil(totalWpt * scale));
+      outCanvas.height = Math.max(16, Math.ceil(totalHpt * scale));
+
+      const ctx = outCanvas.getContext('2d');
+      ctx.save();
+      ctx.scale(scale, scale);
+      ctx.font = effectiveFont;
+      ctx.fillStyle = '#000000';
+      ctx.textBaseline = 'alphabetic';
+      if ('fontVariantLigatures' in ctx) {
+        ctx.fontVariantLigatures = 'normal';
+      }
+      ctx.fillText(clean, padX, ascent + effectiveSize * 0.08);
+      ctx.restore();
+
+      return {
+        dataUrl: outCanvas.toDataURL('image/png'),
+        widthPt: totalWpt,
+        heightPt: totalHpt,
+        ascentPt: ascent + effectiveSize * 0.08,
+        fontSizePt: effectiveSize
+      };
+    }
+
+    /* Mode A: Layout-Preserved Translated PDF (with shaped Bengali rendering + embedded Unicode TTF) */
     async function buildLayoutPreservedPdf(pages, targetLangCode, onPageProgress) {
       const { jsPDF } = window.jspdf || {};
       if (!jsPDF) throw new Error('jsPDF failed to load.');
 
       const combinedText = pages.map((p) => p.lines.map((l) => l.text).join('\n')).join('\n');
       const rtl = isRtlTextOrLang(combinedText, targetLangCode);
+      const needsBengaliShaping = els.unicodeFontToggle.checked && hasBengaliScript(combinedText);
+
+      if (needsBengaliShaping) {
+        setStatus('Loading Hind Siliguri & Noto Sans Bengali shaper…', 'busy');
+        await ensureBengaliShapingFontsLoaded();
+      }
 
       let doc = null;
       for (const page of pages) {
@@ -3521,8 +3833,19 @@ window.gtranslateSettings = {
             : Math.max(48, page.width - x - margin);
 
           let fontSize = Math.max(5, Math.min(line.size, 72));
-          doc.setFontSize(fontSize);
+          let cursorY = page.height - line.y;
 
+          if (needsBengaliShaping && hasBengaliScript(line.text)) {
+            const shaped = renderShapedBengaliTextPng(line.text, fontSize, availWidth, fontSize >= 15);
+            if (shaped) {
+              const drawX = rtl ? Math.max(margin, page.width - margin - shaped.widthPt) : x;
+              const drawY = Math.max(8, cursorY - shaped.ascentPt);
+              doc.addImage(shaped.dataUrl, 'PNG', drawX, drawY, shaped.widthPt, shaped.heightPt);
+              continue;
+            }
+          }
+
+          doc.setFontSize(fontSize);
           const measuredWidth = doc.getTextWidth(line.text);
           if (measuredWidth > availWidth) {
             const ratio = Math.max(0.6, availWidth / measuredWidth);
@@ -3531,7 +3854,6 @@ window.gtranslateSettings = {
           }
 
           const wrapped = doc.splitTextToSize(line.text, availWidth);
-          let cursorY = page.height - line.y;
           const lineHeight = fontSize * 1.18;
 
           for (const segment of wrapped) {
@@ -3552,7 +3874,7 @@ window.gtranslateSettings = {
       return doc;
     }
 
-    /* Mode B: Clean Reflowed Text-to-PDF Converter */
+    /* Mode B: Clean Reflowed Text-to-PDF Converter (with shaped Bengali rendering + embedded Unicode TTF) */
     async function buildReflowedTextPdf(textContent, langCode = '') {
       const { jsPDF } = window.jspdf || {};
       if (!jsPDF) throw new Error('jsPDF failed to load.');
@@ -3562,6 +3884,12 @@ window.gtranslateSettings = {
       const fontSizePt = Number(els.pdfFontSize.value) || 11;
       const marginMm = Number(els.pdfMarginPreset.value) || 20;
       const marginPt = marginMm * 2.83465;
+      const needsBengaliShaping = els.unicodeFontToggle.checked && hasBengaliScript(textContent);
+
+      if (needsBengaliShaping) {
+        setStatus('Loading Hind Siliguri & Noto Sans Bengali shaper…', 'busy');
+        await ensureBengaliShapingFontsLoaded();
+      }
 
       const doc = new jsPDF({
         unit: 'pt',
@@ -3576,7 +3904,7 @@ window.gtranslateSettings = {
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
       const usableWidth = Math.max(72, pageWidth - marginPt * 2);
-      const lineHeight = fontSizePt * 1.42;
+      const lineHeight = fontSizePt * 1.48;
       const rtl = isRtlTextOrLang(textContent, langCode);
 
       const paragraphs = String(textContent || '').split(/\r?\n/);
@@ -3588,6 +3916,44 @@ window.gtranslateSettings = {
           if (cursorY > pageHeight - marginPt) {
             doc.addPage(format, orientation);
             cursorY = marginPt + fontSizePt;
+          }
+          continue;
+        }
+
+        if (needsBengaliShaping && hasBengaliScript(para)) {
+          const words = para.split(/(\s+)/);
+          const probeCanvas = document.createElement('canvas');
+          const pCtx = probeCanvas.getContext('2d');
+          pCtx.font = `400 ${fontSizePt}px "Hind Siliguri", "Noto Sans Bengali", sans-serif`;
+
+          const wrappedLines = [];
+          let curLine = '';
+          for (const token of words) {
+            if (!token) continue;
+            const candidate = curLine + token;
+            if (curLine.trim() && pCtx.measureText(candidate).width > usableWidth) {
+              wrappedLines.push(curLine.trimEnd());
+              curLine = token.trimStart() ? token : '';
+            } else {
+              curLine = candidate;
+            }
+          }
+          if (curLine.trim()) wrappedLines.push(curLine.trimEnd());
+
+          for (const wLine of wrappedLines) {
+            if (cursorY > pageHeight - marginPt) {
+              doc.addPage(format, orientation);
+              cursorY = marginPt + fontSizePt;
+            }
+            const shaped = renderShapedBengaliTextPng(wLine, fontSizePt, usableWidth, false);
+            if (shaped) {
+              const drawX = rtl ? Math.max(marginPt, pageWidth - marginPt - shaped.widthPt) : marginPt;
+              const drawY = Math.max(marginPt * 0.5, cursorY - shaped.ascentPt);
+              doc.addImage(shaped.dataUrl, 'PNG', drawX, drawY, shaped.widthPt, shaped.heightPt);
+            } else {
+              doc.text(wLine, marginPt, cursorY);
+            }
+            cursorY += lineHeight;
           }
           continue;
         }
@@ -3816,7 +4182,7 @@ window.gtranslateSettings = {
         }
       }
       els.sourceLang.value = 'auto';
-      els.targetLang.value = 'es';
+      els.targetLang.value = 'bn-IN';
     }
 
     function syncEngineInputs() {
@@ -3844,12 +4210,12 @@ window.gtranslateSettings = {
         return;
       }
 
-      const hasDict = Boolean(resolveDictionary(src, tgt));
+      const hasDict = Boolean(resolveDictionary(src, tgt)) || t === 'bn';
 
       if (els.fastModeToggle.checked) {
         if (hasDict) {
           els.engineDot.classList.add('ok');
-          els.engineBadgeText.textContent = `Offline Dict (${s}↔${t})`;
+          els.engineBadgeText.textContent = `bn-IN Dict (${s}↔${t})`;
         } else {
           els.engineDot.classList.add('err');
           els.engineBadgeText.textContent = 'No dict for pair';
@@ -4145,6 +4511,7 @@ window.gtranslateSettings = {
       populateLanguages();
       bindEvents();
       refreshEngineBadge();
+      ensureBengaliShapingFontsLoaded();
     }
 
     init();
